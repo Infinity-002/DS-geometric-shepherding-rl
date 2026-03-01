@@ -26,7 +26,7 @@ from scipy.spatial import ConvexHull
 from stable_baselines3 import PPO
 
 import gymnasium as gym
-import envs  # noqa: F401 – triggers HerdingEnv registration
+import shepherding.envs  # noqa: F401 – triggers HerdingEnv registration
 
 
 # ======================================================================

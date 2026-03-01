@@ -26,7 +26,7 @@ from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.monitor import Monitor
 
 import gymnasium as gym
-import envs  # noqa: F401 – triggers HerdingEnv registration
+import shepherding.envs  # noqa: F401 – triggers HerdingEnv registration
 
 
 # ======================================================================

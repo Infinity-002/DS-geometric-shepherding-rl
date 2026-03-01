@@ -18,7 +18,7 @@ import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
 
-from utils.geometry import compute_reward
+from shepherding.utils.geometry import compute_reward
 
 
 class HerdingEnv(gym.Env):

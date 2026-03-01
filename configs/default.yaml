@@ -1,0 +1,40 @@
+# ============================================================
+# Shepherding RL – Default Configuration
+# ============================================================
+
+environment:
+  grid_size: 20.0
+  n_sheep: 10
+  dog_speed: 1.0
+  sheep_speed: 0.4
+  flee_radius: 6.0
+  cohesion_factor: 0.05
+  repulsion_strength: 1.0
+  goal: [18.0, 18.0]
+  max_steps: 500
+  success_radius: 2.0
+
+training:
+  total_timesteps: 2_000_000
+  seed: 0
+  save_dir: models
+
+ppo:
+  n_steps: 4096
+  batch_size: 64
+  n_epochs: 10
+  learning_rate: 3.0e-4
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01
+
+reward:
+  w_centroid: 1.0
+  w_perimeter: 0.1
+  w_incursion: 0.5
+  w_proximity: 0.3
+  success_bonus: 100.0
+
+callback:
+  log_freq: 2048
