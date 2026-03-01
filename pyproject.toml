@@ -1,0 +1,26 @@
+[project]
+name = "shepherding-rl"
+version = "0.1.0"
+description = "Geometric-Informed Reinforcement Learning for the Shepherding Problem"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "gymnasium>=0.29.0",
+    "stable-baselines3>=2.1.0",
+    "numpy>=1.24.0",
+    "scipy>=1.11.0",
+    "matplotlib>=3.7.0",
+    "torch>=2.0.0",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[project.scripts]
+train = "train:main"
+evaluate = "evaluate:main"
