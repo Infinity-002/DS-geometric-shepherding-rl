@@ -1,0 +1,10 @@
+training:
+  dataset_path: results/imitation/dataset/demonstrations.csv
+  output_dir: models/imitation/random_forest
+  model_path: models/imitation/random_forest/behavioral_cloning.pkl
+  validation_fraction: 0.2
+  n_estimators: 300
+  max_depth: 18
+  min_samples_leaf: 2
+  n_jobs: -1
+  seed: 0

@@ -1,0 +1,10 @@
+dataset:
+  output_dir: results/imitation/dataset
+  target_steps: 10000
+  max_episodes: 256
+  seed: 0
+  deterministic: true
+  train_scenarios: ["train"]
+  unseen_scenarios: ["unseen_split_field", "unseen_open_field"]
+  use_cluster_targets: true
+  cluster_activation_distance: 2.0

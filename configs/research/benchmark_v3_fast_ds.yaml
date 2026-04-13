@@ -1,0 +1,32 @@
+benchmark:
+  seeds: [0]
+  total_timesteps: 120000
+  episodes: 4
+  scenarios:
+    train: ["train"]
+    unseen: ["unseen_split_field", "unseen_open_field"]
+  variants:
+    - run_name: heuristic_cluster_aware_fast
+      model_type: heuristic
+      env_overrides:
+        domain_randomization: false
+        randomize_visibility: false
+        randomize_goal: false
+        randomize_obstacles: false
+        randomize_dynamics: false
+    - run_name: behavioral_cloning_rf_fast
+      model_type: behavioral_cloning
+      env_overrides:
+        domain_randomization: false
+        randomize_visibility: false
+        randomize_goal: false
+        randomize_obstacles: false
+        randomize_dynamics: false
+    - run_name: recurrent_domain_randomized_fast
+      model_type: recurrent
+      env_overrides:
+        domain_randomization: true
+        randomize_visibility: true
+        randomize_goal: true
+        randomize_obstacles: true
+        randomize_dynamics: true

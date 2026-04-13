@@ -18,6 +18,10 @@ uv.lock
 
 # Trained models (large binary files)
 models/*.zip
+models/**/*.zip
+**/*.pkl
+results/
+runs/
 
 # OS
 .DS_Store

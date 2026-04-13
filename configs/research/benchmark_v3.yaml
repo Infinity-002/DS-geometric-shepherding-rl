@@ -1,0 +1,48 @@
+benchmark:
+  seeds: [0, 1, 2]
+  total_timesteps: 250000
+  episodes: 6
+  scenarios:
+    train: ["train"]
+    unseen:
+      [
+        "unseen_corridor",
+        "unseen_dense",
+        "unseen_narrow_gate",
+        "unseen_split_field",
+        "unseen_open_field",
+      ]
+  variants:
+    - run_name: heuristic_baseline
+      model_type: heuristic
+      env_overrides:
+        domain_randomization: false
+        randomize_visibility: false
+        randomize_goal: false
+        randomize_obstacles: false
+        randomize_dynamics: false
+    - run_name: feedforward_domain_randomized
+      model_type: feedforward
+      env_overrides:
+        domain_randomization: true
+        randomize_visibility: true
+        randomize_goal: true
+        randomize_obstacles: true
+        randomize_dynamics: true
+    - run_name: recurrent_domain_randomized
+      model_type: recurrent
+      env_overrides:
+        domain_randomization: true
+        randomize_visibility: true
+        randomize_goal: true
+        randomize_obstacles: true
+        randomize_dynamics: true
+    - run_name: recurrent_full_visibility
+      model_type: recurrent
+      env_overrides:
+        domain_randomization: true
+        randomize_visibility: false
+        randomize_goal: true
+        randomize_obstacles: true
+        randomize_dynamics: true
+        visibility_radius: 40.0

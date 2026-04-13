@@ -29,6 +29,48 @@ import gymnasium as gym
 import shepherding.envs  # noqa: F401 – triggers HerdingEnv registration
 
 
+def resolve_model_path(model_arg: str) -> str:
+    """Resolve model path from cwd or project root, with/without .zip."""
+    user_path = Path(model_arg).expanduser()
+    candidates: List[Path] = []
+
+    if user_path.is_absolute():
+        candidates.extend([user_path, user_path.with_suffix(".zip")])
+    else:
+        cwd = Path.cwd()
+        project_root = Path(__file__).resolve().parents[1]
+        candidates.extend(
+            [
+                cwd / user_path,
+                cwd / user_path.with_suffix(".zip"),
+                project_root / user_path,
+                project_root / user_path.with_suffix(".zip"),
+            ]
+        )
+
+    seen = set()
+    deduped: List[Path] = []
+    for candidate in candidates:
+        key = str(candidate)
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(candidate)
+
+    for candidate in deduped:
+        if candidate.exists():
+            if candidate.suffix == ".zip":
+                return str(candidate.with_suffix(""))
+            return str(candidate)
+
+    checked = "\n  - ".join(str(p) for p in deduped)
+    raise FileNotFoundError(
+        "Could not find model file. Checked:\n"
+        f"  - {checked}\n"
+        "Tip: pass --model with absolute path or run from repo root."
+    )
+
+
 # ======================================================================
 # Simulation
 # ======================================================================
@@ -217,15 +259,16 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    resolved_model = resolve_model_path(args.model)
 
     print("=" * 60)
     print("  Shepherding RL – Evaluation & Visualisation")
-    print(f"  Model     : {args.model}")
+    print(f"  Model     : {resolved_model}")
     print(f"  Max steps : {args.max_steps}")
     print("=" * 60)
 
     env = gym.make("HerdingEnv-v0")
-    model = PPO.load(args.model, env=env)
+    model = PPO.load(resolved_model, env=env)
 
     dog_hist, sheep_hist, goal = run_episode(model, env, max_steps=args.max_steps)
     print(f"Episode finished in {len(dog_hist) - 1} steps.")

@@ -74,17 +74,18 @@ def compute_reward(
 ) -> float:
     """Compute the composite geometric reward.
 
-    The reward is a weighted sum of four terms, all normalised to roughly
-    the ``[-1, 0]`` range so learning is stable:
+    The reward is a weighted sum of four terms. Goal-closeness and flock
+    proximity are positive when the configuration is good, while spread and
+    blocking remain penalties.
 
-    1. **Centroid progress** – negative normalised distance from the flock
-       centroid to the *goal*.
+    1. **Centroid-to-goal closeness** – positive when the flock centroid is
+       near the *goal*.
     2. **Perimeter penalty** – negative convex-hull area (normalised by
        grid area) to encourage tight flocking.
     3. **Incursion (blocking) penalty** – penalises the dog for being
        closer to the goal than the flock centroid.
-    4. **Dog-to-flock proximity** – rewards the dog for being close to
-       the flock, encouraging it to approach and herd.
+    4. **Dog-to-flock proximity** – positive when the dog stays near the
+       flock, encouraging useful pressure rather than wandering off.
 
     Parameters
     ----------
@@ -113,9 +114,9 @@ def compute_reward(
     centroid = compute_centroid(sheep_positions)
     max_dist: float = float(np.sqrt(2.0) * grid_size)  # diagonal
 
-    # --- 1. Centroid progress (normalised negative distance to goal) -------
+    # --- 1. Centroid-to-goal closeness ------------------------------------
     centroid_dist: float = float(np.linalg.norm(centroid - goal))
-    centroid_reward: float = -(centroid_dist / max_dist)
+    centroid_reward: float = 1.0 - (centroid_dist / max_dist)
 
     # --- 2. Perimeter penalty (normalised negative hull area) -------------
     hull = compute_convex_hull(sheep_positions)
@@ -135,7 +136,7 @@ def compute_reward(
 
     # --- 4. Dog-to-flock proximity bonus ----------------------------------
     dog_flock_dist: float = float(np.linalg.norm(dog_position - centroid))
-    proximity_bonus: float = -(dog_flock_dist / max_dist)
+    proximity_bonus: float = 1.0 - (dog_flock_dist / max_dist)
 
     # --- Composite reward -------------------------------------------------
     reward: float = (

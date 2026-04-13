@@ -1,0 +1,116 @@
+environment:
+  grid_size: 20.0
+  n_sheep: 10
+  dog_speed: 1.0
+  sheep_speed: 0.32
+  flee_radius: 5.5
+  cohesion_factor: 0.07
+  repulsion_strength: 1.0
+  leader_factor: 0.04
+  goal: [18.0, 18.0]
+  max_steps: 500
+  success_radius: 2.0
+  visibility_radius: 7.5
+  max_obstacles: 8
+  obstacle_size_range: [0.8, 1.8]
+  obstacle_avoidance_threshold: 1.6
+  domain_randomization: true
+  randomize_visibility: true
+  randomize_goal: true
+  randomize_obstacles: true
+  randomize_dynamics: true
+  compute_expensive_metrics: false
+  curriculum_mode: true
+  visibility_loss_penalty: 0.05
+  visibility_gain_reward: 0.8
+  collision_penalty: 0.2
+  w_drive_position: 0.35
+  drive_position_scale: 0.7
+  zero_visibility_penalty: 0.25
+  progress_reward_scale: 3.0
+  persistent_collision_scale: 0.15
+  goal_seek_factor: 0.03
+  scenario: train
+
+training:
+  total_timesteps: 120000
+  save_dir: models/research_v3_fast
+  tensorboard_log: runs/research_v3_fast
+  eval_episodes: 4
+  curriculum:
+    strategy: adaptive
+    window: 24
+    warmup_episodes: 6
+    stages:
+      - stage: 0.0
+        min_success_rate: 0.0
+      - stage: 0.33
+        min_success_rate: 0.10
+        min_visibility_ratio: 0.40
+        max_collision_event_count: 10.0
+        min_progress_reward: -0.04
+        min_timestep_ratio: 0.05
+      - stage: 0.66
+        min_success_rate: 0.30
+        min_visibility_ratio: 0.50
+        max_collision_event_count: 8.0
+        min_progress_reward: -0.01
+        min_timestep_ratio: 0.15
+      - stage: 1.0
+        min_success_rate: 0.50
+        min_visibility_ratio: 0.58
+        max_collision_event_count: 6.0
+        min_progress_reward: 0.0
+        min_timestep_ratio: 0.30
+
+ppo_feedforward:
+  n_steps: 2048
+  batch_size: 128
+  n_epochs: 8
+  learning_rate: 0.0003
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01
+
+ppo_recurrent:
+  n_steps: 512
+  batch_size: 128
+  n_epochs: 8
+  learning_rate: 0.0003
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.005
+  lstm_hidden_size: 128
+
+evaluation:
+  train_scenarios: ["train"]
+  unseen_scenarios: ["unseen_split_field", "unseen_open_field"]
+  deterministic: true
+
+imitation:
+  expert:
+    use_cluster_targets: true
+    cluster_activation_distance: 2.0
+  data_collection:
+    target_steps: 6000
+    max_episodes: 128
+    seed: 0
+    deterministic: true
+    train_scenarios: ["train"]
+    unseen_scenarios: ["unseen_split_field", "unseen_open_field"]
+    use_cluster_targets: true
+    cluster_activation_distance: 2.0
+  training:
+    dataset_path: results/imitation_fast/dataset/demonstrations.csv
+    output_dir: models/imitation_fast/random_forest
+    model_path: models/imitation_fast/random_forest/behavioral_cloning.pkl
+    n_sheep: 10
+    max_obstacles: 8
+    validation_fraction: 0.2
+    n_estimators: 200
+    max_depth: 14
+    min_samples_leaf: 2
+    n_jobs: -1
+    seed: 0

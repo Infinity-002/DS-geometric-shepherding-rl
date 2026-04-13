@@ -7,9 +7,14 @@ requires-python = ">=3.10"
 dependencies = [
     "gymnasium>=0.29.0",
     "stable-baselines3>=2.1.0",
+    "sb3-contrib>=2.1.0",
     "numpy>=1.24.0",
     "scipy>=1.11.0",
     "matplotlib>=3.7.0",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.4.0",
+    "seaborn>=0.13.0",
+    "jupyter>=1.0.0",
     "torch>=2.0.0",
     "pyyaml>=6.0",
 ]
@@ -32,3 +37,13 @@ explicit = true
 [project.scripts]
 train = "scripts.train:main"
 evaluate = "scripts.evaluate:main"
+train-v3-feedforward = "scripts.train_v3_feedforward:main"
+train-v3-recurrent = "scripts.train_v3_recurrent:main"
+evaluate-v3 = "scripts.evaluate_v3:main"
+benchmark-v3 = "scripts.benchmark_v3:main"
+run-ablations-v3 = "scripts.run_ablations_v3:main"
+analyze-v3 = "scripts.analyze_results_v3:main"
+analyze-ds = "scripts.analyze_ds_results:main"
+evaluate-v2-benchmark = "scripts.evaluate_v2_benchmark:main"
+generate-bc-dataset = "scripts.generate_bc_dataset:main"
+train-bc = "scripts.train_bc:main"

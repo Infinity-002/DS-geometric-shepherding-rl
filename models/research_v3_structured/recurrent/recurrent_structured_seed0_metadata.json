@@ -1,0 +1,8 @@
+{
+  "run_name": "recurrent_structured_seed0",
+  "model_type": "recurrent",
+  "seed": 0,
+  "scenario": "train",
+  "total_timesteps": 300000,
+  "config_path": "configs/research/v3_structured.yaml"
+}
