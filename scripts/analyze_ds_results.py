@@ -18,33 +18,22 @@ if str(SRC_ROOT) not in sys.path:
 
 
 DISPLAY_NAMES = {
-    "heuristic_cluster_aware": "Heuristic",
     "heuristic_cluster_aware_fast": "Heuristic",
-    "heuristic_cluster_aware_improved": "Heuristic",
-    "behavioral_cloning_rf": "Behavioral Cloning",
     "behavioral_cloning_rf_fast": "Behavioral Cloning",
-    "behavioral_cloning_rf_improved": "Behavioral Cloning",
-    "recurrent_domain_randomized": "RL (Recurrent PPO)",
-    "recurrent_domain_randomized_fast": "RL (Recurrent PPO)",
-    "recurrent_domain_randomized_improved": "RL (Recurrent PPO)",
-    "recurrent_structured_seed0": "RL (Structured PPO)",
-    "rl_v2_ppo": "RL (v2 PPO)",
+    "recurrent_domain_randomized_fast": "RL (Baseline)",
+    "rl_structured_eval_v2": "RL (Structured v3)",
 }
 
 DISPLAY_ORDER = [
-    "RL (v2 PPO)",
     "Heuristic",
     "Behavioral Cloning",
-    "RL (Recurrent PPO)",
-    "RL (Structured PPO)",
+    "RL (Structured v3)",
 ]
 
 PALETTE = {
-    "RL (v2 PPO)": "#6d597a",
     "Heuristic": "#3d5a80",
     "Behavioral Cloning": "#2a9d8f",
-    "RL (Recurrent PPO)": "#e76f51",
-    "RL (Structured PPO)": "#8d5fd3",
+    "RL (Structured v3)": "#e01e37",
 }
 
 SCENARIO_LABELS = {
@@ -228,10 +217,10 @@ def _plot_main_dashboard(overall: pd.DataFrame, gaps: pd.DataFrame, output_path:
 
     _barh_with_labels(
         axes[0, 0],
-        unseen.sort_values("success_rate", ascending=True),
+        overall[overall["split"] == "train"].sort_values("success_rate", ascending=True),
         x="success_rate",
         y="method",
-        title="Unseen Success Rate",
+        title="Training Success Rate",
         xlabel="Success Rate",
         formatter="{:.2f}",
         xlim=(0.0, 1.0),
@@ -241,20 +230,20 @@ def _plot_main_dashboard(overall: pd.DataFrame, gaps: pd.DataFrame, output_path:
 
     _barh_with_labels(
         axes[1, 0],
-        unseen.sort_values("mean_dist_to_goal", ascending=False),
+        overall[overall["split"] == "train"].sort_values("mean_dist_to_goal", ascending=False),
         x="mean_dist_to_goal",
         y="method",
-        title="Unseen Mean Distance to Goal",
+        title="Training Goal Proximity",
         xlabel="Mean Distance to Goal",
         formatter="{:.2f}",
     )
 
     _barh_with_labels(
         axes[1, 1],
-        unseen.sort_values("mean_episode_return", ascending=True),
+        overall[overall["split"] == "train"].sort_values("mean_episode_return", ascending=True),
         x="mean_episode_return",
         y="method",
-        title="Unseen Mean Episode Return",
+        title="Training Episode Return",
         xlabel="Episode Return",
         formatter="{:.1f}",
     )
@@ -286,11 +275,12 @@ def _plot_scenario_heatmaps(aggregates: pd.DataFrame, output_path: Path) -> None
         cmap="YlGnBu",
         vmin=0.0,
         vmax=1.0,
-        linewidths=0.5,
+        linewidths=1.5,
         cbar_kws={"label": "Success Rate"},
         ax=axes[0],
+        square=True,
     )
-    axes[0].set_title("Success Rate")
+    axes[0].set_title("Success Rate by Scenario")
     axes[0].set_xlabel("")
     axes[0].set_ylabel("")
 
@@ -299,16 +289,17 @@ def _plot_scenario_heatmaps(aggregates: pd.DataFrame, output_path: Path) -> None
         annot=distance.round(2),
         fmt="",
         cmap="YlOrRd_r",
-        linewidths=0.5,
-        cbar_kws={"label": "Mean Distance to Goal"},
+        linewidths=1.5,
+        cbar_kws={"label": "Goal Proximity"},
         ax=axes[1],
+        square=True,
     )
-    axes[1].set_title("Goal Proximity")
+    axes[1].set_title("Distance to Goal (Lower is Better)")
     axes[1].set_xlabel("")
     axes[1].set_ylabel("")
 
-    plt.tight_layout(rect=(0, 0, 1, 0.95))
-    plt.savefig(output_path, dpi=220)
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=200, bbox_inches='tight')
     plt.close()
 
 
