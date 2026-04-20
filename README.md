@@ -52,6 +52,19 @@ uv run python scripts/evaluate.py
 uv run python scripts/evaluate.py --save animation.gif
 ```
 
+## Presentation Dashboard
+
+For a presentation-only Streamlit app that uses the exported PNGs and GIFs
+from `images/` directly:
+
+```bash
+uv add streamlit
+uv run streamlit run streamlit_app.py
+```
+
+The app does not launch training or evaluation code. It only displays the
+assets already present in `images/`.
+
 ## Research Pipeline (v3)
 
 The existing `v0` and `v2` pipelines remain unchanged. A separate `v3`
