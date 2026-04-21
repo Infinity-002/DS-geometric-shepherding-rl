@@ -26,22 +26,6 @@ FEATURED_ASSETS = [
         ),
     ),
     Asset(
-        title="Scenario Heatmaps",
-        filename="scenario_heatmaps.png",
-        caption=(
-            "Scenario-by-scenario performance view showing where each method "
-            "generalizes and where it struggles."
-        ),
-    ),
-    Asset(
-        title="Success Rate by Scenario",
-        filename="success_rate_by_scenario.png",
-        caption=(
-            "Per-scenario success breakdown for presentation of seen versus unseen "
-            "environment performance."
-        ),
-    ),
-    Asset(
         title="Behavioral Cloning Offline Metrics",
         filename="bc_offline_metrics.png",
         caption=(
@@ -219,7 +203,7 @@ def main() -> None:
             #     """,
             #     unsafe_allow_html=True,
             # )
-            if asset_path("scenario_heatmaps.png") is not None:
+            if asset_path("bc_offline_metrics.png") is not None:
                 render_asset(FEATURED_ASSETS[1])
 
     with graphs_tab:
