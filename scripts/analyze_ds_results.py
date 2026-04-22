@@ -420,6 +420,7 @@ def _plot_bc_metrics(metrics: pd.Series, output_path: Path) -> None:
         axes[0].set_title("Error Metrics")
         axes[0].set_xlabel("Value")
         axes[0].set_ylabel("")
+        _annotate_value_bars(axes[0], formatter="{:.3f}", inside_threshold=1.0)
     else:
         axes[0].axis("off")
 
@@ -435,12 +436,53 @@ def _plot_bc_metrics(metrics: pd.Series, output_path: Path) -> None:
         axes[1].set_title("Fit Metrics")
         axes[1].set_xlabel("Value")
         axes[1].set_ylabel("")
+        _annotate_value_bars(axes[1], formatter="{:.3f}", inside_threshold=0.25)
     else:
         axes[1].axis("off")
 
     plt.tight_layout(rect=(0, 0, 1, 0.93))
     plt.savefig(output_path, dpi=220)
     plt.close()
+
+
+def _annotate_value_bars(
+    ax: plt.Axes,
+    *,
+    formatter: str = "{:.2f}",
+    inside_threshold: float = 0.2,
+) -> None:
+    x_min, x_max = ax.get_xlim()
+    span = max(x_max - x_min, 1e-8)
+    outside_offset = span * 0.012
+    inside_offset = span * 0.02
+
+    for patch in ax.patches:
+        width = float(patch.get_width())
+        ypos = patch.get_y() + patch.get_height() / 2.0
+        label = formatter.format(width)
+
+        if width >= inside_threshold:
+            ax.text(
+                width - inside_offset,
+                ypos,
+                label,
+                va="center",
+                ha="right",
+                fontsize=10,
+                fontweight="bold",
+                color="white",
+            )
+        else:
+            ax.text(
+                width + outside_offset,
+                ypos,
+                label,
+                va="center",
+                ha="left",
+                fontsize=10,
+                fontweight="bold",
+                color="#1f2933",
+            )
 
 
 def _barh_with_labels(
