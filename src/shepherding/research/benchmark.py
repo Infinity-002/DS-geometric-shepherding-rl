@@ -17,7 +17,9 @@ from shepherding.research.models import (
     build_feedforward_model,
     build_recurrent_model,
     make_research_env,
+    make_research_vec_env,
 )
+from stable_baselines3.common.vec_env import VecNormalize
 
 
 def run_benchmark(
@@ -46,7 +48,7 @@ def run_benchmark(
             env_config = deepcopy(env_cfg)
             env_config.update(variant.get("env_overrides", {}))
             model_type = str(variant["model_type"])
-            model = _build_or_train_model(
+            model, obs_normalizer = _build_or_train_model(
                 run_name=run_name,
                 model_type=model_type,
                 env_config=env_config,
@@ -65,6 +67,7 @@ def run_benchmark(
                 episodes=episodes,
                 seed_start=seed,
                 deterministic=bool(evaluation_cfg.get("deterministic", True)),
+                obs_normalizer=obs_normalizer,
             )
             all_rows.extend(rows)
             all_summaries.extend(summaries)
@@ -99,7 +102,13 @@ def _build_or_train_model(
     seed: int,
     save_models: bool,
     output_dir: Path,
-) -> Any:
+) -> Tuple[Any, Any]:
+    """Return ``(model, obs_normalizer)`` for one benchmark variant.
+
+    The normalizer is ``None`` for agents that consume raw observations
+    (heuristic, behavioural cloning) and a callable applying the training-time
+    ``VecNormalize`` statistics for the PPO variants.
+    """
     training_cfg = config["training"]
     if model_type == "heuristic":
         return HeuristicShepherdAgent(
@@ -110,12 +119,23 @@ def _build_or_train_model(
             flee_radius=float(env_config["flee_radius"]),
             success_radius=float(env_config["success_radius"]),
             use_cluster_targets=bool(config.get("imitation", {}).get("expert", {}).get("use_cluster_targets", False)),
-        )
+        ), None
     if model_type == "behavioral_cloning":
         model_path = str(config["imitation"]["training"]["model_path"])
-        return load_behavioral_cloning_agent(model_path)
+        return load_behavioral_cloning_agent(model_path), None
 
-    train_env = make_research_env(env_config, seed=seed, scenario="train")
+    vec_cfg = dict(training_cfg.get("vec_env", {}))
+    ppo_cfg = config[f"ppo_{model_type}"] if model_type in ("recurrent", "feedforward") else {}
+    train_env = make_research_vec_env(
+        env_config,
+        seed=seed,
+        scenario="train",
+        n_envs=int(vec_cfg.get("n_envs", 8)),
+        vec_env_type=str(vec_cfg.get("vec_env_type", "subproc")),
+        normalize_observations=bool(vec_cfg.get("normalize_observations", True)),
+        normalize_rewards=bool(vec_cfg.get("normalize_rewards", True)),
+        gamma=float(ppo_cfg.get("gamma", 0.99)),
+    )
     callbacks = benchmark_callbacks(training_cfg, total_timesteps)
     tensorboard_root = str(training_cfg.get("tensorboard_log", "runs/research_v3"))
 
@@ -138,13 +158,26 @@ def _build_or_train_model(
         raise ValueError(f"Unknown benchmark model_type '{model_type}'.")
 
     model.learn(total_timesteps=total_timesteps, callback=callbacks)
+
+    obs_normalizer = _freeze_obs_normalizer(train_env)
     train_env.close()
 
     if save_models:
         model_dir = output_dir / "models" / model_type
         model_dir.mkdir(parents=True, exist_ok=True)
         model.save(str(model_dir / run_name))
-    return model
+    return model, obs_normalizer
+
+
+def _freeze_obs_normalizer(env: Any) -> Any:
+    """Capture the training observation statistics as a plain callable."""
+    current = env
+    while current is not None:
+        if isinstance(current, VecNormalize) and current.norm_obs:
+            current.training = False
+            return current.normalize_obs
+        current = getattr(current, "venv", None)
+    return None
 
 
 def _benchmark_scenarios(
@@ -156,6 +189,11 @@ def _benchmark_scenarios(
     unseen_names = list(
         scenario_cfg.get("unseen", evaluation_cfg.get("unseen_scenarios", []))
     )
-    return [("train", name) for name in train_names] + [
-        ("unseen", name) for name in unseen_names
-    ]
+    test_names = list(
+        scenario_cfg.get("test", evaluation_cfg.get("test_scenarios", []))
+    )
+    return (
+        [("train", name) for name in train_names]
+        + [("unseen", name) for name in unseen_names]
+        + [("test", name) for name in test_names]
+    )

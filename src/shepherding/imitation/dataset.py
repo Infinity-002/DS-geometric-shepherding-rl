@@ -45,6 +45,10 @@ def collect_demonstrations(
 
     env_cfg = dict(env_config)
     env_cfg["compute_expensive_metrics"] = True
+    # The heuristic expert reads the raw observation vector, so demonstrations
+    # must be collected in the legacy layout with a fixed flock size.
+    env_cfg["observation_mode"] = "legacy"
+    env_cfg["randomize_sheep_count"] = False
     rows: list[dict[str, Any]] = []
     episode_summaries: list[dict[str, Any]] = []
     total_steps = 0

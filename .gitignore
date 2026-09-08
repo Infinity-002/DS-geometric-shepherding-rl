@@ -19,6 +19,9 @@ uv.lock
 # Trained models (large binary files)
 models/*.zip
 models/**/*.zip
+# Checkpoints written next to the scripts (VecNormalize .pkl files are already
+# covered by the **/*.pkl rule below).
+scripts/models/**/*.zip
 **/*.pkl
 results/
 runs/

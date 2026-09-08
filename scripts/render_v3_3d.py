@@ -23,7 +23,7 @@ from stable_baselines3 import PPO
 from sb3_contrib import RecurrentPPO
 
 from shepherding.utils.geometry_v2 import visible_sheep_mask
-from shepherding.research import load_yaml_config
+from shepherding.research import load_obs_normalizer, load_yaml_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -41,6 +41,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-steps", type=int, default=None)
     parser.add_argument("--save", type=str, default=None)
     parser.add_argument("--fps", type=int, default=15)
+    parser.add_argument(
+        "--vecnormalize",
+        type=str,
+        default=None,
+        help="VecNormalize statistics saved alongside the model during training. "
+        "Required for models trained with observation normalization, otherwise "
+        "the rendered rollout will not match the evaluated policy.",
+    )
     return parser.parse_args()
 
 
@@ -57,6 +65,7 @@ def run_episode(
     max_steps: int,
     seed: int,
     scenario: str,
+    obs_normalizer: Any = None,
 ) -> Tuple[List[np.ndarray], List[np.ndarray], List[np.ndarray], np.ndarray, List[Tuple[float, float, float, float]], float]:
     obs, _ = env.reset(seed=seed, options={"scenario": scenario})
     inner = env.unwrapped
@@ -74,12 +83,13 @@ def run_episode(
             visible_sheep_mask(inner.dog_pos, inner.sheep_pos, inner.visibility_radius)
         )
 
+        model_obs = obs if obs_normalizer is None else obs_normalizer(obs)
         if model_type == "recurrent":
             action, state = model.predict(
-                obs, state=state, episode_start=episode_start, deterministic=True
+                model_obs, state=state, episode_start=episode_start, deterministic=True
             )
         else:
-            action, _ = model.predict(obs, deterministic=True)
+            action, _ = model.predict(model_obs, deterministic=True)
 
         obs, _, terminated, truncated, _ = env.step(action)
         done = terminated or truncated
@@ -237,6 +247,9 @@ def main() -> None:
         max_steps=max_steps,
         seed=args.seed,
         scenario=args.scenario,
+        obs_normalizer=(
+            load_obs_normalizer(Path(args.vecnormalize)) if args.vecnormalize else None
+        ),
     )
     animate_episode(
         dog_history=dog_history,

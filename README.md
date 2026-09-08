@@ -52,6 +52,69 @@ uv run python scripts/evaluate.py
 uv run python scripts/evaluate.py --save animation.gif
 ```
 
+## v3: generalization workflow
+
+The v3 environment is built around the seen/unseen gap. Train, then score on a
+*held-out procedural test suite* rather than on the five hand-authored
+`unseen_*` presets — those are only five points, and anything tuned against them
+leaks into the reported number.
+
+```bash
+# Train (vectorized + normalized; saves best-on-validation and VecNormalize stats)
+uv run python scripts/train_v3_recurrent.py --config configs/research/v3.yaml --seed 0
+
+# Score on the held-out procedural suite with bootstrap CIs
+uv run python scripts/evaluate_generalization.py \
+  --model-path models/research_v3/recurrent/recurrent_seed0_best.zip \
+  --model-type recurrent \
+  --vecnormalize models/research_v3/recurrent/recurrent_seed0_vecnormalize.pkl \
+  --episodes 150
+```
+
+**Always pass `--vecnormalize`.** Training normalizes observations, so a model
+evaluated on raw observations scores near-randomly.
+
+### Scenario splits
+
+| Scenario | Role |
+| --- | --- |
+| `train` | Randomized training distribution, gated by the curriculum |
+| `validation` | Same distribution, disjoint seed stream; used only for checkpoint selection |
+| `test_procedural` | Deliberately harder, disjoint ranges; the number to report |
+| `unseen_*` | Five fixed presets, kept for qualitative comparison and rendering |
+
+### Observation modes
+
+- `egocentric` (default) — normalized features, unseen sheep encoded as zeros
+  plus a visibility flag, obstacles replaced by a 24-ray lidar sweep, absolute
+  dog position replaced by boundary clearances. Invariant to obstacle count,
+  ordering and shape.
+- `observation_frame: goal` — additionally aligns observations *and* actions with
+  the goal direction, making the task rotation-invariant. Off by default; run it
+  as an ablation.
+- `legacy` — the original layout with the `999.0` sentinel. Required by the
+  heuristic baseline and behavioural-cloning agents, which decode it directly.
+
+### Reading the reports
+
+`scripts/analyze_results_v3.py` and `scripts/analyze_ds_results.py` report against
+the most meaningful held-out split present — `test` (the procedural suite) when
+available, falling back to `unseen`. Both emit one `generalization_gap_<split>.csv`
+per held-out split, and lead their figures with **fraction of flock delivered**
+rather than the strict success rate.
+
+That distinction matters: `success` requires *every* sheep inside the goal radius,
+so a single permanently-lost sheep zeroes an otherwise good episode. Under wide
+randomization it is frequently zero for every method, which makes success-only
+figures flat and uninformative. The scripts print a note when they detect this.
+
+### Diagnosing a run
+
+`models/research_v3/<type>/<run>_metadata.json` records `curriculum.fraction_per_stage`.
+If a run spent most of its timesteps below stage 0.66 it trained on narrower
+randomization than the config asks for, which alone can explain a large
+seen/unseen gap. Training prints a warning when this happens.
+
 ## Presentation Dashboard
 
 For a presentation-only Streamlit app that uses the exported PNGs and GIFs

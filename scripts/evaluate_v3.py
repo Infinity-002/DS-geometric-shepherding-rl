@@ -21,6 +21,7 @@ from shepherding.research import (
     collect_episode,
     load_yaml_config,
     load_model,
+    load_obs_normalizer,
     make_research_env,
     save_rows,
     save_summaries,
@@ -42,6 +43,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--episodes", type=int, default=None)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--output-dir", type=str, default="results/research_v3")
+    parser.add_argument(
+        "--vecnormalize",
+        type=str,
+        default=None,
+        help="VecNormalize statistics saved alongside the model during training.",
+    )
     return parser.parse_args()
 
 def main() -> None:
@@ -70,6 +77,9 @@ def main() -> None:
                 "--model-path is required for feedforward, recurrent, and behavioral_cloning evaluation."
             )
         model = load_model(args.model_type, args.model_path)
+    obs_normalizer = (
+        load_obs_normalizer(Path(args.vecnormalize)) if args.vecnormalize else None
+    )
     output_dir = Path(args.output_dir) / args.run_name
     output_dir.mkdir(parents=True, exist_ok=True)
     eval_env_cfg = dict(env_cfg)
@@ -79,6 +89,7 @@ def main() -> None:
     all_summaries = []
 
     scenarios = [("train", name) for name in eval_cfg["train_scenarios"]]
+    scenarios += [("test", name) for name in eval_cfg.get("test_scenarios", [])]
     scenarios += [("unseen", name) for name in eval_cfg["unseen_scenarios"]]
 
     for split, scenario in scenarios:
@@ -96,6 +107,7 @@ def main() -> None:
                 split=split,
                 scenario=scenario,
                 episode_idx=episode_idx,
+                obs_normalizer=obs_normalizer,
             )
             all_rows.extend(rows)
             all_summaries.append(summary)
@@ -115,6 +127,7 @@ def main() -> None:
             "model_path": args.model_path,
             "episodes_per_scenario": episodes,
             "seed_start": args.seed,
+            "vecnormalize": args.vecnormalize,
         },
     )
     print(f"Saved evaluation outputs to {output_dir}")

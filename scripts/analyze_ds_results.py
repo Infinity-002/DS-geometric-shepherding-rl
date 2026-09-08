@@ -8,6 +8,7 @@ from pathlib import Path
 import sys
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 
@@ -15,6 +16,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = PROJECT_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
+
+from shepherding.research.reporting import (  # noqa: E402
+    available_aggs,
+    generalization_gap_table,
+    holdout_splits,
+    preferred_holdout_split,
+)
 
 
 DISPLAY_NAMES = {
@@ -38,6 +46,7 @@ PALETTE = {
 
 SCENARIO_LABELS = {
     "train": "Train",
+    "test_procedural": "Procedural Test",
     "unseen_split_field": "Split Field",
     "unseen_open_field": "Open Field",
     "unseen_corridor": "Corridor",
@@ -95,19 +104,40 @@ def main() -> None:
     aggregates["scenario_short"] = aggregates["scenario"].map(_scenario_label)
 
     overall = _build_overall_table(aggregates)
-    gaps = _build_generalization_table(overall)
     scenario_table = _build_scenario_table(aggregates)
-    ranking = _build_method_ranking(overall)
+
+    # "test" (the procedural held-out suite) wins over "unseen" when present;
+    # previously a results directory containing it would have had those rows
+    # dropped from every table and figure.
+    primary_holdout = preferred_holdout_split(overall)
+    if primary_holdout is None:
+        raise SystemExit(
+            "No held-out split found in the results. Expected at least one of "
+            "'test' or 'unseen' in episode_summaries.csv."
+        )
+    print(f"Reporting generalization against the '{primary_holdout}' split.")
 
     overall.to_csv(tables_dir / "overall_method_summary.csv", index=False)
-    gaps.to_csv(tables_dir / "generalization_gap.csv", index=False)
     scenario_table.to_csv(tables_dir / "scenario_metric_matrix.csv", index=False)
+
+    # A gap table per held-out split, so 'unseen' stays available for continuity
+    # with older reports even when 'test' is the headline.
+    gaps_by_split = {}
+    for split_name in holdout_splits(overall):
+        split_gaps = _build_generalization_table(overall, split_name)
+        if split_gaps.empty:
+            continue
+        gaps_by_split[split_name] = split_gaps
+        split_gaps.to_csv(tables_dir / f"generalization_gap_{split_name}.csv", index=False)
+    gaps = gaps_by_split.get(primary_holdout, pd.DataFrame())
+
+    ranking = _build_method_ranking(overall, primary_holdout)
     ranking.to_csv(tables_dir / "method_ranking.csv", index=False)
 
-    _plot_main_dashboard(overall, gaps, figures_dir / "main_dashboard.png")
+    _plot_main_dashboard(overall, gaps, primary_holdout, figures_dir / "main_dashboard.png")
     _plot_scenario_heatmaps(aggregates, figures_dir / "scenario_heatmaps.png")
     _plot_return_profiles(summaries, figures_dir / "return_profiles.png")
-    _plot_progress_tradeoff(overall, figures_dir / "progress_tradeoff.png")
+    _plot_progress_tradeoff(overall, primary_holdout, figures_dir / "progress_tradeoff.png")
 
     bc_metrics_path = Path(args.bc_metrics)
     if bc_metrics_path.exists():
@@ -133,100 +163,126 @@ def _ordered_methods(values: pd.Series) -> pd.Categorical:
 
 
 def _build_overall_table(aggregates: pd.DataFrame) -> pd.DataFrame:
-    grouped = (
-        aggregates.groupby(["method", "split"], as_index=False)
-        .agg(
-            success_rate=("success_rate", "mean"),
-            mean_episode_return=("mean_episode_return", "mean"),
-            mean_episode_length=("mean_episode_length", "mean"),
-            mean_dist_to_goal=("mean_dist_to_goal", "mean"),
-            mean_stray_count=("mean_stray_count", "mean"),
-            mean_collision_count=("mean_collision_count", "mean"),
-            mean_dog_path_length=("mean_dog_path_length", "mean"),
-        )
+    spec = {
+        "success_rate": ("success_rate", "mean"),
+        "fraction_at_goal": ("mean_fraction_at_goal", "mean"),
+        "best_fraction_at_goal": ("mean_best_fraction_at_goal", "mean"),
+        "mean_episode_return": ("mean_episode_return", "mean"),
+        "mean_episode_length": ("mean_episode_length", "mean"),
+        "mean_dist_to_goal": ("mean_dist_to_goal", "mean"),
+        "mean_max_dist_to_goal": ("mean_max_dist_to_goal", "mean"),
+        "mean_stray_count": ("mean_stray_count", "mean"),
+        "mean_collision_count": ("mean_collision_count", "mean"),
+        "mean_dog_path_length": ("mean_dog_path_length", "mean"),
+    }
+    grouped = aggregates.groupby(["method", "split"], as_index=False).agg(
+        **available_aggs(aggregates, spec)
     )
     grouped["method"] = _ordered_methods(grouped["method"])
     return grouped.sort_values(["split", "method"]).reset_index(drop=True)
 
 
-def _build_generalization_table(overall: pd.DataFrame) -> pd.DataFrame:
-    train = overall[overall["split"] == "train"].rename(
-        columns={
-            "success_rate": "train_success_rate",
-            "mean_episode_return": "train_return",
-            "mean_dist_to_goal": "train_mean_dist_to_goal",
-        }
+def _headline_metric(frame: pd.DataFrame) -> tuple[str, str]:
+    """Pick the metric to lead the figures with.
+
+    Prefers fraction-of-flock-delivered: the strict success flag needs every
+    sheep inside the goal radius and is routinely zero for every method, which
+    makes a success-only dashboard say nothing.
+    """
+    if "fraction_at_goal" in frame.columns and float(
+        frame["fraction_at_goal"].fillna(0.0).max()
+    ) > 0.0:
+        return "fraction_at_goal", "Fraction of Flock Delivered"
+    return "success_rate", "Success Rate"
+
+
+def _build_generalization_table(overall: pd.DataFrame, holdout_split: str) -> pd.DataFrame:
+    merged = generalization_gap_table(
+        overall,
+        holdout_split=holdout_split,
+        group_key="method",
+        metrics=(
+            "success_rate",
+            "fraction_at_goal",
+            "mean_episode_return",
+            "mean_dist_to_goal",
+        ),
     )
-    unseen = overall[overall["split"] == "unseen"].rename(
-        columns={
-            "success_rate": "unseen_success_rate",
-            "mean_episode_return": "unseen_return",
-            "mean_dist_to_goal": "unseen_mean_dist_to_goal",
-        }
-    )
-    merged = train.merge(unseen, on="method", how="inner")
-    merged["success_gap"] = merged["train_success_rate"] - merged["unseen_success_rate"]
-    merged["return_gap"] = merged["train_return"] - merged["unseen_return"]
+    if merged.empty:
+        return merged
     merged["method"] = _ordered_methods(merged["method"])
     return merged.sort_values("method").reset_index(drop=True)
 
 
 def _build_scenario_table(aggregates: pd.DataFrame) -> pd.DataFrame:
-    table = aggregates[
-        [
-            "method",
-            "split",
-            "scenario_short",
-            "success_rate",
-            "mean_episode_return",
-            "mean_dist_to_goal",
-            "mean_stray_count",
-            "mean_collision_count",
-            "mean_dog_path_length",
-        ]
-    ].copy()
+    columns = [
+        "method",
+        "split",
+        "scenario_short",
+        "success_rate",
+        "mean_fraction_at_goal",
+        "mean_best_fraction_at_goal",
+        "mean_episode_return",
+        "mean_dist_to_goal",
+        "mean_max_dist_to_goal",
+        "mean_stray_count",
+        "mean_collision_count",
+        "mean_dog_path_length",
+    ]
+    table = aggregates[[c for c in columns if c in aggregates.columns]].copy()
     table["method"] = _ordered_methods(table["method"])
     return table.sort_values(["split", "scenario_short", "method"]).reset_index(drop=True)
 
 
-def _build_method_ranking(overall: pd.DataFrame) -> pd.DataFrame:
-    unseen = overall[overall["split"] == "unseen"].copy()
-    if unseen.empty:
-        return unseen
-    unseen["rank_success"] = unseen["success_rate"].rank(ascending=False, method="min")
-    unseen["rank_return"] = unseen["mean_episode_return"].rank(ascending=False, method="min")
-    unseen["rank_distance"] = unseen["mean_dist_to_goal"].rank(ascending=True, method="min")
-    unseen["rank_efficiency"] = unseen["mean_dog_path_length"].rank(ascending=True, method="min")
-    unseen["composite_rank"] = (
-        unseen["rank_success"]
-        + unseen["rank_return"]
-        + unseen["rank_distance"]
-        + unseen["rank_efficiency"]
+def _build_method_ranking(overall: pd.DataFrame, holdout_split: str) -> pd.DataFrame:
+    holdout = overall[overall["split"] == holdout_split].copy()
+    if holdout.empty:
+        return holdout
+    metric, _ = _headline_metric(holdout)
+    holdout["rank_delivery"] = holdout[metric].rank(ascending=False, method="min")
+    holdout["rank_return"] = holdout["mean_episode_return"].rank(ascending=False, method="min")
+    holdout["rank_distance"] = holdout["mean_dist_to_goal"].rank(ascending=True, method="min")
+    holdout["rank_efficiency"] = holdout["mean_dog_path_length"].rank(
+        ascending=True, method="min"
     )
-    unseen["method"] = _ordered_methods(unseen["method"])
-    return unseen.sort_values(["composite_rank", "method"]).reset_index(drop=True)
+    holdout["composite_rank"] = (
+        holdout["rank_delivery"]
+        + holdout["rank_return"]
+        + holdout["rank_distance"]
+        + holdout["rank_efficiency"]
+    )
+    holdout["ranking_metric"] = metric
+    holdout["ranking_split"] = holdout_split
+    holdout["method"] = _ordered_methods(holdout["method"])
+    return holdout.sort_values(["composite_rank", "method"]).reset_index(drop=True)
 
 
-def _plot_main_dashboard(overall: pd.DataFrame, gaps: pd.DataFrame, output_path: Path) -> None:
-    unseen = overall[overall["split"] == "unseen"].copy()
-    unseen["method"] = _ordered_methods(unseen["method"])
-    gaps["method"] = _ordered_methods(gaps["method"])
+def _plot_main_dashboard(
+    overall: pd.DataFrame,
+    gaps: pd.DataFrame,
+    holdout_split: str,
+    output_path: Path,
+) -> None:
+    if not gaps.empty:
+        gaps = gaps.copy()
+        gaps["method"] = _ordered_methods(gaps["method"])
+    metric, metric_label = _headline_metric(overall)
 
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
     fig.suptitle("Shepherding Comparison Dashboard", fontsize=20, fontweight="bold")
 
     _barh_with_labels(
         axes[0, 0],
-        overall[overall["split"] == "train"].sort_values("success_rate", ascending=True),
-        x="success_rate",
+        overall[overall["split"] == "train"].sort_values(metric, ascending=True),
+        x=metric,
         y="method",
-        title="Training Success Rate",
-        xlabel="Success Rate",
+        title=f"Training {metric_label}",
+        xlabel=metric_label,
         formatter="{:.2f}",
         xlim=(0.0, 1.0),
     )
 
-    _dumbbell_success_plot(axes[0, 1], gaps)
+    _dumbbell_gap_plot(axes[0, 1], gaps, metric, metric_label, holdout_split)
 
     _barh_with_labels(
         axes[1, 0],
@@ -256,47 +312,53 @@ def _plot_main_dashboard(overall: pd.DataFrame, gaps: pd.DataFrame, output_path:
 def _plot_scenario_heatmaps(aggregates: pd.DataFrame, output_path: Path) -> None:
     methods = [m for m in DISPLAY_ORDER if m in set(aggregates["method"])]
     scenario_order = _scenario_order(aggregates["scenario_short"])
-    success = (
-        aggregates.pivot_table(index="method", columns="scenario_short", values="success_rate")
-        .reindex(index=methods, columns=scenario_order)
-    )
-    distance = (
-        aggregates.pivot_table(index="method", columns="scenario_short", values="mean_dist_to_goal")
-        .reindex(index=methods, columns=scenario_order)
-    )
 
-    fig, axes = plt.subplots(1, 2, figsize=(15, 5.5))
+    def pivot(column: str) -> pd.DataFrame | None:
+        if column not in aggregates.columns:
+            return None
+        return aggregates.pivot_table(
+            index="method", columns="scenario_short", values=column
+        ).reindex(index=methods, columns=scenario_order)
+
+    panels = [
+        (pivot("success_rate"), "Success Rate by Scenario", "YlGnBu", (0.0, 1.0), "Success Rate"),
+        (
+            pivot("mean_fraction_at_goal"),
+            "Fraction of Flock Delivered",
+            "YlGnBu",
+            (0.0, 1.0),
+            "Fraction Delivered",
+        ),
+        (
+            pivot("mean_dist_to_goal"),
+            "Distance to Goal (Lower is Better)",
+            "YlOrRd_r",
+            None,
+            "Goal Proximity",
+        ),
+    ]
+    panels = [panel for panel in panels if panel[0] is not None]
+
+    fig, axes = plt.subplots(1, len(panels), figsize=(7.5 * len(panels), 5.5))
+    axes = np.atleast_1d(axes)
     fig.suptitle("Scenario-by-Scenario Performance", fontsize=19, fontweight="bold")
 
-    sns.heatmap(
-        success,
-        annot=success.round(2),
-        fmt="",
-        cmap="YlGnBu",
-        vmin=0.0,
-        vmax=1.0,
-        linewidths=1.5,
-        cbar_kws={"label": "Success Rate"},
-        ax=axes[0],
-        square=True,
-    )
-    axes[0].set_title("Success Rate by Scenario")
-    axes[0].set_xlabel("")
-    axes[0].set_ylabel("")
-
-    sns.heatmap(
-        distance,
-        annot=distance.round(2),
-        fmt="",
-        cmap="YlOrRd_r",
-        linewidths=1.5,
-        cbar_kws={"label": "Goal Proximity"},
-        ax=axes[1],
-        square=True,
-    )
-    axes[1].set_title("Distance to Goal (Lower is Better)")
-    axes[1].set_xlabel("")
-    axes[1].set_ylabel("")
+    for ax, (data, title, cmap, limits, cbar_label) in zip(axes, panels):
+        sns.heatmap(
+            data,
+            annot=data.round(2),
+            fmt="",
+            cmap=cmap,
+            vmin=None if limits is None else limits[0],
+            vmax=None if limits is None else limits[1],
+            linewidths=1.5,
+            cbar_kws={"label": cbar_label},
+            ax=ax,
+            square=True,
+        )
+        ax.set_title(title)
+        ax.set_xlabel("")
+        ax.set_ylabel("")
 
     plt.tight_layout()
     plt.savefig(output_path, dpi=200, bbox_inches='tight')
@@ -308,10 +370,18 @@ def _plot_return_profiles(summaries: pd.DataFrame, output_path: Path) -> None:
     plot_df["method"] = _ordered_methods(plot_df["method"])
     order = [m for m in DISPLAY_ORDER if m in set(plot_df["method"])]
 
-    fig, axes = plt.subplots(1, 2, figsize=(15, 5.5), sharey=True)
+    splits = [
+        name for name in ("train", "unseen", "test") if name in set(plot_df["split"])
+    ]
+    if not splits:
+        return
+    fig, axes = plt.subplots(
+        1, len(splits), figsize=(7.5 * len(splits), 5.5), sharey=True
+    )
+    axes = np.atleast_1d(axes)
     fig.suptitle("Episode Return Profiles", fontsize=19, fontweight="bold")
 
-    for ax, split in zip(axes, ["train", "unseen"]):
+    for ax, split in zip(axes, splits):
         split_df = plot_df[plot_df["split"] == split].copy()
         if split_df.empty:
             ax.axis("off")
@@ -342,30 +412,33 @@ def _plot_return_profiles(summaries: pd.DataFrame, output_path: Path) -> None:
         ax.set_title(split.title())
         ax.set_xlabel("")
         ax.tick_params(axis="x", rotation=8)
-        if split == "train" and legend is not None:
+        if split != splits[-1] and legend is not None:
             legend.remove()
     axes[0].set_ylabel("Episode Return")
-    axes[1].set_ylabel("")
+    for ax in axes[1:]:
+        ax.set_ylabel("")
     plt.tight_layout(rect=(0, 0, 1, 0.94))
     plt.savefig(output_path, dpi=220)
     plt.close()
 
 
-def _plot_progress_tradeoff(overall: pd.DataFrame, output_path: Path) -> None:
-    unseen = overall[overall["split"] == "unseen"].copy()
-    unseen["method"] = _ordered_methods(unseen["method"])
+def _plot_progress_tradeoff(
+    overall: pd.DataFrame, holdout_split: str, output_path: Path
+) -> None:
+    holdout = overall[overall["split"] == holdout_split].copy()
+    holdout["method"] = _ordered_methods(holdout["method"])
     fig, ax = plt.subplots(figsize=(9, 7))
     sns.scatterplot(
-        data=unseen,
+        data=holdout,
         x="mean_dog_path_length",
         y="mean_dist_to_goal",
         hue="method",
-        hue_order=[m for m in DISPLAY_ORDER if m in set(unseen["method"])],
+        hue_order=[m for m in DISPLAY_ORDER if m in set(holdout["method"])],
         palette=PALETTE,
         s=220,
         ax=ax,
     )
-    for row in unseen.itertuples(index=False):
+    for row in holdout.itertuples(index=False):
         ax.annotate(
             str(row.method),
             (row.mean_dog_path_length, row.mean_dist_to_goal),
@@ -373,7 +446,7 @@ def _plot_progress_tradeoff(overall: pd.DataFrame, output_path: Path) -> None:
             textcoords="offset points",
             fontsize=11,
         )
-    ax.set_title("Unseen Efficiency vs Final Goal Proximity")
+    ax.set_title(f"{holdout_split.title()} Efficiency vs Final Goal Proximity")
     ax.set_xlabel("Average Dog Path Length")
     ax.set_ylabel("Mean Distance to Goal")
     legend = ax.legend(title="Method", frameon=True)
@@ -456,36 +529,54 @@ def _barh_with_labels(
         ax.text(xpos + offset, ypos, formatter.format(value), va="center", fontsize=10)
 
 
-def _dumbbell_success_plot(ax: plt.Axes, gap_df: pd.DataFrame) -> None:
+def _dumbbell_gap_plot(
+    ax: plt.Axes,
+    gap_df: pd.DataFrame,
+    metric: str,
+    metric_label: str,
+    holdout_split: str,
+) -> None:
+    train_col = f"train_{metric}"
+    holdout_col = f"holdout_{metric}"
+    if gap_df.empty or train_col not in gap_df.columns:
+        ax.axis("off")
+        return
+
     methods = [m for m in DISPLAY_ORDER if m in set(gap_df["method"])]
     gap_df = gap_df.set_index("method").reindex(methods).reset_index()
     y_positions = range(len(gap_df))
 
     for idx, row in enumerate(gap_df.itertuples(index=False)):
         color = PALETTE.get(str(row.method), "#6c757d")
+        train_value = float(getattr(row, train_col))
+        holdout_value = float(getattr(row, holdout_col))
         ax.plot(
-            [row.train_success_rate, row.unseen_success_rate],
-            [idx, idx],
-            color=color,
-            linewidth=3,
-            alpha=0.9,
+            [train_value, holdout_value], [idx, idx], color=color, linewidth=3, alpha=0.9
         )
-        ax.scatter(row.train_success_rate, idx, color=color, s=110, marker="o", zorder=3)
-        ax.scatter(row.unseen_success_rate, idx, color=color, s=110, marker="s", zorder=3)
-        ax.text(row.train_success_rate + 0.02, idx + 0.12, f"{row.train_success_rate:.2f}", fontsize=9)
-        ax.text(row.unseen_success_rate + 0.02, idx - 0.22, f"{row.unseen_success_rate:.2f}", fontsize=9)
+        ax.scatter(train_value, idx, color=color, s=110, marker="o", zorder=3)
+        ax.scatter(holdout_value, idx, color=color, s=110, marker="s", zorder=3)
+        ax.text(train_value + 0.02, idx + 0.12, f"{train_value:.2f}", fontsize=9)
+        ax.text(holdout_value + 0.02, idx - 0.22, f"{holdout_value:.2f}", fontsize=9)
 
     ax.set_yticks(list(y_positions))
     ax.set_yticklabels([str(m) for m in gap_df["method"]])
     ax.set_xlim(0.0, 1.0)
-    ax.set_xlabel("Success Rate")
-    ax.set_title("Train vs Unseen Reliability")
+    ax.set_xlabel(metric_label)
+    ax.set_title(f"Train (o) vs {holdout_split.title()} (s) {metric_label}")
     ax.grid(axis="x", alpha=0.25)
     ax.set_ylabel("")
 
 
 def _scenario_order(values: pd.Series) -> list[str]:
-    preferred = ["Train", "Split Field", "Open Field", "Corridor", "Dense", "Narrow Gate"]
+    preferred = [
+        "Train",
+        "Split Field",
+        "Open Field",
+        "Corridor",
+        "Dense",
+        "Narrow Gate",
+        "Procedural Test",
+    ]
     present = list(dict.fromkeys(values.tolist()))
     ordered = [name for name in preferred if name in present]
     ordered.extend([name for name in present if name not in ordered])

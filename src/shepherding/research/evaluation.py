@@ -22,6 +22,12 @@ class EpisodeSummary:
     scenario: str
     episode_idx: int
     success: int
+    fraction_at_goal: float
+    best_fraction_at_goal: float
+    steps_to_80pct_collected: int
+    max_dist_to_goal: float
+    n_sheep: int
+    topology: str
     episode_length: int
     episode_return: float
     mean_dist_to_goal: float
@@ -55,6 +61,7 @@ def collect_episode(
     split: str,
     scenario: str,
     episode_idx: int,
+    obs_normalizer: Any = None,
 ) -> tuple[list[dict[str, Any]], EpisodeSummary]:
     """Run a single episode and return step-wise rows and final summary."""
     obs, info = env.reset(seed=seed, options={"scenario": scenario})
@@ -72,7 +79,7 @@ def collect_episode(
         action, state = _predict_action(
             model=model,
             model_type=model_type,
-            observation=obs,
+            observation=obs if obs_normalizer is None else obs_normalizer(obs),
             state=state,
             episode_start=episode_start,
             deterministic=deterministic,
@@ -103,6 +110,7 @@ def collect_episode(
                 "centroid_x": float(centroid[0]),
                 "centroid_y": float(centroid[1]),
                 "mean_dist_to_goal": float(final_info.get("mean_dist_to_goal", 0.0)),
+                "fraction_at_goal": float(final_info.get("fraction_at_goal", 0.0)),
                 "visible_ratio": float(final_info.get("visible_ratio", 0.0)),
                 "flock_hull_area": float(final_info.get("flock_hull_area", 0.0)),
                 "stray_count": int(final_info.get("stray_count", 0)),
@@ -142,6 +150,12 @@ def collect_episode(
         scenario=scenario,
         episode_idx=episode_idx,
         success=int(final_info.get("all_at_goal", False)),
+        fraction_at_goal=float(final_info.get("fraction_at_goal", 0.0)),
+        best_fraction_at_goal=float(final_info.get("best_fraction_at_goal", 0.0)),
+        steps_to_80pct_collected=int(final_info.get("steps_to_80pct_collected", -1)),
+        max_dist_to_goal=float(final_info.get("max_dist_to_goal", 0.0)),
+        n_sheep=int(final_info.get("n_sheep", 0)),
+        topology=str(final_info.get("topology", "unknown")),
         episode_length=int(final_info.get("step", len(rows))),
         episode_return=float(total_reward),
         mean_dist_to_goal=float(final_info.get("mean_dist_to_goal", 0.0)),
@@ -183,6 +197,7 @@ def evaluate_scenarios(
     episodes: int,
     seed_start: int,
     deterministic: bool,
+    obs_normalizer: Any = None,
 ) -> tuple[list[dict[str, Any]], list[EpisodeSummary]]:
     rows: list[dict[str, Any]] = []
     summaries: list[EpisodeSummary] = []
@@ -204,6 +219,7 @@ def evaluate_scenarios(
                 split=split,
                 scenario=scenario,
                 episode_idx=episode_idx,
+                obs_normalizer=obs_normalizer,
             )
             rows.extend(episode_rows)
             summaries.append(summary)
@@ -228,6 +244,10 @@ def aggregate_results(input_csv: Path, output_csv: Path) -> pd.DataFrame:
         "seeds": ("seed", "nunique"),
     }
     optional_aggs: Dict[str, tuple[str, str]] = {
+        "mean_fraction_at_goal": ("fraction_at_goal", "mean"),
+        "std_fraction_at_goal": ("fraction_at_goal", "std"),
+        "mean_best_fraction_at_goal": ("best_fraction_at_goal", "mean"),
+        "mean_max_dist_to_goal": ("max_dist_to_goal", "mean"),
         "mean_collision_event_count": ("collision_event_count", "mean"),
         "mean_reward_base": ("avg_reward_base", "mean"),
         "mean_reward_progress": ("avg_reward_progress", "mean"),

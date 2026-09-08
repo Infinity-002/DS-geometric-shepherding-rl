@@ -4,6 +4,7 @@ benchmark:
   episodes: 6
   scenarios:
     train: ["train"]
+    test: ["test_procedural"]
     unseen:
       [
         "unseen_corridor",
@@ -16,6 +17,10 @@ benchmark:
     - run_name: heuristic_baseline
       model_type: heuristic
       env_overrides:
+        # The heuristic decodes the raw observation vector, so it needs the
+        # original layout and a fixed flock size.
+        observation_mode: legacy
+        randomize_sheep_count: false
         domain_randomization: false
         randomize_visibility: false
         randomize_goal: false
@@ -46,3 +51,28 @@ benchmark:
         randomize_obstacles: true
         randomize_dynamics: true
         visibility_radius: 40.0
+
+    # --- ablations for the generalization changes -----------------------------
+    # Isolates the observation rewrite: same algorithm and randomization, but the
+    # original sentinel/absolute-position/indexed-obstacle encoding.
+    - run_name: recurrent_legacy_observation
+      model_type: recurrent
+      env_overrides:
+        observation_mode: legacy
+        randomize_sheep_count: false
+        domain_randomization: true
+        randomize_visibility: true
+        randomize_goal: true
+        randomize_obstacles: true
+        randomize_dynamics: true
+    # Isolates the rotation-invariant frame.
+    - run_name: recurrent_goal_frame
+      model_type: recurrent
+      env_overrides:
+        observation_mode: egocentric
+        observation_frame: goal
+        domain_randomization: true
+        randomize_visibility: true
+        randomize_goal: true
+        randomize_obstacles: true
+        randomize_dynamics: true

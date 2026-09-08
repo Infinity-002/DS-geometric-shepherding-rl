@@ -33,6 +33,16 @@ environment:
   goal_seek_factor: 0.03
   structured_train_obstacles: true
   opposite_goal_spawn: true
+
+  # --- observation encoding -------------------------------------------------
+  max_sheep: 16
+  observation_mode: egocentric
+  observation_frame: world
+  n_lidar_rays: 24
+  lidar_range: 15.0
+  randomize_sheep_count: true
+  # Reduced from the original 125.0 now that returns are normalized.
+  success_bonus: 20.0
   scenario: train
 
 training:
@@ -40,6 +50,17 @@ training:
   save_dir: models/research_v3_structured
   tensorboard_log: runs/research_v3_structured
   eval_episodes: 6
+  vec_env:
+    n_envs: 12
+    vec_env_type: subproc
+    normalize_observations: true
+    normalize_rewards: true
+  validation:
+    enabled: true
+    scenario: validation
+    episodes: 8
+    eval_freq: 25000
+    seed: 10000
   curriculum:
     strategy: adaptive
     window: 30
@@ -48,27 +69,29 @@ training:
       - stage: 0.0
         min_success_rate: 0.0
       - stage: 0.33
-        min_success_rate: 0.15
+        min_fraction_at_goal: 0.3
         min_visibility_ratio: 0.45
         max_collision_event_count: 8.0
         min_progress_reward: -0.02
         min_timestep_ratio: 0.05
       - stage: 0.66
-        min_success_rate: 0.35
+        min_fraction_at_goal: 0.55
         min_visibility_ratio: 0.55
         max_collision_event_count: 6.0
         min_progress_reward: 0.0
         min_timestep_ratio: 0.18
       - stage: 1.0
-        min_success_rate: 0.55
+        min_fraction_at_goal: 0.7
+        min_success_rate: 0.15
         min_visibility_ratio: 0.62
         max_collision_event_count: 4.5
         min_progress_reward: 0.005
         min_timestep_ratio: 0.30
 
 ppo_feedforward:
-  n_steps: 4096
-  batch_size: 128
+  # n_steps is per-env: 512 x 12 envs per rollout.
+  n_steps: 512
+  batch_size: 512
   n_epochs: 10
   learning_rate: 0.0003
   gamma: 0.99
@@ -77,8 +100,9 @@ ppo_feedforward:
   ent_coef: 0.01
 
 ppo_recurrent:
-  n_steps: 1024
-  batch_size: 128
+  # 256 x 12 envs; batch_size is a multiple of n_envs.
+  n_steps: 256
+  batch_size: 384
   n_epochs: 10
   learning_rate: 0.0003
   gamma: 0.99
@@ -89,5 +113,6 @@ ppo_recurrent:
 
 evaluation:
   train_scenarios: ["train"]
+  test_scenarios: ["test_procedural"]
   unseen_scenarios: ["unseen_split_field", "unseen_open_field"]
   deterministic: true

@@ -168,5 +168,16 @@ def scenario_presets(grid_size: float) -> Dict[str, ScenarioTemplate]:
     }
 
 
+#: Scenario names resolved procedurally by the environment rather than from the
+#: hand-authored preset table.
+#:
+#: ``train``            – the randomized training distribution (curriculum-gated)
+#: ``validation``       – same distribution, disjoint seed stream, used only for
+#:                        model selection during training
+#: ``test_procedural``  – a deliberately harder, disjoint distribution used as the
+#:                        held-out test suite
+PROCEDURAL_SCENARIOS: tuple[str, ...] = ("train", "validation", "test_procedural")
+
+
 def available_scenarios(grid_size: float) -> list[str]:
-    return sorted(scenario_presets(grid_size).keys())
+    return sorted(scenario_presets(grid_size).keys()) + list(PROCEDURAL_SCENARIOS)

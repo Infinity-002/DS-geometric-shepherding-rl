@@ -14,6 +14,8 @@ SRC_ROOT = PROJECT_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
+from stable_baselines3.common.vec_env import VecNormalize
+
 import shepherding.envs  # noqa: F401
 
 from shepherding.research import (
@@ -26,6 +28,7 @@ from shepherding.research import (
     create_significance_table,
     load_yaml_config,
     make_research_env,
+    make_research_vec_env,
     save_rows,
     save_summaries,
     write_json,
@@ -92,6 +95,52 @@ def main() -> None:
                 "visibility_radius": env_cfg["visibility_radius"],
             },
         },
+        # --- ablations for the generalization changes -----------------------
+        {
+            # Isolates the observation rewrite: same algorithm, same
+            # randomization, but the original sentinel / absolute-position /
+            # indexed-obstacle encoding.
+            "run_name": "recurrent_legacy_observation",
+            "model_type": "recurrent",
+            "env_overrides": {
+                "observation_mode": "legacy",
+                "randomize_sheep_count": False,
+                "domain_randomization": True,
+                "randomize_visibility": True,
+                "randomize_goal": True,
+                "randomize_obstacles": True,
+                "randomize_dynamics": True,
+                "visibility_radius": env_cfg["visibility_radius"],
+            },
+        },
+        {
+            # Isolates the rotation-invariant goal frame.
+            "run_name": "recurrent_goal_frame",
+            "model_type": "recurrent",
+            "env_overrides": {
+                "observation_mode": "egocentric",
+                "observation_frame": "goal",
+                "domain_randomization": True,
+                "randomize_visibility": True,
+                "randomize_goal": True,
+                "randomize_obstacles": True,
+                "randomize_dynamics": True,
+                "visibility_radius": env_cfg["visibility_radius"],
+            },
+        },
+        {
+            # Isolates the widened obstacle topologies: blobs only, as before.
+            "run_name": "recurrent_blobs_only",
+            "model_type": "recurrent",
+            "env_overrides": {
+                "domain_randomization": True,
+                "randomize_visibility": True,
+                "randomize_goal": True,
+                "randomize_obstacles": False,
+                "randomize_dynamics": True,
+                "visibility_radius": env_cfg["visibility_radius"],
+            },
+        },
         {
             "run_name": "recurrent_full_visibility",
             "model_type": "recurrent",
@@ -115,7 +164,18 @@ def main() -> None:
             env_config = deepcopy(env_cfg)
             env_config.update(variant["env_overrides"])
 
-            train_env = make_research_env(env_config, seed=seed, scenario="train")
+            vec_cfg = dict(train_cfg.get("vec_env", {}))
+            ppo_key = f"ppo_{variant['model_type']}"
+            train_env = make_research_vec_env(
+                env_config,
+                seed=seed,
+                scenario="train",
+                n_envs=int(vec_cfg.get("n_envs", 8)),
+                vec_env_type=str(vec_cfg.get("vec_env_type", "subproc")),
+                normalize_observations=bool(vec_cfg.get("normalize_observations", True)),
+                normalize_rewards=bool(vec_cfg.get("normalize_rewards", True)),
+                gamma=float(config.get(ppo_key, {}).get("gamma", 0.99)),
+            )
             callback = [
                 ResearchMetricsCallback(log_freq=2048, verbose=1),
                 build_curriculum_callback(
@@ -151,9 +211,20 @@ def main() -> None:
                 model_dir.mkdir(parents=True, exist_ok=True)
                 model.save(str(model_dir / run_label))
 
+            # Freeze the training observation statistics before tearing the vec
+            # env down; the single-env evaluation loop below needs them.
+            obs_normalizer = None
+            normalizer_env = train_env
+            while normalizer_env is not None:
+                if isinstance(normalizer_env, VecNormalize) and normalizer_env.norm_obs:
+                    normalizer_env.training = False
+                    obs_normalizer = normalizer_env.normalize_obs
+                    break
+                normalizer_env = getattr(normalizer_env, "venv", None)
             train_env.close()
 
             scenarios = [("train", name) for name in eval_cfg["train_scenarios"]]
+            scenarios += [("test", name) for name in eval_cfg.get("test_scenarios", [])]
             scenarios += [("unseen", name) for name in eval_cfg["unseen_scenarios"]]
             for split, scenario in scenarios:
                 eval_env_config = deepcopy(env_config)
@@ -171,6 +242,7 @@ def main() -> None:
                         split=split,
                         scenario=scenario,
                         episode_idx=episode_idx,
+                        obs_normalizer=obs_normalizer,
                     )
                     all_rows.extend(rows)
                     all_summaries.append(summary)

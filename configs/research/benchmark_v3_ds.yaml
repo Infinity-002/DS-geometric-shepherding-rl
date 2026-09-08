@@ -4,6 +4,7 @@ benchmark:
   episodes: 6
   scenarios:
     train: ["train"]
+    test: ["test_procedural"]
     unseen:
       [
         "unseen_corridor",
@@ -16,6 +17,10 @@ benchmark:
     - run_name: heuristic_cluster_aware
       model_type: heuristic
       env_overrides:
+        # Decodes the raw observation vector, so it needs the original layout
+        # and a fixed flock size.
+        observation_mode: legacy
+        randomize_sheep_count: false
         domain_randomization: false
         randomize_visibility: false
         randomize_goal: false
@@ -24,6 +29,10 @@ benchmark:
     - run_name: behavioral_cloning_rf
       model_type: behavioral_cloning
       env_overrides:
+        # Decodes the raw observation vector, so it needs the original layout
+        # and a fixed flock size.
+        observation_mode: legacy
+        randomize_sheep_count: false
         domain_randomization: false
         randomize_visibility: false
         randomize_goal: false

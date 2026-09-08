@@ -227,3 +227,93 @@ def visible_sheep_mask(
     diffs = sheep_pos - dog_pos
     dists_sq = np.sum(diffs * diffs, axis=1)
     return dists_sq <= float(visibility_radius * visibility_radius)
+
+
+# ---------------------------------------------------------------------------
+# Egocentric ray casting
+# ---------------------------------------------------------------------------
+
+def raycast_distances(
+    origin: np.ndarray,
+    angles: np.ndarray,
+    obstacles: Sequence[Rect],
+    grid_size: float,
+    max_range: float,
+) -> np.ndarray:
+    """Cast rays from *origin* and return the free distance along each one.
+
+    Rays are occluded by the axis-aligned obstacle rectangles *and* by the arena
+    boundary, so the resulting vector is a complete, egocentric description of
+    the local free space. Unlike an indexed list of obstacle rectangles this
+    representation is invariant to obstacle count, ordering, absolute position
+    and shape, which is what lets a policy trained on scattered blobs transfer to
+    corridors and gates.
+
+    Parameters
+    ----------
+    origin : np.ndarray
+        Shape ``(2,)`` – ray origin, assumed to lie in free space.
+    angles : np.ndarray
+        Shape ``(R,)`` – ray directions in radians.
+    obstacles : sequence of Rect
+        Obstacle rectangles ``(x_min, y_min, w, h)``.
+    grid_size : float
+        Arena side length; the arena boundary occludes rays.
+    max_range : float
+        Rays are truncated at this distance.
+
+    Returns
+    -------
+    np.ndarray
+        Shape ``(R,)`` – distance to the first occluder along each ray, clipped
+        to ``[0, max_range]``.
+    """
+    origin = np.asarray(origin, dtype=np.float32).reshape(2)
+    angles = np.asarray(angles, dtype=np.float32).reshape(-1)
+    directions = np.stack([np.cos(angles), np.sin(angles)], axis=1).astype(np.float32)
+
+    max_range = float(max_range)
+    hits = np.full(angles.shape[0], max_range, dtype=np.float32)
+
+    # The arena boundary behaves like a rectangle seen from the inside: keep the
+    # nearest positive crossing of each of the four bounding lines.
+    with np.errstate(divide="ignore", invalid="ignore"):
+        for axis, (lo, hi) in enumerate(((0.0, grid_size), (0.0, grid_size))):
+            d = directions[:, axis]
+            safe = np.abs(d) > 1e-9
+            for bound in (lo, hi):
+                t = np.full(angles.shape[0], np.inf, dtype=np.float32)
+                t[safe] = (bound - origin[axis]) / d[safe]
+                t[t < 0.0] = np.inf
+                hits = np.minimum(hits, t)
+
+    if len(obstacles) > 0:
+        rects = np.asarray(obstacles, dtype=np.float32)
+        mins = rects[:, :2]
+        maxs = mins + rects[:, 2:]
+
+        # Vectorized slab test: (R, O) entry/exit parameters per ray/rectangle.
+        with np.errstate(divide="ignore", invalid="ignore"):
+            inv_dir = np.where(
+                np.abs(directions) > 1e-9, 1.0 / directions, np.float32(np.inf)
+            ).astype(np.float32)
+            t_lo = (mins[None, :, :] - origin[None, None, :]) * inv_dir[:, None, :]
+            t_hi = (maxs[None, :, :] - origin[None, None, :]) * inv_dir[:, None, :]
+
+        t_near = np.max(np.minimum(t_lo, t_hi), axis=2)
+        t_far = np.min(np.maximum(t_lo, t_hi), axis=2)
+        valid = (t_far >= np.maximum(t_near, 0.0)) & (t_far >= 0.0)
+        entry = np.where(valid, np.maximum(t_near, 0.0), np.float32(np.inf))
+        hits = np.minimum(hits, np.min(entry, axis=1))
+
+    return np.clip(np.nan_to_num(hits, nan=max_range, posinf=max_range), 0.0, max_range).astype(
+        np.float32
+    )
+
+
+def ray_angles(n_rays: int, offset: float = 0.0) -> np.ndarray:
+    """Return *n_rays* evenly spaced ray directions starting at *offset*."""
+    return (
+        np.linspace(0.0, 2.0 * np.pi, int(n_rays), endpoint=False, dtype=np.float32)
+        + np.float32(offset)
+    ).astype(np.float32)
