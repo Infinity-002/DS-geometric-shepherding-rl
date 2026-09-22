@@ -72,26 +72,32 @@ training:
     strategy: adaptive
     window: 40
     warmup_episodes: 12
+    # Hysteresis: a stage change is locked out for min_dwell_steps after the
+    # previous one, and a demotion must miss the gates by demote_margin (as a
+    # fraction of each gate) rather than merely grazing them. Without this the
+    # memoryless stage computation flipped 0.00 <-> 0.33 within a single rollout.
+    demote_margin: 0.25
+    min_dwell_steps: 25000
     stages:
       - stage: 0.0
         min_success_rate: 0.0
       - stage: 0.33
         min_fraction_at_goal: 0.30
         min_visibility_ratio: 0.40
-        max_collision_event_count: 10.0
+        max_collision_event_count: 14.0
         min_progress_reward: -0.03
         min_timestep_ratio: 0.05
       - stage: 0.66
         min_fraction_at_goal: 0.55
         min_visibility_ratio: 0.50
-        max_collision_event_count: 8.0
+        max_collision_event_count: 11.0
         min_progress_reward: -0.005
         min_timestep_ratio: 0.15
       - stage: 1.0
         min_fraction_at_goal: 0.70
         min_success_rate: 0.15
         min_visibility_ratio: 0.55
-        max_collision_event_count: 6.0
+        max_collision_event_count: 9.0
         min_progress_reward: 0.0
         min_timestep_ratio: 0.30
 

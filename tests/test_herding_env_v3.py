@@ -120,6 +120,37 @@ class HerdingEnvV3Tests(unittest.TestCase):
         with self.assertRaises(ValueError):
             HerdingEnvV3(observation_mode="legacy", randomize_sheep_count=True)
 
+    def test_goal_is_randomized_at_the_narrowest_curriculum_stage(self) -> None:
+        """Stage 0 must not pin the goal to the configured corner.
+
+        It used to, which meant a run that lingered at stage 0 only ever learned
+        "drive the flock to the top-right". Validation and test always randomize
+        the goal, so such a run scores an unbroken 0.0 on them however long it
+        trains. Stage still narrows breadth; it no longer freezes the goal.
+        """
+        env = HerdingEnvV3(randomize_goal=True, curriculum_mode=True)
+        env.set_curriculum_stage(0.0)
+
+        goals = set()
+        for seed in range(6):
+            env.reset(seed=seed, options={"scenario": "train"})
+            goals.add(tuple(np.round(env.goal, 3)))
+        env.close()
+
+        self.assertGreater(len(goals), 1)
+        self.assertNotEqual(goals, {tuple(np.round(env.base_goal, 3))})
+
+    def test_randomize_goal_false_still_pins_the_goal_at_every_stage(self) -> None:
+        """The structured config turns goal randomization off on purpose."""
+        env = HerdingEnvV3(randomize_goal=False, curriculum_mode=True)
+        base = tuple(np.round(env.base_goal, 3))
+
+        for stage in (0.0, 0.5, 1.0):
+            env.set_curriculum_stage(stage)
+            env.reset(seed=int(stage * 10), options={"scenario": "train"})
+            self.assertEqual(tuple(np.round(env.goal, 3)), base)
+        env.close()
+
     def test_legacy_observation_layout_is_preserved(self) -> None:
         env = HerdingEnvV3(observation_mode="legacy", curriculum_mode=False)
         expected = 4 + 2 * env.n_sheep + 4 * env.max_obstacles

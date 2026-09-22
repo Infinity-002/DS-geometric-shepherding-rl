@@ -502,7 +502,13 @@ class HerdingEnvV3(gym.Env):
         if stage < 0.33:
             weights = {"open": 0.35, "blobs": 0.45, "bars": 0.20}
             breadth = 0.25
-            randomize_goal = False
+            # The goal is randomized even at the narrowest stage. Pinning it to
+            # the configured corner made stage 0 teach "drive the flock to the
+            # top-right", which transfers to nothing: the validation and test
+            # splits always randomize the goal, so a run that lingers here
+            # scores an unbroken 0.0 on them no matter how long it trains.
+            # Breadth still narrows the layouts and dynamics around the agent.
+            randomize_goal = self.randomize_goal
         elif stage < 0.66:
             weights = {"open": 0.18, "blobs": 0.32, "bars": 0.25, "gate": 0.25}
             breadth = 0.6

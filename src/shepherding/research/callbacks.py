@@ -161,12 +161,17 @@ class AdaptiveCurriculumCallback(BaseCallback):
         window: int = 50,
         warmup_episodes: int = 10,
         total_timesteps: int | None = None,
+        demote_margin: float = 0.2,
+        min_dwell_steps: int = 20000,
         verbose: int = 0,
     ) -> None:
         super().__init__(verbose)
         self.stages = sorted((dict(stage) for stage in stages), key=lambda item: item["stage"])
         self.window = max(int(window), 1)
         self.warmup_episodes = max(int(warmup_episodes), 1)
+        self.demote_margin = max(float(demote_margin), 0.0)
+        self.min_dwell_steps = max(int(min_dwell_steps), 0)
+        self._last_change_step = 0
         self.total_timesteps = None if total_timesteps is None else max(int(total_timesteps), 1)
         self.successes: List[float] = []
         self.fractions_at_goal: List[float] = []
@@ -193,14 +198,17 @@ class AdaptiveCurriculumCallback(BaseCallback):
             self.progress_rewards.append(float(info.get("avg_reward_progress", 0.0)))
 
         self.tracker.update(self.current_stage, self.num_timesteps)
-        next_stage = self._compute_stage()
+        next_stage = self._resolve_stage()
         if next_stage != self.current_stage:
+            previous_stage = self.current_stage
+            self._last_change_step = self.num_timesteps
             self.current_stage = next_stage
             self.tracker.record_transition(next_stage, self.num_timesteps)
             _set_stage_on_envs(self.training_env, self.current_stage)
             if self.verbose:
+                direction = "advanced to" if next_stage > previous_stage else "fell back to"
                 print(
-                    f"Adaptive curriculum advanced to stage {self.current_stage:.2f} "
+                    f"Adaptive curriculum {direction} stage {self.current_stage:.2f} "
                     f"at timestep {self.num_timesteps:,}"
                 )
         self.logger.record("curriculum/stage", self.current_stage)
@@ -209,9 +217,48 @@ class AdaptiveCurriculumCallback(BaseCallback):
     def stage_summary(self) -> Dict[str, Any]:
         return self.tracker.summary(self.current_stage)
 
-    def _compute_stage(self) -> float:
+    def _resolve_stage(self) -> float:
+        """Apply hysteresis around the raw gate evaluation.
+
+        ``_compute_stage`` is memoryless: it re-derives the stage from the
+        rolling window every step, so a metric sitting on a threshold flips the
+        stage back and forth on consecutive updates. That thrash is worse than
+        staying put, because the environment distribution then changes several
+        times per rollout and the value function never sees a stationary target.
+
+        Two guards: a stage change may not occur within ``min_dwell_steps`` of
+        the previous one, and a *demotion* must additionally fail the gates by
+        ``demote_margin`` rather than merely grazing them. Promotions still use
+        the strict thresholds, so widening randomization stays as demanding as
+        the config asks.
+        """
+        strict = self._compute_stage()
+        if strict == self.current_stage:
+            return strict
+        if self.num_timesteps - self._last_change_step < self.min_dwell_steps:
+            return self.current_stage
+        if strict > self.current_stage:
+            return strict
+        relaxed = self._compute_stage(margin=self.demote_margin)
+        return min(relaxed, self.current_stage)
+
+    def _compute_stage(self, margin: float = 0.0) -> float:
+        """Highest stage whose gates the rolling window satisfies.
+
+        *margin* loosens every gate by that fraction of its own magnitude —
+        lower bounds move down, the collision ceiling moves up. Used only for
+        demotion checks; see :meth:`_resolve_stage`.
+        """
         if not self.stages:
             return 0.0
+
+        def lower(stage: Dict[str, float], key: str, default: float) -> float:
+            value = float(stage.get(key, default))
+            return value - abs(value) * margin
+
+        def upper(stage: Dict[str, float], key: str, default: float) -> float:
+            value = float(stage.get(key, default))
+            return value + abs(value) * margin
 
         candidate = float(self.stages[0]["stage"])
         if len(self.successes) < self.warmup_episodes:
@@ -224,20 +271,20 @@ class AdaptiveCurriculumCallback(BaseCallback):
         progress_reward = rolling_mean(self.progress_rewards, self.window)
 
         for stage in self.stages:
-            if success_rate < float(stage.get("min_success_rate", 0.0)):
+            if success_rate < lower(stage, "min_success_rate", 0.0):
                 break
             # Gating on all-or-nothing success stalls the curriculum: under wide
             # randomization that rate stays near zero for a long time, so the
             # agent never reaches the stages where the randomization it needs to
             # generalize is actually switched on. Fraction-delivered moves early
             # and continuously, so it can carry the gate.
-            if fraction_at_goal < float(stage.get("min_fraction_at_goal", 0.0)):
+            if fraction_at_goal < lower(stage, "min_fraction_at_goal", 0.0):
                 break
-            if visibility_ratio < float(stage.get("min_visibility_ratio", 0.0)):
+            if visibility_ratio < lower(stage, "min_visibility_ratio", 0.0):
                 break
-            if collision_event_count > float(stage.get("max_collision_event_count", np.inf)):
+            if collision_event_count > upper(stage, "max_collision_event_count", np.inf):
                 break
-            if progress_reward < float(stage.get("min_progress_reward", -np.inf)):
+            if progress_reward < lower(stage, "min_progress_reward", -np.inf):
                 break
             if self.total_timesteps is not None:
                 min_timestep_ratio = float(stage.get("min_timestep_ratio", 0.0))
@@ -263,6 +310,8 @@ def build_curriculum_callback(
         window=int(curriculum_cfg.get("window", 50)),
         warmup_episodes=int(curriculum_cfg.get("warmup_episodes", 10)),
         total_timesteps=total_timesteps,
+        demote_margin=float(curriculum_cfg.get("demote_margin", 0.2)),
+        min_dwell_steps=int(curriculum_cfg.get("min_dwell_steps", 20000)),
         verbose=verbose,
     )
 
