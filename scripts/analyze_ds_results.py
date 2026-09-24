@@ -28,19 +28,21 @@ from shepherding.research.reporting import (  # noqa: E402
 DISPLAY_NAMES = {
     "heuristic_cluster_aware_fast": "Heuristic",
     "behavioral_cloning_rf_fast": "Behavioral Cloning",
-    "recurrent_domain_randomized_fast": "RL (Baseline)",
+    "recurrent_domain_randomized_fast": "RL (Domain Randomized)",
     "rl_structured_eval_v2": "RL (Structured v3)",
 }
 
 DISPLAY_ORDER = [
     "Heuristic",
     "Behavioral Cloning",
+    "RL (Domain Randomized)",
     "RL (Structured v3)",
 ]
 
 PALETTE = {
     "Heuristic": "#3d5a80",
     "Behavioral Cloning": "#2a9d8f",
+    "RL (Domain Randomized)": "#e01e37",
     "RL (Structured v3)": "#e01e37",
 }
 
@@ -75,6 +77,12 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional second results directory to merge into the plots (for example v2 benchmark outputs)",
     )
+    parser.add_argument(
+        "--exclude-run-names",
+        nargs="*",
+        default=[],
+        help="Optional list of run_name values to exclude after merging results.",
+    )
     return parser.parse_args()
 
 
@@ -95,6 +103,11 @@ def main() -> None:
         extra_aggregates = pd.read_csv(extra_dir / "aggregate_metrics.csv")
         summaries = pd.concat([summaries, extra_summaries], ignore_index=True, sort=False)
         aggregates = pd.concat([aggregates, extra_aggregates], ignore_index=True, sort=False)
+
+    if args.exclude_run_names:
+        excluded = set(args.exclude_run_names)
+        summaries = summaries[~summaries["run_name"].isin(excluded)].copy()
+        aggregates = aggregates[~aggregates["run_name"].isin(excluded)].copy()
 
     summaries["method"] = summaries["run_name"].map(_display_name)
     aggregates["method"] = aggregates["run_name"].map(_display_name)
@@ -480,6 +493,7 @@ def _plot_bc_metrics(metrics: pd.Series, output_path: Path) -> None:
         axes[0].set_title("Error Metrics")
         axes[0].set_xlabel("Value")
         axes[0].set_ylabel("")
+        _annotate_value_bars(axes[0], formatter="{:.3f}", inside_threshold=1.0)
     else:
         axes[0].axis("off")
 
@@ -495,12 +509,53 @@ def _plot_bc_metrics(metrics: pd.Series, output_path: Path) -> None:
         axes[1].set_title("Fit Metrics")
         axes[1].set_xlabel("Value")
         axes[1].set_ylabel("")
+        _annotate_value_bars(axes[1], formatter="{:.3f}", inside_threshold=0.25)
     else:
         axes[1].axis("off")
 
     plt.tight_layout(rect=(0, 0, 1, 0.93))
     plt.savefig(output_path, dpi=220)
     plt.close()
+
+
+def _annotate_value_bars(
+    ax: plt.Axes,
+    *,
+    formatter: str = "{:.2f}",
+    inside_threshold: float = 0.2,
+) -> None:
+    x_min, x_max = ax.get_xlim()
+    span = max(x_max - x_min, 1e-8)
+    outside_offset = span * 0.012
+    inside_offset = span * 0.02
+
+    for patch in ax.patches:
+        width = float(patch.get_width())
+        ypos = patch.get_y() + patch.get_height() / 2.0
+        label = formatter.format(width)
+
+        if width >= inside_threshold:
+            ax.text(
+                width - inside_offset,
+                ypos,
+                label,
+                va="center",
+                ha="right",
+                fontsize=10,
+                fontweight="bold",
+                color="white",
+            )
+        else:
+            ax.text(
+                width + outside_offset,
+                ypos,
+                label,
+                va="center",
+                ha="left",
+                fontsize=10,
+                fontweight="bold",
+                color="#1f2933",
+            )
 
 
 def _barh_with_labels(
@@ -514,15 +569,27 @@ def _barh_with_labels(
     formatter: str,
     xlim: tuple[float, float] | None = None,
 ) -> None:
-    methods = list(data[y])
+    plot_data = data.copy()
+    methods = [str(method) for method in plot_data[y]]
     colors = [PALETTE.get(str(method), "#6c757d") for method in methods]
-    sns.barplot(data=data, x=x, y=y, palette=colors, orient="h", ax=ax)
+    sns.barplot(data=plot_data, x=x, y=y, palette=colors, orient="h", ax=ax)
     if xlim is not None:
         ax.set_xlim(*xlim)
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel("")
-    for patch, value in zip(ax.patches, data[x].to_list()):
+
+    # Seaborn may render categorical bars in category order rather than row order,
+    # so look up the displayed y-labels and annotate using the matching values.
+    value_by_method = {
+        str(method): float(value)
+        for method, value in zip(plot_data[y].astype(str), plot_data[x])
+    }
+    rendered_methods = [tick.get_text() for tick in ax.get_yticklabels()]
+    for patch, method in zip(ax.patches, rendered_methods):
+        value = value_by_method.get(method)
+        if value is None:
+            continue
         xpos = patch.get_width()
         ypos = patch.get_y() + patch.get_height() / 2.0
         offset = 0.015 * (ax.get_xlim()[1] - ax.get_xlim()[0] if ax.get_xlim()[1] > ax.get_xlim()[0] else 1.0)
