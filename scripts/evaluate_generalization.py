@@ -22,6 +22,7 @@ if str(SRC_ROOT) not in sys.path:
 
 import numpy as np
 import pandas as pd
+import torch
 
 import shepherding.envs  # noqa: F401
 
@@ -94,6 +95,10 @@ def bootstrap_ci(
 
 def main() -> None:
     args = parse_args()
+    # Inference is one observation at a time, so extra intra-op threads only add
+    # contention. With the default thread count, 14 evals run in parallel pushed
+    # the load average to ~80 on 16 cores.
+    torch.set_num_threads(1)
     config = load_yaml_config(Path(args.config))
     env_cfg = dict(config["environment"])
     # The heuristic and the cloning agent decode the legacy observation vector,

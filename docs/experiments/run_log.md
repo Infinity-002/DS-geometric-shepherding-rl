@@ -411,24 +411,110 @@ Reading:
 
 ---
 
-## Runs 6 and 7 — extra seeds of the run-5 config (in progress), 2026-09-24
+## Runs 6 and 7 — extra seeds of the run-5 config (completed), 2026-09-24
 
 | | |
 |---|---|
 | Commands | `.venv/bin/python scripts/train_v3_recurrent.py --config configs/research/v3.yaml --seed 1` (run 6), then `--seed 2` (run 7) |
 | Code | `6539378` (identical to run 5) |
 | Purpose | Seed variance for the paper. Run 5 is a single seed, and runs 2 and 3 showed large run-to-run differences |
-| Scheduling | Sequential. One run uses ~4.8 GB of the 7.5 GB RAM, so two in parallel risked OOM. Run 7 is queued to start when run 6 exits |
+| Scheduling | Sequential. One run uses ~4.8 GB of the 7.5 GB RAM, so two in parallel risked OOM |
+| Artifacts | `models/research_v3/recurrent/recurrent_seed{1,2}{,_best}.zip` + `*_vecnormalize.pkl` + metadata |
 | Raw logs | `logs/runs/run6_v3_seed1.log`, `logs/runs/run7_v3_seed2.log` |
 
-Early run 6: validation FracGoal 0.089 (25k), 0.244 (50k), 0.241 (75k), 0.242 (100k).
-Train FracGoal 0.51 at 123k at stage 0.33, ahead of run 5 at the same point.
+Validation FracGoal (30 episodes, every 25k):
 
-To do when both finish: evaluate `_best` with `--fixed-sheep-count` and without, on
-all six scenarios, into `results/generalization_v3/rppo_seed{1,2}_{fixed,rand}`. Then
-regenerate the figures with
-`scripts/paper_figures.py --rl-dirs rppo_run5_fixed rppo_seed1_fixed rppo_seed2_fixed`
-and update Table I in the paper to the mean across seeds.
+| Step | Seed 0 (run 5) | Seed 1 (run 6) | Seed 2 (run 7) |
+|---|---|---|---|
+| 100k | 0.205 | 0.242 | 0.306 |
+| 200k | 0.147 | 0.315 | 0.258 |
+| 300k | 0.256 | 0.423 | 0.261 |
+| 400k | 0.271 | 0.328 | 0.289 |
+| 500k | 0.294 | 0.409 | 0.268 |
+| 600k | 0.410 | 0.455 | 0.288 |
+| **Best** | **0.410 @600k** | **0.455 @600k** | **0.378 @175k** |
+
+Time per curriculum stage (0.00 / 0.33 / 0.66):
+
+| Seed | Stage 0.00 | Stage 0.33 | Stage 0.66 | Stage 0.66 changes |
+|---|---|---|---|---|
+| 0 | 17% | 70% | 13% | 3 promotions, 3 demotions |
+| 1 | 16% | 56% | 28% | 5 promotions, 5 demotions |
+| 2 | 16% | 45% | 39% | 7 promotions, 7 demotions |
+
+No seed reached stage 1.0.
+
+Final training window (≈602k):
+
+| Seed | SR | FracGoal | Vis | CollEvt |
+|---|---|---|---|---|
+| 1 | 0.41 | 0.53 | 0.72 | 14.0 |
+| 2 | 0.30 | 0.42 | 0.67 | 14.2 |
+
+Findings:
+- Seed 1 behaves like seed 0 and ends a little higher: validation rises through the
+  second half as the LR anneals, and the best checkpoint is the final one.
+- Seed 2 learns early (0.38 at 175k), then stays flat at ~0.21–0.36. Its best
+  checkpoint is the 175k one, before most of the full-breadth training. Seed-to-seed
+  spread of the best validation score is 0.38–0.46.
+- All three seeds alternate 0.33 ↔ 0.66 on the delivery bound. Seed 2 spent the
+  most time at 0.66 (39%) and has the flattest curve, so time at full breadth
+  alone does not predict a better policy.
+- Collisions converge to ~14 per episode in every seed.
+
+Held-out eval: see "Recurrent PPO, seeds 1 and 2" and "Three-seed summary" below.
+
+## Recurrent PPO, seeds 1 and 2 (150 episodes/scenario), 2026-09-24
+
+Each seed's `_best.zip` with its paired `_best_vecnormalize.pkl`. Seed 1's best is its
+600k checkpoint (validation 0.455); seed 2's is its 175k checkpoint (0.378). Same
+protocol as run 5: `--fixed-sheep-count` on all six scenarios plus a
+randomized-flock `test_procedural` run, merged into
+`results/generalization_v3/rppo_seed{1,2}_{fixed,rand}/generalization_report.csv`.
+Launcher: 14 parallel single-scenario processes (see `logs/eval/`).
+
+Incident: the first launch ran 14 processes with PyTorch's default thread pool (~39
+threads each). Load average hit ~79 on 16 cores and nothing finished in 36 min.
+Killed and relaunched with `OMP_NUM_THREADS=1`; everything finished in ~25–30 min.
+`scripts/evaluate_generalization.py` now calls `torch.set_num_threads(1)`.
+
+FracGoal [95% CI] / SR / MeanDist, 10 sheep:
+
+| Scenario | Seed 1 | Seed 2 |
+|---|---|---|
+| test_procedural | 0.302 [0.239, 0.368] / 0.21 / 4.52 | 0.326 [0.259, 0.392] / 0.22 / 4.62 |
+| split_field | 0.511 [0.444, 0.579] / 0.37 / 2.81 | 0.184 [0.148, 0.225] / 0.03 / 4.55 |
+| dense | 0.286 [0.240, 0.337] / 0.08 / 3.87 | 0.040 [0.023, 0.061] / 0.01 / 5.92 |
+| open_field | 0.311 [0.260, 0.366] / 0.11 / 2.93 | 0.233 [0.193, 0.274] / 0.03 / 3.05 |
+| corridor | 0.005 [0.001, 0.009] / 0.00 / 10.98 | 0.000 / 0.00 / 13.19 |
+| narrow_gate | 0.000 / 0.00 / 10.98 | 0.011 [0.003, 0.021] / 0.00 / 8.70 |
+| test_procedural, random flock | 0.281 [0.221, 0.343] / 0.15 | 0.212 [0.155, 0.269] / 0.13 |
+
+## Three-seed summary (goes into paper Table I)
+
+FracGoal mean (min, max over seeds) / mean SR:
+
+| Scenario | Heuristic | BC | Recurrent PPO, 3 seeds |
+|---|---|---|---|
+| test_procedural | **0.468** / 0.35 | 0.010 / 0.00 | 0.296 (0.261, 0.326) / 0.20 |
+| split_field | 0.317 / 0.08 | 0.196 / 0.01 | 0.424 (0.184, 0.576) / 0.28 |
+| dense | 0.269 / 0.19 | 0.062 / 0.00 | 0.205 (0.040, 0.289) / 0.06 |
+| open_field | **0.989** / 0.98 | 0.599 / 0.39 | 0.370 (0.233, 0.565) / 0.21 |
+| corridor | 0.000 / 0.00 | 0.008 / 0.00 | 0.004 (0.000, 0.007) / 0.00 |
+| narrow_gate | 0.003 / 0.00 | 0.021 / 0.00 | 0.005 (0.000, 0.011) / 0.00 |
+| test_procedural, random flock | | | 0.234 (0.209, 0.281) / 0.13 |
+
+Reading, and what changed from the single-seed picture:
+- **Procedural test is stable across seeds** (0.26–0.33, all CIs below the
+  heuristic's 0.395 lower bound). The claim "heuristic > RL on the test suite" holds.
+- **Presets are not.** Seed 0 was the lucky seed on open field (0.57 vs 0.31, 0.23).
+  "RL beats the heuristic on split field" holds for 2 of 3 seeds (0.58, 0.51 vs 0.32,
+  non-overlapping CIs); seed 2 gets 0.18.
+- Seed 2 is best on the procedural test and worst on split, dense and open field. Its
+  checkpoint was selected at 175k, so validation (procedural, full breadth) picked a
+  policy that is good on average and brittle on specific maps.
+- Single-seed headline "45% / 49% success on split / open field" becomes mean
+  28% / 21% (best seed 45% / 49%). The paper now reports the means.
 
 ## Paper figures
 

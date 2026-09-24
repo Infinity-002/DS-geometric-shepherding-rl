@@ -1,0 +1,251 @@
+{
+  "run_name": "recurrent_seed1",
+  "model_type": "recurrent",
+  "seed": 1,
+  "scenario": "train",
+  "total_timesteps": 600000,
+  "config_path": "configs/research/v3.yaml",
+  "n_envs": 12,
+  "observation_mode": "egocentric",
+  "observation_frame": "world",
+  "vecnormalize_path": "models/research_v3/recurrent/recurrent_seed1_vecnormalize.pkl",
+  "curriculum": {
+    "final_stage": 0.33,
+    "reached_final_stage": false,
+    "timesteps_per_stage": {
+      "0.0": 93708,
+      "0.33": 339072,
+      "0.66": 169332
+    },
+    "fraction_per_stage": {
+      "0.0": 0.15563217474489796,
+      "0.33": 0.5631377551020408,
+      "0.66": 0.28123007015306123
+    },
+    "stage_transitions": [
+      {
+        "stage": 0.33,
+        "timestep": 93708.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 156912.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 181920.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 306624.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 333480.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 358488.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 383496.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 444000.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 511452.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 556416.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 581424.0
+      }
+    ]
+  },
+  "validation": {
+    "scenario": "validation",
+    "episodes": 30,
+    "eval_freq": 25000,
+    "seed": 10001,
+    "best_fraction_at_goal": 0.45477670477670473,
+    "best_model_path": "models/research_v3/recurrent/recurrent_seed1_best",
+    "best_vecnormalize_path": "models/research_v3/recurrent/recurrent_seed1_best_vecnormalize.pkl",
+    "history": [
+      {
+        "timestep": 25008.0,
+        "success_rate": 0.06666666666666667,
+        "fraction_at_goal": 0.08901098901098901,
+        "mean_dist_to_goal": 7.698813649018605,
+        "episode_length": 661.0
+      },
+      {
+        "timestep": 50016.0,
+        "success_rate": 0.2,
+        "fraction_at_goal": 0.24391534391534392,
+        "mean_dist_to_goal": 6.304427429040273,
+        "episode_length": 615.1333333333333
+      },
+      {
+        "timestep": 75024.0,
+        "success_rate": 0.16666666666666666,
+        "fraction_at_goal": 0.2412217412217412,
+        "mean_dist_to_goal": 5.968412435054779,
+        "episode_length": 625.0666666666667
+      },
+      {
+        "timestep": 100032.0,
+        "success_rate": 0.23333333333333334,
+        "fraction_at_goal": 0.24166666666666667,
+        "mean_dist_to_goal": 6.4897366205851235,
+        "episode_length": 597.7333333333333
+      },
+      {
+        "timestep": 125040.0,
+        "success_rate": 0.3,
+        "fraction_at_goal": 0.3813131313131313,
+        "mean_dist_to_goal": 4.805772193272909,
+        "episode_length": 593.6333333333333
+      },
+      {
+        "timestep": 150048.0,
+        "success_rate": 0.13333333333333333,
+        "fraction_at_goal": 0.20207200207200207,
+        "mean_dist_to_goal": 5.286841853459676,
+        "episode_length": 633.7
+      },
+      {
+        "timestep": 175056.0,
+        "success_rate": 0.2,
+        "fraction_at_goal": 0.29538239538239536,
+        "mean_dist_to_goal": 4.495741327603658,
+        "episode_length": 601.8666666666667
+      },
+      {
+        "timestep": 200064.0,
+        "success_rate": 0.23333333333333334,
+        "fraction_at_goal": 0.31505531505531503,
+        "mean_dist_to_goal": 4.503245059649149,
+        "episode_length": 598.7666666666667
+      },
+      {
+        "timestep": 225072.0,
+        "success_rate": 0.06666666666666667,
+        "fraction_at_goal": 0.1792995892995893,
+        "mean_dist_to_goal": 5.2178581833839415,
+        "episode_length": 665.1
+      },
+      {
+        "timestep": 250080.0,
+        "success_rate": 0.16666666666666666,
+        "fraction_at_goal": 0.21512422762422764,
+        "mean_dist_to_goal": 4.973354518413544,
+        "episode_length": 612.8
+      },
+      {
+        "timestep": 275088.0,
+        "success_rate": 0.3,
+        "fraction_at_goal": 0.3436026936026936,
+        "mean_dist_to_goal": 4.414681529998779,
+        "episode_length": 551.8666666666667
+      },
+      {
+        "timestep": 300096.0,
+        "success_rate": 0.36666666666666664,
+        "fraction_at_goal": 0.42328042328042326,
+        "mean_dist_to_goal": 3.834620088338852,
+        "episode_length": 542.0333333333333
+      },
+      {
+        "timestep": 325104.0,
+        "success_rate": 0.26666666666666666,
+        "fraction_at_goal": 0.35414742664742666,
+        "mean_dist_to_goal": 3.651601028442383,
+        "episode_length": 568.3333333333334
+      },
+      {
+        "timestep": 350112.0,
+        "success_rate": 0.3,
+        "fraction_at_goal": 0.3774392274392274,
+        "mean_dist_to_goal": 3.892711051305135,
+        "episode_length": 556.0
+      },
+      {
+        "timestep": 375120.0,
+        "success_rate": 0.23333333333333334,
+        "fraction_at_goal": 0.2899239649239649,
+        "mean_dist_to_goal": 4.312991225719452,
+        "episode_length": 596.7666666666667
+      },
+      {
+        "timestep": 400128.0,
+        "success_rate": 0.23333333333333334,
+        "fraction_at_goal": 0.327994227994228,
+        "mean_dist_to_goal": 4.599742869536082,
+        "episode_length": 578.3
+      },
+      {
+        "timestep": 425136.0,
+        "success_rate": 0.26666666666666666,
+        "fraction_at_goal": 0.4215314315314316,
+        "mean_dist_to_goal": 3.641479957103729,
+        "episode_length": 571.7333333333333
+      },
+      {
+        "timestep": 450144.0,
+        "success_rate": 0.3,
+        "fraction_at_goal": 0.40504606504606505,
+        "mean_dist_to_goal": 3.5628355622291563,
+        "episode_length": 586.2
+      },
+      {
+        "timestep": 475152.0,
+        "success_rate": 0.2,
+        "fraction_at_goal": 0.29948801198801195,
+        "mean_dist_to_goal": 3.9415390133857726,
+        "episode_length": 612.4
+      },
+      {
+        "timestep": 500160.0,
+        "success_rate": 0.26666666666666666,
+        "fraction_at_goal": 0.4086502386502386,
+        "mean_dist_to_goal": 3.3658196051915485,
+        "episode_length": 586.1333333333333
+      },
+      {
+        "timestep": 525168.0,
+        "success_rate": 0.3333333333333333,
+        "fraction_at_goal": 0.4177359677359677,
+        "mean_dist_to_goal": 3.707203996181488,
+        "episode_length": 543.3
+      },
+      {
+        "timestep": 550176.0,
+        "success_rate": 0.26666666666666666,
+        "fraction_at_goal": 0.40796888296888295,
+        "mean_dist_to_goal": 3.795264685153961,
+        "episode_length": 570.2
+      },
+      {
+        "timestep": 575184.0,
+        "success_rate": 0.23333333333333334,
+        "fraction_at_goal": 0.4095167795167795,
+        "mean_dist_to_goal": 3.3017289916674297,
+        "episode_length": 609.8
+      },
+      {
+        "timestep": 600192.0,
+        "success_rate": 0.36666666666666664,
+        "fraction_at_goal": 0.45477670477670473,
+        "mean_dist_to_goal": 3.8758034269014994,
+        "episode_length": 523.5333333333333
+      }
+    ]
+  }
+}

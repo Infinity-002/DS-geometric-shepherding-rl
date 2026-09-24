@@ -3,17 +3,14 @@
 #show: ieee.with(
   title: [Learning to Herd Under Limited Visibility: Recurrent PPO with Procedural Curricula for Single-Agent Shepherding],
   abstract: [
-    Shepherding asks one agent to move a flock of reactive, non-cooperative agents into a goal region.
-    Collect-and-drive heuristics solve the open-field version well but degrade when sensing is local, obstacles are present, or the flock splits.
-    We study whether a learned controller can close that gap without overfitting to its training layouts.
-    A simulated dog with a finite visibility radius controls a Strömbom-style flock of 6 to 16 sheep.
-    The dog observes an egocentric, normalized state with masked sheep slots, a lidar scan, and a short memory of the last seen flock centroid.
-    We train a recurrent PPO policy with a geometric shaped reward, procedurally generated obstacle topologies, domain randomization over flock dynamics and sensing, and an adaptive curriculum with hysteresis.
-    Evaluation uses 150 held-out episodes per scenario with bootstrap confidence intervals, and compares against a cluster-aware collect-and-drive heuristic and a random-forest clone of it.
-    An earlier policy trained on a fixed set of layouts reached 75% in-distribution success but 0% on held-out split-field and open-field maps.
-    The procedurally trained policy reaches 45% and 49% success on those maps and beats the heuristic on the split field (58% versus 32% of the flock delivered).
-    The heuristic remains stronger on the procedural test suite (47% versus 26%) and on the open field (99% versus 57%), and no agent solves corridor or narrow-gate maps.
-    We also report the curriculum failure modes found during training and the fixes that removed them.
+    Shepherding asks one agent to move a flock of reactive agents into a goal region.
+    Collect-and-drive heuristics solve open fields well but degrade when sensing is local, obstacles are present, or the flock splits.
+    We train a recurrent PPO herder with limited visibility on procedurally generated obstacle layouts, with domain randomization, a geometric shaped reward, and an adaptive curriculum, and compare it with a collect-and-drive heuristic and a behavioral clone on 150 held-out episodes per scenario over three training seeds.
+    A policy trained on fixed layouts had succeeded in no held-out split-field or open-field episode; the procedurally trained policy succeeds in 28% and 21% of them on average across seeds.
+    On the split field, two of three seeds deliver more of the flock than the heuristic (58% and 51% versus 32%), but the third delivers 18%.
+    The heuristic stays ahead on the procedural test suite (47% versus 30%) and the open field, and no agent solves corridor or narrow-gate maps.
+    Procedural test scores agree across seeds within 7 points, while single-map scores vary by up to 39 points.
+    We also document the curriculum failure modes found in training and their fixes.
   ],
   authors: (
     (
@@ -59,8 +56,7 @@ The same structure appears in livestock robotics @king2023, crowd guidance, and 
 Strömbom _et al._ showed that a short program reproduces the GPS traces of working sheepdogs: collect the furthest sheep when the flock is too spread out, otherwise drive the flock from behind toward the goal @strombom2014.
 That rule assumes the dog can see the whole flock and that the field is mostly open.
 Both assumptions fail when visibility is limited, when obstacles block the direct route, or when the flock splits into separate groups.
-Tuning the rule for each geometry is tedious, which makes learning a policy attractive.
-The learning problem is hard, though. It is a partially observable Markov decision process (POMDP) with a long horizon, a many-body plant, and a sparse success condition.
+Learning a policy avoids tuning the rule for each geometry, but the learning problem is a partially observable Markov decision process (POMDP) with a long horizon, many interacting bodies, and sparse success.
 
 Our first attempt illustrates the main risk.
 A recurrent PPO policy trained on four fixed obstacle layouts, with the flock always spawned opposite the goal, succeeded in 75% of training episodes but in none of the held-out split-field or open-field episodes, where the heuristic succeeded in 25% and 100% (small evaluation budget, single seed).
@@ -70,10 +66,10 @@ This paper describes the redesign that followed and measures how far it goes.
 Our contributions are:
 - A herding environment with procedurally generated obstacle topologies, randomized flock size, dynamics, sensing noise and goals, and a held-out test distribution with wider parameter ranges than training (@sec:env).
 - A recurrent PPO agent with an egocentric observation, a geometric shaped reward, and an adaptive curriculum. We document four failure modes of the curriculum and checkpointing pipeline and the fixes for each (@sec:method, @sec:stability).
-- A comparison with a collect-and-drive heuristic and a behavioral-cloning baseline on 900 held-out episodes per agent, with bootstrap confidence intervals (@sec:results).
+- A comparison over three training seeds with a collect-and-drive heuristic and a behavioral-cloning baseline, on 900 held-out episodes per agent and seed, with bootstrap confidence intervals (@sec:results).
 
-The learned policy transfers to held-out geometry that defeated the earlier version, and beats the heuristic when the flock must be herded around bars that split it.
-It does not yet match the heuristic on the full procedural test suite, and no method solves maps that require threading the flock through a passage.
+The learned policy transfers to held-out geometry that defeated the earlier version, and in two of three seeds it beats the heuristic when bars split the flock.
+It does not match the heuristic on the procedural test suite, and the seed-to-seed spread on single maps is large enough that one run would have supported a much stronger claim.
 
 = Related Work
 
@@ -87,7 +83,6 @@ _Learning to shepherd._
 Hussein _et al._ learn the collect and drive behaviors with curriculum PPO instead of a waypoint generator @hussein2022aamas.
 Hasan _et al._ treat cooperative multi-shepherd herding as payload protection @hasan2022, and Napolitano _et al._ learn decentralized policies for several herders and non-cohesive targets @napolitano2024.
 These works usually assume wider sensing than ours, or split the task into target assignment and single-target driving.
-We learn one continuous steering command for a single dog that must remember sheep it can no longer see and route around obstacles.
 
 _Generalization and evaluation._
 Recurrent policies are the usual response to partial observability @hausknecht2015 @hochreiter1997.
@@ -116,12 +111,9 @@ The nominal values are $v_s = 0.32$, $R_f = 5.5$, $alpha = 0.07$, $R_r = 1.0$ an
 The dog sees sheep within a Euclidean visibility radius $R_v$ (nominally 7.5).
 Obstacles do not block sight.
 The policy receives a 98-dimensional egocentric vector with no absolute position.
-It contains the unit direction and scaled distance to the goal, the distance to each arena wall along the two axes, and the previous action.
-It also has a summary of the visible sheep: visible fraction and count, and the centroid offset, mean and maximum distance, and spread, all scaled by $R_v$.
-A memory block holds the offset to the last seen flock centroid, the time since the flock was last seen, and the direction and distance from that centroid to the goal.
-A time-remaining feature follows.
-Next come 16 sheep slots of (relative $x$, relative $y$, visible flag), with invisible sheep and unused slots set to zero.
-The last 24 values are lidar ranges to obstacles and arena walls, up to 15 units.
+It contains the direction and distance to the goal, the distances to the arena walls, the previous action, and summary statistics of the visible sheep (fraction visible, centroid offset, mean and maximum distance, spread).
+A memory block holds the offset to the last seen flock centroid, the time since it was seen, and its direction and distance to the goal, followed by the remaining time.
+Next come 16 sheep slots of (relative $x$, relative $y$, visible flag), with invisible sheep and unused slots set to zero, and 24 lidar ranges to obstacles and walls, up to 15 units.
 Sheep positions carry Gaussian observation noise, and executed actions carry Gaussian action noise.
 The fixed slot count lets one network handle flocks of 6 to 16 sheep.
 
@@ -148,12 +140,8 @@ Its flocks have 8 to 16 sheep instead of 6 to 14.
 It also has more obstacle blobs, narrower gates (2.2 to 4.0 units instead of 3.0 to 6.0), longer walls, and visibility radii from 4.5 to 10.0 instead of 5.0 to 9.5.
 The test ranges for sheep speed, cohesion, repulsion, flee radius and noise are wider in the same way.
 
-Five hand-authored presets serve as further held-out maps with fixed parameters and 10 sheep.
-In _corridor_ the flock must pass two staggered pairs of walls.
-_Dense_ has five larger blobs near the start, and _narrow gate_ has two offset walls with openings.
-_Split field_ has three horizontal bars between the spawn and the goal.
-_Open field_ has no obstacles, a small visibility radius (5.6) and faster sheep.
-None of these presets was used for training or model selection.
+Five hand-authored presets with fixed parameters and 10 sheep serve as further held-out maps, none used for training or model selection.
+In _corridor_ the flock must pass two staggered pairs of walls, _dense_ has five larger blobs near the start, _narrow gate_ has two offset walls with openings, _split field_ has three horizontal bars between the spawn and the goal, and _open field_ has no obstacles, a small visibility radius (5.6) and faster sheep.
 
 = Method <sec:method>
 
@@ -236,12 +224,13 @@ The main metric is the fraction of the flock inside the goal region at the end o
 It gives partial credit, which matters when most episodes end with a few stragglers outside the goal.
 We also report success rate (SR, all sheep inside) and the mean sheep-to-goal distance.
 The 95% intervals for FracGoal are percentile bootstrap intervals over episodes with 2000 resamples @efron1994.
-The recurrent PPO results come from one training seed; runs with further seeds are in progress.
+We train recurrent PPO with three seeds (0, 1, 2) and the same configuration, and evaluate the checkpoint that each run selected on validation.
+For recurrent PPO we report the mean over seeds and, in parentheses, the lowest and highest per-seed value.
 
 = Results <sec:results>
 
 #figure(
-  caption: [Held-out results. FracGoal with 95% bootstrap interval, success rate (SR) and final mean sheep-to-goal distance (Dist.). All agents see the same episodes with a 10-sheep flock. With the randomized 8 to 16 sheep flock, recurrent PPO scores 0.209 [0.155, 0.264], SR 0.12, on the procedural test. Best FracGoal per row in bold when intervals do not overlap.],
+  caption: [Held-out results with a 10-sheep flock; all agents see the same episodes. Baselines: FracGoal with 95% bootstrap interval. Recurrent PPO: mean over three seeds, with the lowest and highest seed in parentheses; SR and Dist. are seed means. Bold marks the best FracGoal when it is ahead of every seed of every other agent. With the randomized 8 to 16 sheep flock, recurrent PPO scores 0.234 (0.209, 0.281), SR 0.13, on the procedural test.],
   placement: top,
   scope: "parent",
   table(
@@ -254,12 +243,12 @@ The recurrent PPO results come from one training seed; runs with further seeds a
       [Scenario], [FracGoal], [SR], [Dist.], [FracGoal], [SR], [Dist.], [FracGoal], [SR], [Dist.],
     ),
     table.hline(stroke: 0.5pt),
-    [Procedural test], [*0.468* [0.395, 0.537]], [0.35], [3.44], [0.010 [0.001, 0.024]], [0.00], [12.20], [0.261 [0.200, 0.322]], [0.16], [4.28],
-    [Split field], [0.317 [0.276, 0.360]], [0.08], [3.97], [0.196 [0.161, 0.233]], [0.01], [3.86], [*0.576* [0.512, 0.644]], [0.45], [2.21],
-    [Dense], [0.269 [0.207, 0.333]], [0.19], [6.41], [0.062 [0.036, 0.090]], [0.00], [7.83], [0.289 [0.236, 0.345]], [0.11], [3.85],
-    [Open field], [*0.989* [0.975, 1.000]], [0.98], [1.21], [0.599 [0.519, 0.674]], [0.39], [2.17], [0.565 [0.490, 0.637]], [0.49], [3.09],
-    [Corridor], [0.000 [0.000, 0.000]], [0.00], [12.21], [0.008 [0.000, 0.023]], [0.00], [10.27], [0.007 [0.000, 0.017]], [0.00], [11.58],
-    [Narrow gate], [0.003 [0.000, 0.007]], [0.00], [6.75], [0.021 [0.008, 0.036]], [0.00], [5.36], [0.005 [0.000, 0.015]], [0.00], [10.68],
+    [Procedural test], [*0.468* [0.395, 0.537]], [0.35], [3.44], [0.010 [0.001, 0.024]], [0.00], [12.20], [0.296 (0.261, 0.326)], [0.20], [4.47],
+    [Split field], [0.317 [0.276, 0.360]], [0.08], [3.97], [0.196 [0.161, 0.233]], [0.01], [3.86], [0.424 (0.184, 0.576)], [0.28], [3.19],
+    [Dense], [0.269 [0.207, 0.333]], [0.19], [6.41], [0.062 [0.036, 0.090]], [0.00], [7.83], [0.205 (0.040, 0.289)], [0.06], [4.55],
+    [Open field], [*0.989* [0.975, 1.000]], [0.98], [1.21], [0.599 [0.519, 0.674]], [0.39], [2.17], [0.370 (0.233, 0.565)], [0.21], [3.02],
+    [Corridor], [0.000 [0.000, 0.000]], [0.00], [12.21], [0.008 [0.000, 0.023]], [0.00], [10.27], [0.004 (0.000, 0.007)], [0.00], [11.92],
+    [Narrow gate], [0.003 [0.000, 0.007]], [0.00], [6.75], [0.021 [0.008, 0.036]], [0.00], [5.36], [0.005 (0.000, 0.011)], [0.00], [10.12],
     table.hline(),
   ),
 ) <tbl:main>
@@ -268,27 +257,56 @@ The recurrent PPO results come from one training seed; runs with further seeds a
 
 @tbl:main and @fig:results give the results.
 On the procedural test split the heuristic delivers 47% of the flock and succeeds in 35% of episodes.
-Recurrent PPO delivers 26% and succeeds in 16%, and the intervals do not overlap.
-With its randomized flock sizes the test is harder still, and FracGoal drops to 21%.
+Recurrent PPO delivers 30% on average and succeeds in 20%.
+All three seeds fall between 26% and 33%, and each seed's interval lies below the heuristic's.
+With its randomized flock sizes the test is harder still, and FracGoal drops to 23%.
 
 #figure(
   image("figures/v3_results.png", width: 100%),
-  caption: [Fraction of the flock at the goal on the held-out scenarios. Error bars are 95% bootstrap intervals over episodes.],
+  caption: [Fraction of the flock at the goal on the held-out scenarios. Baseline error bars are 95% bootstrap intervals over episodes. The recurrent PPO bar is the mean of three seeds, and its error bar spans the lowest and highest seed.],
 ) <fig:results>
 
-The presets give a more varied picture.
-On the split field, recurrent PPO delivers 58% of the flock and succeeds in 45% of episodes, against 32% and 8% for the heuristic.
-It also ends closer to the goal (2.21 versus 3.97).
+The presets give a more varied picture, and the seeds disagree much more on them (@tbl:seeds).
+On the split field, seeds 0 and 1 deliver 58% and 51% of the flock, and both intervals lie above the heuristic's 32%.
+Seed 0 also succeeds in 45% of episodes against the heuristic's 8%.
 The bars tend to break the flock into groups on different sides of an obstacle, and the heuristic works on one cluster at a time.
 In 92% of its split-field episodes it runs out of time before the whole flock reaches the goal (mean episode length 660 of 700 steps).
-On the dense map the two agents deliver the same fraction within noise, although the heuristic finishes more episodes (19% versus 11%) and the learned policy leaves the flock closer to the goal on average.
-On the open field the heuristic is nearly perfect (99%, finishing in 191 steps on average), while recurrent PPO delivers 57% and succeeds in 49% of episodes.
-This is the setting that Strömbom's rule was designed for, and the learned policy does not recover it fully.
+Seed 2, however, delivers only 18% on this map.
+On the dense map seeds 0 and 1 match the heuristic's delivery within noise and leave the flock closer to the goal, while seed 2 delivers 4%.
+On the open field the heuristic is nearly perfect (99%, finishing in 191 steps on average).
+The seeds deliver between 23% and 57%.
+This is the setting that Strömbom's rule was designed for, and no seed recovers it fully.
 Corridor and narrow-gate maps defeat all three agents.
 Both require the dog to push the whole flock through an opening, and neither the reward nor the heuristic has a term for that.
 
-Compared with the earlier structured policy, which succeeded in none of the held-out split-field and open-field episodes, the procedurally trained policy succeeds in about half of them.
-That earlier result used a small evaluation budget, so the comparison is qualitative, but the size of the change is well beyond evaluation noise.
+#figure(
+  caption: [FracGoal per recurrent PPO seed on the held-out scenarios (150 episodes each), and each seed's best validation score and the step at which it was reached.],
+  table(
+    columns: (1.4fr, 1fr, 1fr, 1fr),
+    align: (left, center, center, center),
+    stroke: none,
+    table.hline(),
+    table.header([Scenario], [Seed 0], [Seed 1], [Seed 2]),
+    table.hline(stroke: 0.5pt),
+    [Procedural test], [0.261], [0.302], [0.326],
+    [Split field], [0.576], [0.511], [0.184],
+    [Dense], [0.289], [0.286], [0.040],
+    [Open field], [0.565], [0.311], [0.233],
+    [Corridor], [0.007], [0.005], [0.000],
+    [Narrow gate], [0.005], [0.000], [0.011],
+    table.hline(stroke: 0.5pt),
+    [Best validation], [0.410 @ 600k], [0.455 @ 600k], [0.378 @ 175k],
+    table.hline(),
+  ),
+) <tbl:seeds>
+
+On the procedural test, which averages over many layouts, the three seeds lie within 7 points of each other; on single maps they differ by up to 39 points.
+Seed 2 scores best on the procedural test but worst on three presets.
+Its selected checkpoint comes from 175k steps, early in training, so validation on the procedural distribution picked a policy that does well on average but fails on particular layouts.
+Had we trained only seed 0, we would have reported 45% and 49% success on the split and open fields; the three-seed means are 28% and 21%.
+
+Compared with the earlier structured policy, which succeeded in none of the held-out split-field and open-field episodes, every seed of the procedurally trained policy succeeds in some of them (3% to 49%).
+That earlier result used a small evaluation budget, so the comparison is qualitative.
 
 The clone does worst in nearly every scenario.
 It keeps some competence on the open field (60% delivered), the setting closest to its training data, and falls to 1% on the procedural test.
@@ -296,34 +314,30 @@ Its $29 degree$ offline heading error compounds in closed loop @ross2011, and th
 
 == Training dynamics
 
-@fig:training shows validation performance and the curriculum stage for the reported run.
-Validation FracGoal rose from 0.13 at 25k steps to 0.41 at 600k, with most of the gain in the second half as the learning rate decayed.
-The final checkpoint was also the best one.
-Collision events per training episode fell from about 36 to between 14 and 18, although collisions were never a reason for demotion.
+@fig:training shows validation performance and the curriculum stage for the three seeds.
+Seeds 0 and 1 improve through the second half of training as the learning rate decays, and their final checkpoints are also their best (0.41 and 0.46).
+Seed 2 reaches 0.38 at 175k steps and stays between 0.21 and 0.36 afterwards.
+In every seed, collision events per training episode fall to about 14, although collisions are never a reason for demotion.
 
 #figure(
   image("figures/v3_training.png", width: 100%),
-  caption: [Validation FracGoal (solid) and success rate (dotted) every 25k steps, 30 episodes each, and the curriculum stage (bottom).],
+  caption: [Validation FracGoal (solid) and success rate (dotted) every 25k steps, 30 episodes each, and the curriculum stage (bottom), for three seeds.],
 ) <fig:training>
 
-The curriculum reached stage 0.33 at 104k steps and stage 0.66 at 178k, then alternated between the two.
-The agent spent 17% of training at stage 0, 70% at stage 0.33 and 13% at stage 0.66, and never reached stage 1.
+All seeds reached stage 0.33 at 94k to 104k steps and stage 0.66 by 178k, then alternated between the two, and none reached stage 1.
 Each demotion from 0.66 came from delivery: at full breadth the agent could not keep FracGoal above the demotion bound of 0.41.
-Most learning therefore happened at 60% breadth, without corridors or randomized flock sizes.
+The share of training at stage 0.66 was 13%, 28% and 39% for seeds 0, 1 and 2, so most learning happened at 60% breadth, without corridors or randomized flock sizes.
 That is consistent with the weak corridor results and with the gap between the fixed and randomized flock results on the test split.
+More time at full breadth did not by itself help, though: seed 2 spent the most time there and has the flattest validation curve.
 
 == Training stability <sec:stability>
 
-Four earlier runs with the same seed failed or were stopped, each for a different reason (@tbl:stability).
-The first run pinned the goal to one corner in stage 0. Validation always randomizes the goal, so validation FracGoal was exactly zero at all 17 checkpoints up to 433k steps.
-Without hysteresis, the stage also flipped between 0 and 0.33 within a single rollout.
-After goals were randomized from stage 0 and hysteresis was added, the collision threshold became the only binding constraint.
-Arena walls count as collisions, and random goals often lie near a wall, so a competent policy settled at 17 to 18 collision events per episode, above the demotion bound.
-Raising the thresholds exposed a second problem: each promotion adds harder layouts, which raised collisions enough to trigger a demotion as soon as the 25k-step lock expired, even while delivery improved.
-Removing collisions from the demotion rule fixed this. Collisions then fell below the old thresholds on their own, because the reward still penalizes them.
-The fourth run exposed a checkpointing bug: the best checkpoint was saved without the observation-normalization statistics of that moment, so it could only be evaluated with mismatched normalization.
-With 12 validation episodes, the standard error of FracGoal was about 0.1, so selecting the best checkpoint mostly picked the luckiest draw.
-The reported run pairs each checkpoint with its statistics, uses 30 validation episodes, and anneals the learning rate.
+Four earlier runs failed or were stopped, each for a different reason (@tbl:stability).
+In the first, stage 0 pinned the goal to one corner, and validation FracGoal, which always uses a random goal, was zero at all 17 checkpoints.
+Next, the collision threshold became the only binding constraint, because arena walls count as collisions and random goals often lie near a wall.
+Each promotion then added harder layouts, which raised collisions enough to demote the agent while delivery was still improving.
+Once collisions no longer caused demotions, they fell below the old thresholds on their own, because the reward still penalizes them.
+Finally, the best checkpoint had been saved without its observation-normalization statistics, and with 12 validation episodes (standard error about 0.1) checkpoint selection mostly picked the luckiest draw.
 
 #figure(
   caption: [Failure modes found in successive training runs and the change that removed each.],
@@ -342,33 +356,29 @@ The reported run pairs each checkpoint with its statistics, uses 30 validation e
   ),
 ) <tbl:stability>
 
-The runs also show how much single runs vary.
-Runs 2 and 3 differed only in the collision thresholds, which did not bind before 75k steps, yet training FracGoal at 75k was 0.52 in one and 0.30 in the other, because parallel environments are not bit-reproducible.
-This is why we do not treat the single-seed numbers in @tbl:main as final.
+Runs 2 and 3 differed only in thresholds that did not bind before 75k steps, yet reached training FracGoal of 0.52 and 0.30 at that point, because parallel environments are not bit-reproducible.
 
 = Discussion
 
-The results support two claims and leave a third open.
 First, a narrow training distribution was the main cause of the earlier collapse on held-out maps.
-With procedural layouts, random goals and randomized dynamics, the same algorithm and a similar reward transfer to maps it never saw.
-Second, the learned policy does better than the hand-written rule when the flock is split by obstacles.
-The heuristic handles one cluster at a time and rarely finishes before the time limit on that map.
+With procedural layouts, random goals and randomized dynamics, every seed of the same algorithm transfers to some degree to maps it never saw.
+Second, a learned policy can do better than the hand-written rule when obstacles split the flock, but training does not produce such a policy reliably: two of three seeds do, and one does not.
 We have not yet analyzed the learned trajectories, but the memory features and LSTM state give the policy a way to track sheep it can no longer see, which the heuristic lacks beyond the last seen centroid.
+The seed spread also bears on evaluation practice.
+Scores on single hand-designed maps changed the conclusion from seed to seed, while the procedural test did not, which supports reporting averages over many sampled layouts and several seeds @cobbe2019 @agarwal2021.
 
-The open question is whether the learned policy can match the heuristic across the whole test distribution.
-It cannot yet, and three factors are likely involved.
-The curriculum never trained at full difficulty for long, so the test ranges, which are wider than training at both ends, are far from what the policy mostly saw.
-The heuristic reads the full obstacle map, while the policy has 24 lidar rays.
-The reward has no term for pushing a flock through an opening, which is what corridor and narrow-gate maps need.
+The open question is whether a learned policy can match the heuristic across the whole test distribution.
+Three factors likely hold it back: the curriculum rarely trained at full difficulty, the heuristic reads the full obstacle map while the policy has 24 lidar rays, and the reward has no term for pushing a flock through an opening.
 
 Several changes follow directly.
-The demotion bound at stage 0.66 could be relaxed so that most training happens at full breadth.
+The demotion bound at stage 0.66 could be relaxed so that most training happens at full breadth, although seed 2 suggests that this alone is not enough.
+Selecting checkpoints on a validation set that includes more layout types, or averaging several checkpoints, could reduce the dependence on a lucky seed.
 A residual policy on top of the heuristic would keep its open-field competence and let learning handle splits.
 A reward term or a sub-goal for passing through openings could address the corridor and gate maps.
 Finally, the clone should be retrained on demonstrations from the procedural distribution before any claim is made about cloning as a method.
 
 _Limitations._
-The recurrent PPO numbers come from one seed.
+Three seeds show the variance but are too few to estimate it well.
 The environment is a 2-D kinematic simulation with rectangular obstacles, and sight is not blocked by obstacles.
 The five presets are single maps and are useful as case studies, not as a distribution.
 The heuristic's parameters were not retuned for the presets.
@@ -377,7 +387,8 @@ We control a single herder; cooperation between herders @hasan2022 @napolitano20
 = Conclusion
 
 We trained a recurrent PPO herder under limited visibility on procedurally generated layouts with an adaptive curriculum, and evaluated it against a collect-and-drive heuristic and a behavioral clone on 150 held-out episodes per scenario.
-Compared with a policy trained on fixed layouts, success on held-out split-field and open-field maps rose from 0% to 45% and 49%.
-The learned policy beats the heuristic on the split field, ties it on the dense map, and trails it on the procedural test suite and in open space.
+Compared with a policy trained on fixed layouts, mean success over three seeds on held-out split-field and open-field maps rose from 0% to 28% and 21%, and to 45% and 49% for the best seed.
+Two of three seeds beat the heuristic on the split field, and all seeds trail it on the procedural test suite and in open space.
+Scores on the procedural test were consistent across seeds, while scores on single maps were not.
 Getting the curriculum to work required four fixes: random goals from the first stage, a stage lock with a demotion margin, collision checks used only for promotion, and checkpoints saved with their normalization statistics.
-The next steps are multi-seed evaluation, longer training at full difficulty, and a reward for moving the flock through openings.
+The next steps are more seeds, checkpoint selection that is less sensitive to the seed, longer training at full difficulty, and a reward for moving the flock through openings.
