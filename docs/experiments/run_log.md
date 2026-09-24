@@ -7,9 +7,11 @@ entry states the config, the code state and the numbers rather than a summary.
 Conventions
 - **Train metrics** are rolling means over recent training episodes (curriculum
   distribution at the current stage). **Validation** is the `validation` split:
-  full breadth (1.0), randomized goal, disjoint seeds, 12 episodes per checkpoint.
-  **Test** is `test_procedural`: harder, disjoint ranges, 150 episodes. That is the
-  number to report.
+  full breadth (1.0), randomized goal, its own seed stream, 12 episodes per
+  checkpoint (30 from run 5 on).
+  **Test** is `test_procedural`: wider parameter ranges that extend past the
+  training ranges at both ends (supersets, not disjoint intervals), seeds from
+  100000, 150 episodes. That is the number to report.
 - `FracGoal` = fraction of sheep inside the goal radius at episode end (graded).
   `SR` = all sheep inside (strict). `CollEvt` = dog collision *events* per episode
   (obstacles **and arena walls**; consecutive contact counts once).
@@ -406,3 +408,30 @@ Reading:
   through a passage, and nothing in training rewards that explicitly.
 - Single seed. The seed-to-seed variance seen across runs 2–5 means these RL
   numbers need 2+ more seeds before they are a claim rather than a data point.
+
+---
+
+## Runs 6 and 7 — extra seeds of the run-5 config (in progress), 2026-09-24
+
+| | |
+|---|---|
+| Commands | `.venv/bin/python scripts/train_v3_recurrent.py --config configs/research/v3.yaml --seed 1` (run 6), then `--seed 2` (run 7) |
+| Code | `6539378` (identical to run 5) |
+| Purpose | Seed variance for the paper. Run 5 is a single seed, and runs 2 and 3 showed large run-to-run differences |
+| Scheduling | Sequential. One run uses ~4.8 GB of the 7.5 GB RAM, so two in parallel risked OOM. Run 7 is queued to start when run 6 exits |
+| Raw logs | `logs/runs/run6_v3_seed1.log`, `logs/runs/run7_v3_seed2.log` |
+
+Early run 6: validation FracGoal 0.089 (25k), 0.244 (50k), 0.241 (75k), 0.242 (100k).
+Train FracGoal 0.51 at 123k at stage 0.33, ahead of run 5 at the same point.
+
+To do when both finish: evaluate `_best` with `--fixed-sheep-count` and without, on
+all six scenarios, into `results/generalization_v3/rppo_seed{1,2}_{fixed,rand}`. Then
+regenerate the figures with
+`scripts/paper_figures.py --rl-dirs rppo_run5_fixed rppo_seed1_fixed rppo_seed2_fixed`
+and update Table I in the paper to the mean across seeds.
+
+## Paper figures
+
+`scripts/paper_figures.py` regenerates `docs/paper/figures/v3_{layouts,training,results}.png`
+from the eval CSVs and training logs. The layouts figure draws the first test-split
+seeds (from 100000) that produce the blobs, corridor, gate and bars topologies.
