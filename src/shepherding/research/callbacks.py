@@ -163,6 +163,7 @@ class AdaptiveCurriculumCallback(BaseCallback):
         total_timesteps: int | None = None,
         demote_margin: float = 0.2,
         min_dwell_steps: int = 20000,
+        demote_on_collisions: bool = True,
         verbose: int = 0,
     ) -> None:
         super().__init__(verbose)
@@ -171,6 +172,7 @@ class AdaptiveCurriculumCallback(BaseCallback):
         self.warmup_episodes = max(int(warmup_episodes), 1)
         self.demote_margin = max(float(demote_margin), 0.0)
         self.min_dwell_steps = max(int(min_dwell_steps), 0)
+        self.demote_on_collisions = bool(demote_on_collisions)
         self._last_change_step = 0
         self.total_timesteps = None if total_timesteps is None else max(int(total_timesteps), 1)
         self.successes: List[float] = []
@@ -231,6 +233,11 @@ class AdaptiveCurriculumCallback(BaseCallback):
         ``demote_margin`` rather than merely grazing them. Promotions still use
         the strict thresholds, so widening randomization stays as demanding as
         the config asks.
+
+        With ``demote_on_collisions`` off, the collision ceiling gates promotion
+        only. Promoting widens the layouts, which raises collisions by itself, so
+        a demotion check on collisions undoes every promotion once the dwell
+        expires even while delivery keeps improving.
         """
         strict = self._compute_stage()
         if strict == self.current_stage:
@@ -239,10 +246,12 @@ class AdaptiveCurriculumCallback(BaseCallback):
             return self.current_stage
         if strict > self.current_stage:
             return strict
-        relaxed = self._compute_stage(margin=self.demote_margin)
+        relaxed = self._compute_stage(
+            margin=self.demote_margin, gate_collisions=self.demote_on_collisions
+        )
         return min(relaxed, self.current_stage)
 
-    def _compute_stage(self, margin: float = 0.0) -> float:
+    def _compute_stage(self, margin: float = 0.0, gate_collisions: bool = True) -> float:
         """Highest stage whose gates the rolling window satisfies.
 
         *margin* loosens every gate by that fraction of its own magnitude —
@@ -282,7 +291,9 @@ class AdaptiveCurriculumCallback(BaseCallback):
                 break
             if visibility_ratio < lower(stage, "min_visibility_ratio", 0.0):
                 break
-            if collision_event_count > upper(stage, "max_collision_event_count", np.inf):
+            if gate_collisions and collision_event_count > upper(
+                stage, "max_collision_event_count", np.inf
+            ):
                 break
             if progress_reward < lower(stage, "min_progress_reward", -np.inf):
                 break
@@ -312,6 +323,7 @@ def build_curriculum_callback(
         total_timesteps=total_timesteps,
         demote_margin=float(curriculum_cfg.get("demote_margin", 0.2)),
         min_dwell_steps=int(curriculum_cfg.get("min_dwell_steps", 20000)),
+        demote_on_collisions=bool(curriculum_cfg.get("demote_on_collisions", True)),
         verbose=verbose,
     )
 
@@ -388,6 +400,11 @@ class GeneralizationEvalCallback(BaseCallback):
         self.eval_freq = max(int(eval_freq), 1)
         self.seed = int(seed)
         self.best_model_path = Path(best_model_path) if best_model_path else None
+        self.best_vecnormalize_path = (
+            self.best_model_path.with_name(f"{self.best_model_path.name}_vecnormalize.pkl")
+            if self.best_model_path is not None
+            else None
+        )
         self._training_env = training_env
         self.best_score = -np.inf
         self.history: List[Dict[str, float]] = []
@@ -409,6 +426,11 @@ class GeneralizationEvalCallback(BaseCallback):
             if self.best_model_path is not None:
                 self.best_model_path.parent.mkdir(parents=True, exist_ok=True)
                 self.model.save(str(self.best_model_path))
+                # The observation statistics keep moving after this point, so
+                # the checkpoint is only usable with a snapshot taken now.
+                normalizer = self._normalizer()
+                if normalizer is not None:
+                    normalizer.save(str(self.best_vecnormalize_path))
         if self.verbose:
             print(
                 f"[validation @ {self.num_timesteps:,}] "
@@ -487,5 +509,11 @@ class GeneralizationEvalCallback(BaseCallback):
                 float(self.best_score) if np.isfinite(self.best_score) else None
             ),
             "best_model_path": str(self.best_model_path) if self.best_model_path else None,
+            "best_vecnormalize_path": (
+                str(self.best_vecnormalize_path)
+                if self.best_vecnormalize_path is not None
+                and self.best_vecnormalize_path.exists()
+                else None
+            ),
             "history": self.history,
         }

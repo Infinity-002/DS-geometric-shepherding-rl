@@ -53,7 +53,9 @@ environment:
   scenario: train
 
 training:
-  total_timesteps: 1000000
+  # Cut from 1M: every run so far peaked on validation by ~150-250k and training
+  # delivery drifted down afterwards (run 4: 0.52 -> 0.38 by 350k).
+  total_timesteps: 600000
   save_dir: models/research_v3
   tensorboard_log: runs/research_v3
   eval_episodes: 8
@@ -65,7 +67,9 @@ training:
   validation:
     enabled: true
     scenario: validation
-    episodes: 12
+    # 12 episodes gave a standard error of ~0.1 on FracGoal, so the "best"
+    # checkpoint was largely the luckiest one.
+    episodes: 30
     eval_freq: 25000
     seed: 10000
   curriculum:
@@ -78,26 +82,35 @@ training:
     # memoryless stage computation flipped 0.00 <-> 0.33 within a single rollout.
     demote_margin: 0.25
     min_dwell_steps: 25000
+    # Collisions gate promotion only. Each promotion adds harder layouts, which
+    # raises collisions on its own; with collisions also gating demotion, run 3
+    # was demoted the moment each 25k dwell expired while delivery kept rising.
+    demote_on_collisions: false
     stages:
       - stage: 0.0
         min_success_rate: 0.0
       - stage: 0.33
         min_fraction_at_goal: 0.30
         min_visibility_ratio: 0.40
-        max_collision_event_count: 14.0
+        # Ceilings recalibrated after goals were randomized from stage 0: a
+        # random goal is often near a wall and wall contact counts as a
+        # collision, so a competent policy plateaus at ~17-18 events per episode
+        # (vs ~10-13 with the old corner goal). At 14/11/9 this gate alone
+        # demoted the run at 145k while every other gate cleared stage 0.66.
+        max_collision_event_count: 22.0
         min_progress_reward: -0.03
         min_timestep_ratio: 0.05
       - stage: 0.66
         min_fraction_at_goal: 0.55
         min_visibility_ratio: 0.50
-        max_collision_event_count: 11.0
+        max_collision_event_count: 19.0
         min_progress_reward: -0.005
         min_timestep_ratio: 0.15
       - stage: 1.0
         min_fraction_at_goal: 0.70
         min_success_rate: 0.15
         min_visibility_ratio: 0.55
-        max_collision_event_count: 9.0
+        max_collision_event_count: 16.0
         min_progress_reward: 0.0
         min_timestep_ratio: 0.30
 
@@ -121,6 +134,8 @@ ppo_recurrent:
   batch_size: 384
   n_epochs: 10
   learning_rate: 0.0003
+  # Anneal to zero so the policy settles instead of drifting late in the run.
+  lr_schedule: linear
   gamma: 0.99
   gae_lambda: 0.95
   clip_range: 0.2

@@ -177,3 +177,32 @@ class CurriculumHysteresisTests(unittest.TestCase):
 
         callback.collision_events = [13.0] * 4
         self.assertAlmostEqual(callback._resolve_stage(), 0.0)
+
+    def test_collisions_gate_promotion_only_when_demotion_on_them_is_off(self) -> None:
+        callback = AdaptiveCurriculumCallback(
+            stages=[
+                {"stage": 0.0},
+                {"stage": 0.33, "max_collision_event_count": 10.0, "min_fraction_at_goal": 0.3},
+            ],
+            window=5,
+            warmup_episodes=2,
+            demote_margin=0.25,
+            min_dwell_steps=0,
+            demote_on_collisions=False,
+        )
+        callback.successes = [0.0] * 4
+        callback.fractions_at_goal = [0.5] * 4
+        callback.visibilities = [0.8] * 4
+        callback.progress_rewards = [0.0] * 4
+        callback.num_timesteps = 100_000
+        callback.collision_events = [30.0] * 4
+
+        # Far over the ceiling: an agent at stage 0 is still not promoted...
+        callback.current_stage = 0.0
+        self.assertAlmostEqual(callback._resolve_stage(), 0.0)
+        # ...but one already at 0.33 is not demoted for it.
+        callback.current_stage = 0.33
+        self.assertAlmostEqual(callback._resolve_stage(), 0.33)
+        # A collapse in delivery still demotes.
+        callback.fractions_at_goal = [0.0] * 4
+        self.assertAlmostEqual(callback._resolve_stage(), 0.0)

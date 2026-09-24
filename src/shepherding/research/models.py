@@ -152,6 +152,19 @@ def _find_vecnormalize(env: Any) -> Optional[VecNormalize]:
     return None
 
 
+def _with_lr_schedule(config: Dict[str, Any]) -> Dict[str, Any]:
+    """Resolve ``lr_schedule: linear`` into a callable SB3 learning rate.
+
+    Linear decays ``learning_rate`` to zero over the run, as in the original
+    PPO paper. Any other value (or none) keeps the rate constant.
+    """
+    schedule = str(config.pop("lr_schedule", "constant")).lower()
+    if schedule == "linear":
+        initial = float(config.get("learning_rate", 3e-4))
+        config["learning_rate"] = lambda progress_remaining: initial * progress_remaining
+    return config
+
+
 def build_feedforward_model(
     env: gym.Env,
     ppo_config: Dict[str, Any],
@@ -159,7 +172,7 @@ def build_feedforward_model(
     tensorboard_log: str | None,
 ) -> PPO:
     tensorboard_log = _maybe_disable_tensorboard(tensorboard_log)
-    config = dict(ppo_config)
+    config = _with_lr_schedule(dict(ppo_config))
     policy_kwargs = config.pop("policy_kwargs", None)
     return PPO(
         policy="MlpPolicy",
@@ -178,7 +191,7 @@ def build_recurrent_model(
     seed: int,
     tensorboard_log: str | None,
 ) -> RecurrentPPO:
-    model_config = dict(ppo_config)
+    model_config = _with_lr_schedule(dict(ppo_config))
     lstm_hidden_size = int(model_config.pop("lstm_hidden_size", 256))
     policy_kwargs = dict(model_config.pop("policy_kwargs", None) or {})
     policy_kwargs.setdefault("lstm_hidden_size", lstm_hidden_size)

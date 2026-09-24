@@ -152,8 +152,13 @@ def load_behavioral_cloning_agent(path: Path | str) -> BehavioralCloningAgent:
     model_path = Path(path)
     with model_path.open("rb") as handle:
         payload = pickle.load(handle)
+    estimator = payload["estimator"]
+    # Inference is one observation per step; spinning up a worker pool for each
+    # call made it ~3x slower (66 ms vs 22 ms per step for 300 trees).
+    if hasattr(estimator, "n_jobs"):
+        estimator.n_jobs = 1
     return BehavioralCloningAgent(
-        estimator=payload["estimator"],
+        estimator=estimator,
         n_sheep=int(payload["n_sheep"]),
         max_obstacles=int(payload.get("max_obstacles", 0)),
         model_feature_names=list(payload.get("feature_names", [])),

@@ -25,6 +25,7 @@ import pandas as pd
 
 import shepherding.envs  # noqa: F401
 
+from shepherding.baselines import HeuristicShepherdAgent
 from shepherding.research import (
     evaluate_scenarios,
     load_model,
@@ -39,13 +40,26 @@ from shepherding.research import (
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Held-out generalization evaluation")
     parser.add_argument("--config", type=str, default="configs/research/v3.yaml")
-    parser.add_argument("--model-path", type=str, required=True)
+    parser.add_argument(
+        "--model-path",
+        type=str,
+        default=None,
+        help="Required for every model type except the heuristic.",
+    )
     parser.add_argument(
         "--model-type",
         type=str,
         default="recurrent",
-        choices=["recurrent", "feedforward", "behavioral_cloning"],
+        choices=["recurrent", "feedforward", "behavioral_cloning", "heuristic"],
     )
+    parser.add_argument(
+        "--fixed-sheep-count",
+        action="store_true",
+        help="Hold the flock at the configured n_sheep. The heuristic and cloning "
+        "agents always run this way; pass it to a PPO model to compare on "
+        "identical episodes.",
+    )
+    parser.add_argument("--run-name", type=str, default=None)
     parser.add_argument(
         "--vecnormalize",
         type=str,
@@ -82,6 +96,13 @@ def main() -> None:
     args = parse_args()
     config = load_yaml_config(Path(args.config))
     env_cfg = dict(config["environment"])
+    # The heuristic and the cloning agent decode the legacy observation vector,
+    # which has a fixed number of sheep slots.
+    if args.model_type in ("heuristic", "behavioral_cloning"):
+        env_cfg["observation_mode"] = "legacy"
+        env_cfg["randomize_sheep_count"] = False
+    if args.fixed_sheep_count:
+        env_cfg["randomize_sheep_count"] = False
     evaluation_cfg = config.get("evaluation", {})
 
     if args.scenarios:
@@ -94,11 +115,26 @@ def main() -> None:
         ("test" if name.startswith("test") else "unseen", name) for name in scenario_names
     ]
 
-    model = load_model(args.model_type, args.model_path)
+    if args.model_type == "heuristic":
+        model = HeuristicShepherdAgent(
+            n_sheep=int(env_cfg["n_sheep"]),
+            max_obstacles=int(env_cfg["max_obstacles"]),
+            grid_size=float(env_cfg["grid_size"]),
+            visibility_radius=float(env_cfg["visibility_radius"]),
+            flee_radius=float(env_cfg["flee_radius"]),
+            success_radius=float(env_cfg["success_radius"]),
+            use_cluster_targets=bool(
+                config.get("imitation", {}).get("expert", {}).get("use_cluster_targets", False)
+            ),
+        )
+    elif args.model_path is None:
+        raise SystemExit("--model-path is required for this model type.")
+    else:
+        model = load_model(args.model_type, args.model_path)
     obs_normalizer = (
         load_obs_normalizer(Path(args.vecnormalize)) if args.vecnormalize else None
     )
-    if obs_normalizer is None and args.model_type != "behavioral_cloning":
+    if obs_normalizer is None and args.model_type in ("recurrent", "feedforward"):
         print(
             "[warning] No --vecnormalize given. If the model was trained with "
             "observation normalization enabled, these scores will be meaningless."
@@ -109,7 +145,7 @@ def main() -> None:
         scenarios=scenarios,
         model=model,
         model_type=args.model_type,
-        run_name=Path(args.model_path).stem,
+        run_name=args.run_name or Path(args.model_path or args.model_type).stem,
         episodes=args.episodes,
         seed_start=args.seed_start,
         deterministic=bool(evaluation_cfg.get("deterministic", True)),
