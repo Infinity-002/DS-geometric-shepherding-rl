@@ -1,0 +1,4 @@
+ split        scenario  episodes  success_rate  fraction_at_goal  fraction_at_goal_ci_low  fraction_at_goal_ci_high  best_fraction_at_goal  mean_dist_to_goal  mean_episode_length
+unseen unseen_corridor       150           0.0          0.021333                 0.007333                  0.038667               0.119333           9.713658                700.0
+
+Wrote results/generalization_v3/gate045_seed2_fixed/unseen_corridor/generalization_report.csv

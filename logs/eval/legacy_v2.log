@@ -1,0 +1,12 @@
+/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/gymnasium/envs/registration.py:512: DeprecationWarning: [33mWARN: The environment HerdingEnv-v2 is out of date. You should consider upgrading to version `v3`.[0m
+  logger.deprecation(
+/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/gymnasium/envs/registration.py:512: DeprecationWarning: [33mWARN: The environment HerdingEnv-v2 is out of date. You should consider upgrading to version `v3`.[0m
+  logger.deprecation(
+{'version': 'v2', 'env': 'HerdingEnv-v2', 'agent': 'ppo', 'goal': 'fixed', 'episodes': 150, 'success_rate': np.float64(0.6933333333333334), 'fraction_at_goal': np.float64(0.7146666666666666), 'fraction_at_goal_ci_low': 0.6413333333333333, 'fraction_at_goal_ci_high': 0.7806999999999997, 'mean_dist_to_goal': np.float64(3.616062406698863), 'mean_episode_length': np.float64(360.34)}
+/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/gymnasium/envs/registration.py:512: DeprecationWarning: [33mWARN: The environment HerdingEnv-v2 is out of date. You should consider upgrading to version `v3`.[0m
+  logger.deprecation(
+{'version': 'v2', 'env': 'HerdingEnv-v2', 'agent': 'ppo', 'goal': 'random', 'episodes': 150, 'success_rate': np.float64(0.03333333333333333), 'fraction_at_goal': np.float64(0.056666666666666664), 'fraction_at_goal_ci_low': 0.02666666666666667, 'fraction_at_goal_ci_high': 0.08933333333333332, 'mean_dist_to_goal': np.float64(9.533211743036906), 'mean_episode_length': np.float64(588.0666666666667)}
+/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/gymnasium/envs/registration.py:512: DeprecationWarning: [33mWARN: The environment HerdingEnv-v2 is out of date. You should consider upgrading to version `v3`.[0m
+  logger.deprecation(
+{'version': 'v2', 'env': 'HerdingEnv-v2', 'agent': 'random_policy', 'goal': 'fixed', 'episodes': 150, 'success_rate': np.float64(0.13333333333333333), 'fraction_at_goal': np.float64(0.13733333333333334), 'fraction_at_goal_ci_low': 0.08733333333333333, 'fraction_at_goal_ci_high': 0.19333333333333333, 'mean_dist_to_goal': np.float64(11.381574620405832), 'mean_episode_length': np.float64(576.1666666666666)}
+Wrote /home/ciatel/coding/college/DS-geometric-shepherding-rl/results/legacy/v2_report.csv

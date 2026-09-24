@@ -1,0 +1,192 @@
+# Copy of v3.yaml for the stage-0.66 gate ablation. Keep every other value
+# identical so the comparison with runs 5-7 isolates the gate.
+environment:
+  grid_size: 20.0
+  n_sheep: 10
+  max_sheep: 16
+  dog_speed: 1.0
+  sheep_speed: 0.32
+  flee_radius: 5.5
+  cohesion_factor: 0.07
+  repulsion_strength: 1.0
+  leader_factor: 0.04
+  goal: [18.0, 18.0]
+  max_steps: 700
+  success_radius: 2.0
+  visibility_radius: 7.5
+  max_obstacles: 8
+  obstacle_size_range: [0.8, 1.8]
+  obstacle_avoidance_threshold: 1.6
+
+  # --- observation encoding -------------------------------------------------
+  # "egocentric": normalized, masked sheep slots + lidar. "legacy": the original
+  # layout with the 999.0 sentinel, kept only for the heuristic and behavioural
+  # cloning agents that decode it directly.
+  observation_mode: egocentric
+  # "goal" makes the observation and action rotation-invariant about the goal
+  # direction; "world" keeps world-aligned axes. Worth running as an ablation.
+  observation_frame: world
+  n_lidar_rays: 24
+  lidar_range: 15.0
+
+  # --- domain randomization -------------------------------------------------
+  domain_randomization: true
+  randomize_visibility: true
+  randomize_goal: true
+  randomize_obstacles: true
+  randomize_dynamics: true
+  randomize_sheep_count: true
+
+  compute_expensive_metrics: false
+  curriculum_mode: true
+  visibility_loss_penalty: 0.05
+  visibility_gain_reward: 0.8
+  collision_penalty: 0.2
+  w_drive_position: 0.35
+  drive_position_scale: 0.7
+  zero_visibility_penalty: 0.25
+  progress_reward_scale: 3.0
+  persistent_collision_scale: 0.15
+  goal_seek_factor: 0.03
+  # Reduced from 125.0: with VecNormalize on returns, a terminal bonus three
+  # orders of magnitude above the per-step shaping made the value target
+  # dominated by a single rare event.
+  success_bonus: 20.0
+  scenario: train
+
+training:
+  # Cut from 1M: every run so far peaked on validation by ~150-250k and training
+  # delivery drifted down afterwards (run 4: 0.52 -> 0.38 by 350k).
+  total_timesteps: 600000
+  save_dir: models/research_v3_gate045
+  tensorboard_log: runs/research_v3_gate045
+  eval_episodes: 8
+  vec_env:
+    n_envs: 12
+    vec_env_type: subproc
+    normalize_observations: true
+    normalize_rewards: true
+  validation:
+    enabled: true
+    scenario: validation
+    # 12 episodes gave a standard error of ~0.1 on FracGoal, so the "best"
+    # checkpoint was largely the luckiest one.
+    episodes: 30
+    eval_freq: 25000
+    seed: 10000
+  curriculum:
+    strategy: adaptive
+    window: 40
+    warmup_episodes: 12
+    # Hysteresis: a stage change is locked out for min_dwell_steps after the
+    # previous one, and a demotion must miss the gates by demote_margin (as a
+    # fraction of each gate) rather than merely grazing them. Without this the
+    # memoryless stage computation flipped 0.00 <-> 0.33 within a single rollout.
+    demote_margin: 0.25
+    min_dwell_steps: 25000
+    # Collisions gate promotion only. Each promotion adds harder layouts, which
+    # raises collisions on its own; with collisions also gating demotion, run 3
+    # was demoted the moment each 25k dwell expired while delivery kept rising.
+    demote_on_collisions: false
+    stages:
+      - stage: 0.0
+        min_success_rate: 0.0
+      - stage: 0.33
+        min_fraction_at_goal: 0.30
+        min_visibility_ratio: 0.40
+        # Ceilings recalibrated after goals were randomized from stage 0: a
+        # random goal is often near a wall and wall contact counts as a
+        # collision, so a competent policy plateaus at ~17-18 events per episode
+        # (vs ~10-13 with the old corner goal). At 14/11/9 this gate alone
+        # demoted the run at 145k while every other gate cleared stage 0.66.
+        max_collision_event_count: 22.0
+        min_progress_reward: -0.03
+        min_timestep_ratio: 0.05
+      - stage: 0.66
+        # Gate ablation (runs 8-10). Only change from v3.yaml: 0.55 -> 0.45.
+        # Under 0.55 the demotion bound was 0.41, and all three seeds of the
+        # base config fell back to 0.33 whenever full-breadth delivery dipped
+        # below it (70/56/45% of training at breadth 0.6). At 0.45 the bound
+        # is ~0.34, below the ~0.42-0.50 the policy delivers at full breadth.
+        min_fraction_at_goal: 0.45
+        min_visibility_ratio: 0.50
+        max_collision_event_count: 19.0
+        min_progress_reward: -0.005
+        min_timestep_ratio: 0.15
+      - stage: 1.0
+        min_fraction_at_goal: 0.70
+        min_success_rate: 0.15
+        min_visibility_ratio: 0.55
+        max_collision_event_count: 16.0
+        min_progress_reward: 0.0
+        min_timestep_ratio: 0.30
+
+ppo_feedforward:
+  # n_steps is per-env: 512 x 12 envs = 6144 transitions per rollout, in the same
+  # range as the old single-env 4096 but drawn from 12 independent randomization
+  # draws instead of one.
+  n_steps: 512
+  batch_size: 512
+  n_epochs: 10
+  learning_rate: 0.0003
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01
+
+ppo_recurrent:
+  # 256 x 12 envs = 3072 transitions per rollout. batch_size is a multiple of
+  # n_envs so RecurrentPPO can split it into whole sequences.
+  n_steps: 256
+  batch_size: 384
+  n_epochs: 10
+  learning_rate: 0.0003
+  # Anneal to zero so the policy settles instead of drifting late in the run.
+  lr_schedule: linear
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.005
+  lstm_hidden_size: 256
+
+evaluation:
+  train_scenarios: ["train"]
+  # Held-out procedural suite: the number to report.
+  test_scenarios: ["test_procedural"]
+  # Hand-authored presets, kept for qualitative comparison and rendering. Do not
+  # tune against these; they are only five points.
+  unseen_scenarios:
+    [
+      "unseen_corridor",
+      "unseen_dense",
+      "unseen_narrow_gate",
+      "unseen_split_field",
+      "unseen_open_field",
+    ]
+  deterministic: true
+
+imitation:
+  expert:
+    use_cluster_targets: true
+    cluster_activation_distance: 2.0
+  data_collection:
+    target_steps: 10000
+    max_episodes: 256
+    seed: 0
+    deterministic: true
+    train_scenarios: ["train"]
+    unseen_scenarios: ["unseen_split_field", "unseen_open_field"]
+    use_cluster_targets: true
+    cluster_activation_distance: 2.0
+  training:
+    dataset_path: results/imitation/dataset/demonstrations.csv
+    output_dir: models/imitation/random_forest
+    model_path: models/imitation/random_forest/behavioral_cloning.pkl
+    n_sheep: 10
+    max_obstacles: 8
+    validation_fraction: 0.2
+    n_estimators: 300
+    max_depth: 18
+    min_samples_leaf: 2
+    n_jobs: -1
+    seed: 0

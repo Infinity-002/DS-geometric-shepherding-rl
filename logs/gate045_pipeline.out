@@ -1,0 +1,8 @@
+[pipeline] train seed 0 start 08:22
+[pipeline] train seed 0 exit 0 09:35
+[pipeline] train seed 1 start 09:35
+[pipeline] train seed 1 exit 0 10:53
+[pipeline] train seed 2 start 10:53
+[pipeline] train seed 2 exit 0 12:02
+[pipeline] eval start 12:02
+[pipeline] all done 12:15

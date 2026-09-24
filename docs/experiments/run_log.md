@@ -516,8 +516,174 @@ Reading, and what changed from the single-seed picture:
 - Single-seed headline "45% / 49% success on split / open field" becomes mean
   28% / 21% (best seed 45% / 49%). The paper now reports the means.
 
-## Paper figures
+## Runs 8–10 — stage-0.66 gate ablation, seeds 0–2 (completed), 2026-09-24
 
-`scripts/paper_figures.py` regenerates `docs/paper/figures/v3_{layouts,training,results}.png`
-from the eval CSVs and training logs. The layouts figure draws the first test-split
-seeds (from 100000) that produce the blobs, corridor, gate and bars topologies.
+| | |
+|---|---|
+| Question | Does keeping the agent at full breadth (stage 0.66) improve held-out performance? |
+| Config | `configs/research/v3_gate045.yaml` = `v3.yaml` with stage-0.66 `min_fraction_at_goal` 0.55 → **0.45** (demotion bound 0.41 → ~0.34), `save_dir: models/research_v3_gate045`. Nothing else changed |
+| Code | `6e7c4e1` |
+| Pipeline | `logs/gate045_pipeline.sh` trains seeds 0, 1, 2 one after another (08:22–12:02 UTC, ~70–78 min each), then evaluates every `_best` exactly like runs 5–7 (12:02–12:15, 21 single-thread processes) into `results/generalization_v3/gate045_seed{0,1,2}_{fixed,rand}` |
+| Raw logs | `logs/runs/run{8,9,10}_gate045_seed{0,1,2}.log`, `logs/gate045_pipeline.out`, `logs/eval/gate045_*.log` |
+
+Note: the launcher sets an empty `OMP_NUM_THREADS` for training, so libgomp prints a
+warning and falls back to its default (the same thread count as runs 5–7).
+
+### Training
+
+| Seed | Best validation | At step | Stage 0 / 0.33 / 0.66 | Stage changes | Longest stint at 0.66 |
+|---|---|---|---|---|---|
+| 0 | 0.434 | 500k | 15% / 42% / 43% | 18 | ~40k |
+| 1 | 0.418 | 575k | 13% / 37% / 50% | 8 | 212k (270k–482k) |
+| 2 | 0.451 | 425k | 17% / 28% / 55% | 8 | 167k (194k–361k) |
+| *base 0 / 1 / 2* | *0.410 / 0.455 / 0.378* | *600k / 600k / 175k* | *13% / 28% / 39% at 0.66* | *6 / 10 / 14* | |
+
+- The gate change did what it was meant to: 43–55% of training at full breadth,
+  versus 13–39%. Seeds 1 and 2 held stage 0.66 for long stretches. Seed 0 still
+  cycled every ~25–40k, because a 40-episode window right after promotion can dip
+  under the 0.34 bound even though the longer training average stays ~0.37.
+- No seed reached stage 1.0 (needs FracGoal ≥ 0.70 on the training window).
+- All three best checkpoints come from late in training (425k–575k). Baseline seed 2's
+  175k checkpoint was the outlier that hurt it on the presets.
+- Final training window at stage 0.66 (full breadth): FracGoal 0.42 / 0.50 / 0.45,
+  CollEvt 15–17 (slightly above the base runs' ~14, as expected with corridors in the mix).
+
+### Held-out results (150 episodes/scenario, 10 sheep unless noted)
+
+Per seed FracGoal, and 3-seed mean (SR mean):
+
+| Scenario | Gate s0 | Gate s1 | Gate s2 | **Gate mean** | Base mean | Heuristic |
+|---|---|---|---|---|---|---|
+| test_procedural | 0.326 | 0.358 | 0.279 | **0.321** (SR 0.19) | 0.296 (0.20) | 0.468 (0.35) |
+| test_procedural, random flock | 0.279 | 0.284 | 0.305 | **0.289** (SR 0.16) | 0.234 (0.13) | |
+| split_field | 0.340 | 0.356 | 0.218 | 0.305 (SR 0.12) | **0.424** (0.28) | 0.317 (0.08) |
+| dense | 0.385 | 0.401 | 0.179 | **0.322** (SR 0.13) | 0.205 (0.06) | 0.269 (0.19) |
+| open_field | 0.627 | 0.473 | 0.346 | **0.482** (SR 0.28) | 0.370 (0.21) | 0.989 (0.98) |
+| corridor | 0.036 | 0.064 | 0.021 | **0.040** (SR 0.02) | 0.004 (0.00) | 0.000 |
+| narrow_gate | 0.052 | 0.052 | 0.082 | **0.062** (SR 0.02) | 0.005 (0.00) | 0.003 |
+| mean of the 6 held-out | | | | **0.255** | 0.217 | 0.341 |
+
+Per-seed 95% CIs are in the merged CSVs.
+
+Findings:
+- **The gate change improves the mean on 5 of 6 held-out scenarios**, and the
+  randomized-flock test (+5.5 points). The largest gains are where breadth-0.6
+  training had no coverage: corridors appear only at stage ≥ 0.66, and so do
+  randomized flock sizes. **Corridor and narrow gate are above zero for every gate
+  seed** (CIs exclude 0, every gate seed > every base seed), though still tiny (2–8%).
+- **Split field got worse** (0.42 → 0.31). Both base seeds that beat the heuristic
+  there (0.58, 0.51) have no counterpart; all three gate seeds sit at or below the
+  heuristic (0.317). Training time moved away from breadth 0.6, where bar layouts are
+  a larger share (bars 0.25 at stage 0.33 vs 0.20 at full breadth), and toward
+  corridors and gates.
+- **Seeds agree more.** The largest per-scenario spread across seeds is 28 points
+  (open field) versus 39 for the base config (split field). On the procedural test the
+  spread is 8 points (0.28–0.36).
+- **The procedural test gain is small** (0.296 → 0.321), inside the seed spread of both
+  arms. The heuristic's 0.468 is still well above every seed.
+- Net: longer training at full breadth trades specialization (split field) for
+  coverage (corridors, gates, flock sizes, open field). Three seeds per arm can show
+  the large effects (corridor/gate, split field) but not the small one on the test suite.
+
+## Legacy versions v1 and v2 (150 episodes per setting), 2026-09-24
+
+For the paper's development-history section. Script:
+`scripts/evaluate_legacy_versions.py --version {v1,v2}` → `results/legacy/{v1,v2}_report.csv`.
+
+- **v1** = `HerdingEnv-v0`: full visibility, no obstacles, 10 sheep scattered in
+  [5, 15]², goal fixed at (18, 18), 500 steps. Model `models/legacy_v1/ppo_herding.zip`,
+  restored from the first commit (`9d8d987`; it was deleted from the tree in `f764238`).
+- **v2** = `HerdingEnv-v2`: visibility radius 8 with the 999 sentinel, two default
+  obstacles, goal fixed at (18, 18), 600 steps. Model `scripts/models/ppo_herding_v2.zip`.
+- **Neither observation contains the goal.** v1 is (dog position, sheep relative to
+  dog); v2 adds the visibility mask and obstacle boxes. A policy can only learn "herd
+  to (18, 18)".
+
+Settings: PPO on its training setting; PPO with the goal drawn uniformly from
+[2.4, 17.6]² (v3's goal region); a seeded uniform-random policy on the training setting.
+Seeds 100000+.
+
+| Version | Agent | Goal | SR | FracGoal [95% CI] | MeanDist | Ep. len |
+|---|---|---|---|---|---|---|
+| v1 | PPO | fixed (18, 18) | 0.993 | 0.993 [0.980, 1.000] | 1.22 | 92 |
+| v1 | PPO | random | 0.020 | 0.023 [0.003, 0.047] | 12.21 | 491 |
+| v1 | random policy | fixed | 0.040 | 0.056 [0.025, 0.091] | 12.12 | 490 |
+| v2 | PPO | fixed (18, 18) | 0.693 | 0.715 [0.641, 0.781] | 3.62 | 360 |
+| v2 | PPO | random | 0.033 | 0.057 [0.027, 0.089] | 9.53 | 588 |
+| v2 | random policy | fixed | 0.133 | 0.137 [0.087, 0.193] | 11.38 | 576 |
+
+Reading: both versions solve their own fixed-corner task (99% and 69% success) and
+drop to the level of a random policy or below when the goal moves. That's the first
+link in the chain v1 → v2 → structured v3 → procedural v3: each version removed one
+source of overfitting (goal, then layouts) and exposed the next.
+
+## Rollout figure
+
+`scripts/paper_figures.py` also writes `docs/paper/figures/v3_rollouts.png` (light
+mode, replacing the dark 3-D GIF stills). It shows dog and flock-centroid paths from
+the saved eval trajectories (`trajectories.csv`) for the heuristic and RL seed 0 on
+the same preset episode. The episode is the first one where the two agents' outcomes
+differ (split field #2, open field #3), so it is illustrative, not typical.
+Observation: on open field, RL brings the flock to the goal and then circles it for the
+rest of the episode instead of holding it there. The heuristic finishes in 78 steps.
+
+## Delivered-then-lost analysis (all agents, from episode summaries), 2026-09-24
+
+`best_fraction_at_goal` = highest fraction of the flock inside the goal at any step;
+FracGoal = at the final step. "Lost" = best − final. "Reached-then-lost" = share of
+episodes with best ≥ 0.8 but final < 0.5. RL rows pool the 3 seeds (450 episodes).
+
+| Scenario | Agent | Final | Best | Lost | Reached-then-lost |
+|---|---|---|---|---|---|
+| test_procedural | Heuristic | 0.47 | 0.63 | 0.16 | 0.18 |
+| | RL base | 0.30 | 0.44 | 0.15 | 0.09 |
+| | RL gate | 0.32 | 0.53 | 0.21 | 0.13 |
+| split_field | Heuristic | 0.32 | 0.46 | 0.15 | 0.09 |
+| | RL base | 0.42 | 0.69 | 0.27 | 0.23 |
+| | RL gate | 0.30 | 0.65 | 0.35 | 0.31 |
+| dense | Heuristic | 0.27 | 0.39 | 0.13 | 0.18 |
+| | RL base | 0.21 | 0.51 | 0.31 | 0.22 |
+| | RL gate | 0.32 | 0.70 | 0.37 | 0.29 |
+| open_field | Heuristic | 0.99 | 1.00 | 0.01 | 0.01 |
+| | BC | 0.60 | 0.85 | 0.26 | 0.18 |
+| | RL base | 0.37 | 0.70 | 0.33 | 0.24 |
+| | RL gate | 0.48 | 0.79 | 0.31 | 0.23 |
+
+Findings:
+- On the presets, RL gets 65–79% of the flock into the goal at some point but ends
+  with 30–48%. That's a third of the flock lost after arrival. The heuristic loses 1%
+  on open field and 13–16% elsewhere.
+- In 22–31% of RL preset episodes the flock was ≥ 80% delivered and then fell
+  below 50%. That matches the rollout figure (open field: flock reaches the goal,
+  then the dog circles it back out).
+- Gate RL reaches the goal more often (best 0.70 dense, 0.79 open) but holds it no
+  better. Delivery improved, retention didn't.
+- Likely cause: success needs every sheep inside at the same step, and the reward
+  has no term for keeping delivered sheep inside. The progress terms reward reducing
+  the mean and max distance, so they give nothing once sheep are in, while the
+  drive-position term keeps pulling the dog to the far side of the flock, which pushes
+  sheep through the goal. A holding reward, or ending the episode at a high fraction,
+  is a direct next experiment.
+- On the procedural test the gap is smaller (0.15–0.21 lost), so the preset maps
+  exaggerate it.
+
+## Paper figures and final paper (2026-09-24)
+
+`scripts/paper_figures.py` regenerates every figure in `docs/paper/figures/` from the
+eval CSVs and run logs (all light mode):
+- `v3_layouts.png`: first test-split seeds (from 100000) with the blobs, corridor,
+  gate and bars topologies.
+- `v3_results.png`: held-out FracGoal. Heuristic, BC, RL base (runs 5–7) and RL
+  gate 0.45 (runs 8–10). Baseline bars show a bootstrap CI; RL bars show the 3-seed
+  mean with a min–max seed range.
+- `v3_training.png`: 3-seed mean and range of validation FracGoal per curriculum, plus
+  each run's share of steps per stage.
+- `v3_rollouts.png`: see "Rollout figure" above.
+
+`docs/paper/main.typ` was rewritten from scratch after runs 8–10 (not patched):
+development history (v1, v2, structured v3, procedural v3), method, three-seed
+results for both curricula, seed variance, curriculum ablation, delivered-but-not-held,
+training stability, discussion, limitations. Six pages; no em or en dashes in the
+text (the only ones are the IEEE template's "Abstract—"/"Index Terms—" and
+reference page ranges). Column figures and tables use `placement: auto` so they
+float to column tops instead of leaving gaps.

@@ -1,0 +1,4 @@
+split        scenario  episodes  success_rate  fraction_at_goal  fraction_at_goal_ci_low  fraction_at_goal_ci_high  best_fraction_at_goal  mean_dist_to_goal  mean_episode_length
+ test test_procedural       150          0.16          0.278667                 0.216667                  0.338667                  0.482           4.572693           632.693333
+
+Wrote results/generalization_v3/gate045_seed2_fixed/test_procedural/generalization_report.csv

@@ -1,0 +1,279 @@
+{
+  "run_name": "recurrent_seed0",
+  "model_type": "recurrent",
+  "seed": 0,
+  "scenario": "train",
+  "total_timesteps": 600000,
+  "config_path": "configs/research/v3_gate045.yaml",
+  "n_envs": 12,
+  "observation_mode": "egocentric",
+  "observation_frame": "world",
+  "vecnormalize_path": "models/research_v3_gate045/recurrent/recurrent_seed0_vecnormalize.pkl",
+  "curriculum": {
+    "final_stage": 0.66,
+    "reached_final_stage": false,
+    "timesteps_per_stage": {
+      "0.0": 87372,
+      "0.33": 255672,
+      "0.66": 259068
+    },
+    "fraction_per_stage": {
+      "0.0": 0.1451092155612245,
+      "0.33": 0.424625318877551,
+      "0.66": 0.43026546556122447
+    },
+    "stage_transitions": [
+      {
+        "stage": 0.33,
+        "timestep": 87372.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 126600.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 151608.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 186768.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 218316.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 244020.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 283764.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 308772.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 334104.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 364644.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 401148.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 426156.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 462948.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 487956.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 512964.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 537972.0
+      },
+      {
+        "stage": 0.33,
+        "timestep": 568392.0
+      },
+      {
+        "stage": 0.66,
+        "timestep": 593400.0
+      }
+    ]
+  },
+  "validation": {
+    "scenario": "validation",
+    "episodes": 30,
+    "eval_freq": 25000,
+    "seed": 10000,
+    "best_fraction_at_goal": 0.4342881192881193,
+    "best_model_path": "models/research_v3_gate045/recurrent/recurrent_seed0_best",
+    "best_vecnormalize_path": "models/research_v3_gate045/recurrent/recurrent_seed0_best_vecnormalize.pkl",
+    "history": [
+      {
+        "timestep": 25008.0,
+        "success_rate": 0.06666666666666667,
+        "fraction_at_goal": 0.13784511784511783,
+        "mean_dist_to_goal": 7.032981387774149,
+        "episode_length": 674.1
+      },
+      {
+        "timestep": 50016.0,
+        "success_rate": 0.1,
+        "fraction_at_goal": 0.15673400673400675,
+        "mean_dist_to_goal": 7.337710591157277,
+        "episode_length": 647.1666666666666
+      },
+      {
+        "timestep": 75024.0,
+        "success_rate": 0.06666666666666667,
+        "fraction_at_goal": 0.10052910052910052,
+        "mean_dist_to_goal": 6.843375092744827,
+        "episode_length": 662.0
+      },
+      {
+        "timestep": 100032.0,
+        "success_rate": 0.06666666666666667,
+        "fraction_at_goal": 0.0857142857142857,
+        "mean_dist_to_goal": 7.167496689160665,
+        "episode_length": 678.5666666666667
+      },
+      {
+        "timestep": 125040.0,
+        "success_rate": 0.06666666666666667,
+        "fraction_at_goal": 0.10132275132275131,
+        "mean_dist_to_goal": 6.889266049861908,
+        "episode_length": 678.7
+      },
+      {
+        "timestep": 150048.0,
+        "success_rate": 0.13333333333333333,
+        "fraction_at_goal": 0.187035187035187,
+        "mean_dist_to_goal": 5.471435129642487,
+        "episode_length": 641.0333333333333
+      },
+      {
+        "timestep": 175056.0,
+        "success_rate": 0.1,
+        "fraction_at_goal": 0.22481499981499983,
+        "mean_dist_to_goal": 4.721150910854339,
+        "episode_length": 648.9
+      },
+      {
+        "timestep": 200064.0,
+        "success_rate": 0.16666666666666666,
+        "fraction_at_goal": 0.22924723424723423,
+        "mean_dist_to_goal": 4.711316182216009,
+        "episode_length": 627.7666666666667
+      },
+      {
+        "timestep": 225072.0,
+        "success_rate": 0.2,
+        "fraction_at_goal": 0.26605339105339104,
+        "mean_dist_to_goal": 4.341631937026977,
+        "episode_length": 607.0
+      },
+      {
+        "timestep": 250080.0,
+        "success_rate": 0.16666666666666666,
+        "fraction_at_goal": 0.24914862914862912,
+        "mean_dist_to_goal": 4.60198480685552,
+        "episode_length": 616.0
+      },
+      {
+        "timestep": 275088.0,
+        "success_rate": 0.16666666666666666,
+        "fraction_at_goal": 0.23656084656084655,
+        "mean_dist_to_goal": 4.9435678124427795,
+        "episode_length": 643.4333333333333
+      },
+      {
+        "timestep": 300096.0,
+        "success_rate": 0.2,
+        "fraction_at_goal": 0.3123520923520923,
+        "mean_dist_to_goal": 4.535544919967651,
+        "episode_length": 591.3
+      },
+      {
+        "timestep": 325104.0,
+        "success_rate": 0.26666666666666666,
+        "fraction_at_goal": 0.3411688311688312,
+        "mean_dist_to_goal": 4.522929565111796,
+        "episode_length": 563.2666666666667
+      },
+      {
+        "timestep": 350112.0,
+        "success_rate": 0.16666666666666666,
+        "fraction_at_goal": 0.25553150553150555,
+        "mean_dist_to_goal": 4.407669373353323,
+        "episode_length": 619.4333333333333
+      },
+      {
+        "timestep": 375120.0,
+        "success_rate": 0.1,
+        "fraction_at_goal": 0.28514790764790765,
+        "mean_dist_to_goal": 4.020273252328237,
+        "episode_length": 658.3
+      },
+      {
+        "timestep": 400128.0,
+        "success_rate": 0.16666666666666666,
+        "fraction_at_goal": 0.23201539201539206,
+        "mean_dist_to_goal": 4.217458351453145,
+        "episode_length": 622.5666666666667
+      },
+      {
+        "timestep": 425136.0,
+        "success_rate": 0.06666666666666667,
+        "fraction_at_goal": 0.23836219336219336,
+        "mean_dist_to_goal": 3.9871346433957418,
+        "episode_length": 669.0
+      },
+      {
+        "timestep": 450144.0,
+        "success_rate": 0.16666666666666666,
+        "fraction_at_goal": 0.3497787397787398,
+        "mean_dist_to_goal": 3.6402292529741924,
+        "episode_length": 649.0
+      },
+      {
+        "timestep": 475152.0,
+        "success_rate": 0.2,
+        "fraction_at_goal": 0.2982251082251082,
+        "mean_dist_to_goal": 4.539653937021892,
+        "episode_length": 614.8
+      },
+      {
+        "timestep": 500160.0,
+        "success_rate": 0.26666666666666666,
+        "fraction_at_goal": 0.4342881192881193,
+        "mean_dist_to_goal": 3.370306009054184,
+        "episode_length": 587.9666666666667
+      },
+      {
+        "timestep": 525168.0,
+        "success_rate": 0.2,
+        "fraction_at_goal": 0.3134920634920635,
+        "mean_dist_to_goal": 3.7897323966026306,
+        "episode_length": 628.3666666666667
+      },
+      {
+        "timestep": 550176.0,
+        "success_rate": 0.2,
+        "fraction_at_goal": 0.3185473785473785,
+        "mean_dist_to_goal": 4.039026729265848,
+        "episode_length": 636.7666666666667
+      },
+      {
+        "timestep": 575184.0,
+        "success_rate": 0.13333333333333333,
+        "fraction_at_goal": 0.24903439153439152,
+        "mean_dist_to_goal": 4.427407832940419,
+        "episode_length": 666.2666666666667
+      },
+      {
+        "timestep": 600192.0,
+        "success_rate": 0.26666666666666666,
+        "fraction_at_goal": 0.33286676286676287,
+        "mean_dist_to_goal": 3.969613420963287,
+        "episode_length": 583.7333333333333
+      }
+    ]
+  }
+}

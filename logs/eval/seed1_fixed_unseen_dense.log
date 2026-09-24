@@ -1,0 +1,4 @@
+ split     scenario  episodes  success_rate  fraction_at_goal  fraction_at_goal_ci_low  fraction_at_goal_ci_high  best_fraction_at_goal  mean_dist_to_goal  mean_episode_length
+unseen unseen_dense       150          0.08             0.286                     0.24                  0.336667               0.669333           3.871322           678.173333
+
+Wrote results/generalization_v3/rppo_seed1_fixed/unseen_dense/generalization_report.csv

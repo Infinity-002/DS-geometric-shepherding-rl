@@ -1,0 +1,4 @@
+ split          scenario  episodes  success_rate  fraction_at_goal  fraction_at_goal_ci_low  fraction_at_goal_ci_high  best_fraction_at_goal  mean_dist_to_goal  mean_episode_length
+unseen unseen_open_field       150      0.306667          0.472667                 0.405317                     0.538                  0.876           3.311895           620.766667
+
+Wrote results/generalization_v3/gate045_seed1_fixed/unseen_open_field/generalization_report.csv
