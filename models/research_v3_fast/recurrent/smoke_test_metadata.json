@@ -1,0 +1,40 @@
+{
+  "run_name": "smoke_test",
+  "model_type": "recurrent",
+  "seed": 0,
+  "scenario": "train",
+  "total_timesteps": 20000,
+  "config_path": "configs/research/v3_fast.yaml",
+  "n_envs": 8,
+  "observation_mode": "egocentric",
+  "observation_frame": "world",
+  "vecnormalize_path": "models/research_v3_fast/recurrent/smoke_test_vecnormalize.pkl",
+  "curriculum": {
+    "final_stage": 0.0,
+    "reached_final_stage": false,
+    "timesteps_per_stage": {
+      "0.0": 20480
+    },
+    "fraction_per_stage": {
+      "0.0": 1.0
+    },
+    "stage_transitions": []
+  },
+  "validation": {
+    "scenario": "validation",
+    "episodes": 6,
+    "eval_freq": 15000,
+    "seed": 10000,
+    "best_fraction_at_goal": 0.0,
+    "best_model_path": "models/research_v3_fast/recurrent/smoke_test_best",
+    "history": [
+      {
+        "timestep": 15000.0,
+        "success_rate": 0.0,
+        "fraction_at_goal": 0.0,
+        "mean_dist_to_goal": 9.71030569076538,
+        "episode_length": 500.0
+      }
+    ]
+  }
+}

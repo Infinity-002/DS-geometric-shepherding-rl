@@ -1,0 +1,3844 @@
+TensorBoard is not installed; continuing without tensorboard logging.
+Using cpu device
+========================================================================
+  Shepherding RL v3 – Recurrent PPO
+  Run name         : recurrent_seed0
+  Seed             : 0
+  Scenario         : train
+  Parallel envs    : 12
+  Total timesteps  : 1,000,000
+========================================================================
+---------------------------------
+| curriculum/        |          |
+|    stage           | 0        |
+| time/              |          |
+|    fps             | 1865     |
+|    iterations      | 1        |
+|    time_elapsed    | 1        |
+|    total_timesteps | 3072     |
+---------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0          |
+| time/                   |            |
+|    fps                  | 166        |
+|    iterations           | 2          |
+|    time_elapsed         | 36         |
+|    total_timesteps      | 6144       |
+| train/                  |            |
+|    approx_kl            | 0.00862122 |
+|    clip_fraction        | 0.0465     |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.84      |
+|    explained_variance   | 0.0453     |
+|    learning_rate        | 0.0003     |
+|    loss                 | 0.335      |
+|    n_updates            | 10         |
+|    policy_gradient_loss | -0.00538   |
+|    std                  | 1          |
+|    value_loss           | 0.93       |
+----------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0           |
+| rollout/                |             |
+|    ep_len_mean          | 700         |
+|    ep_rew_mean          | 538         |
+| time/                   |             |
+|    fps                  | 225         |
+|    iterations           | 3           |
+|    time_elapsed         | 40          |
+|    total_timesteps      | 9216        |
+| train/                  |             |
+|    approx_kl            | 0.013797838 |
+|    clip_fraction        | 0.129       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.84       |
+|    explained_variance   | 0.524       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.00717    |
+|    n_updates            | 20          |
+|    policy_gradient_loss | -0.0166     |
+|    std                  | 0.999       |
+|    value_loss           | 0.0793      |
+-----------------------------------------
+[Step    12288] SR=0.077 | FracGoal=0.077 | Ret=515.08 | Vis=0.40 | Prog=0.018 | CollEvt=32.92 | Stage=0.00
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0           |
+| research/                 |             |
+|    collision_count        | 71.6        |
+|    collision_event_count  | 32.9        |
+|    curriculum_stage       | 0           |
+|    episode_length         | 656         |
+|    episode_return         | 515         |
+|    fraction_at_goal       | 0.0769      |
+|    reward_collision       | -0.0117     |
+|    reward_progress        | 0.0181      |
+|    reward_zero_visibility | -0.105      |
+|    stray_count            | 0           |
+|    success_rate           | 0.0769      |
+|    visibility_ratio       | 0.4         |
+| rollout/                  |             |
+|    ep_len_mean            | 656         |
+|    ep_rew_mean            | 515         |
+| time/                     |             |
+|    fps                    | 185         |
+|    iterations             | 4           |
+|    time_elapsed           | 66          |
+|    total_timesteps        | 12288       |
+| train/                    |             |
+|    approx_kl              | 0.017327905 |
+|    clip_fraction          | 0.177       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.83       |
+|    explained_variance     | 0.828       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0223     |
+|    n_updates              | 30          |
+|    policy_gradient_loss   | -0.0222     |
+|    std                    | 0.993       |
+|    value_loss             | 0.0718      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0           |
+| rollout/                |             |
+|    ep_len_mean          | 647         |
+|    ep_rew_mean          | 528         |
+| time/                   |             |
+|    fps                  | 212         |
+|    iterations           | 5           |
+|    time_elapsed         | 72          |
+|    total_timesteps      | 15360       |
+| train/                  |             |
+|    approx_kl            | 0.018233843 |
+|    clip_fraction        | 0.182       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.82       |
+|    explained_variance   | 0.717       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0295     |
+|    n_updates            | 40          |
+|    policy_gradient_loss | -0.0239     |
+|    std                  | 0.983       |
+|    value_loss           | 0.0583      |
+-----------------------------------------
+[Step    18432] SR=0.120 | FracGoal=0.164 | Ret=609.27 | Vis=0.41 | Prog=0.020 | CollEvt=38.32 | Stage=0.00
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0          |
+| research/                 |            |
+|    collision_count        | 89.9       |
+|    collision_event_count  | 38.3       |
+|    curriculum_stage       | 0          |
+|    episode_length         | 670        |
+|    episode_return         | 609        |
+|    fraction_at_goal       | 0.164      |
+|    reward_collision       | -0.0137    |
+|    reward_progress        | 0.0205     |
+|    reward_zero_visibility | -0.103     |
+|    stray_count            | 0.2        |
+|    success_rate           | 0.12       |
+|    visibility_ratio       | 0.408      |
+| rollout/                  |            |
+|    ep_len_mean            | 670        |
+|    ep_rew_mean            | 609        |
+| time/                     |            |
+|    fps                    | 233        |
+|    iterations             | 6          |
+|    time_elapsed           | 78         |
+|    total_timesteps        | 18432      |
+| train/                    |            |
+|    approx_kl              | 0.01657578 |
+|    clip_fraction          | 0.188      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.8       |
+|    explained_variance     | 0.759      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0405    |
+|    n_updates              | 50         |
+|    policy_gradient_loss   | -0.0199    |
+|    std                    | 0.98       |
+|    value_loss             | 0.0453     |
+------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0           |
+| rollout/                |             |
+|    ep_len_mean          | 670         |
+|    ep_rew_mean          | 609         |
+| time/                   |             |
+|    fps                  | 212         |
+|    iterations           | 7           |
+|    time_elapsed         | 101         |
+|    total_timesteps      | 21504       |
+| train/                  |             |
+|    approx_kl            | 0.020409275 |
+|    clip_fraction        | 0.213       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.79       |
+|    explained_variance   | 0.705       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.034      |
+|    n_updates            | 60          |
+|    policy_gradient_loss | -0.025      |
+|    std                  | 0.971       |
+|    value_loss           | 0.0569      |
+-----------------------------------------
+[Step    24576] SR=0.148 | FracGoal=0.189 | Ret=622.35 | Vis=0.41 | Prog=0.022 | CollEvt=38.15 | Stage=0.00
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0           |
+| research/                 |             |
+|    collision_count        | 88.7        |
+|    collision_event_count  | 38.1        |
+|    curriculum_stage       | 0           |
+|    episode_length         | 668         |
+|    episode_return         | 622         |
+|    fraction_at_goal       | 0.189       |
+|    reward_collision       | -0.0136     |
+|    reward_progress        | 0.022       |
+|    reward_zero_visibility | -0.103      |
+|    stray_count            | 0.185       |
+|    success_rate           | 0.148       |
+|    visibility_ratio       | 0.405       |
+| rollout/                  |             |
+|    ep_len_mean            | 668         |
+|    ep_rew_mean            | 622         |
+| time/                     |             |
+|    fps                    | 233         |
+|    iterations             | 8           |
+|    time_elapsed           | 105         |
+|    total_timesteps        | 24576       |
+| train/                    |             |
+|    approx_kl              | 0.024824645 |
+|    clip_fraction          | 0.205       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.77       |
+|    explained_variance     | 0.746       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0165     |
+|    n_updates              | 70          |
+|    policy_gradient_loss   | -0.0206     |
+|    std                    | 0.966       |
+|    value_loss             | 0.0454      |
+-------------------------------------------
+[validation @ 25,008] SR=0.083 | FracGoal=0.160 | MeanDist=6.62 | best=0.160
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0           |
+| rollout/                |             |
+|    ep_len_mean          | 676         |
+|    ep_rew_mean          | 662         |
+| time/                   |             |
+|    fps                  | 213         |
+|    iterations           | 9           |
+|    time_elapsed         | 129         |
+|    total_timesteps      | 27648       |
+| train/                  |             |
+|    approx_kl            | 0.022883879 |
+|    clip_fraction        | 0.202       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.77       |
+|    explained_variance   | 0.835       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0335     |
+|    n_updates            | 80          |
+|    policy_gradient_loss | -0.0189     |
+|    std                  | 0.962       |
+|    value_loss           | 0.0421      |
+| validation/             |             |
+|    episode_length       | 663         |
+|    fraction_at_goal     | 0.16        |
+|    mean_dist_to_goal    | 6.62        |
+|    success_rate         | 0.0833      |
+-----------------------------------------
+[Step    30720] SR=0.162 | FracGoal=0.214 | Ret=661.66 | Vis=0.45 | Prog=0.023 | CollEvt=37.92 | Stage=0.00
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0           |
+| research/                 |             |
+|    collision_count        | 87.5        |
+|    collision_event_count  | 37.9        |
+|    curriculum_stage       | 0           |
+|    episode_length         | 676         |
+|    episode_return         | 662         |
+|    fraction_at_goal       | 0.214       |
+|    reward_collision       | -0.0134     |
+|    reward_progress        | 0.0234      |
+|    reward_zero_visibility | -0.0877     |
+|    stray_count            | 0.135       |
+|    success_rate           | 0.162       |
+|    visibility_ratio       | 0.453       |
+| rollout/                  |             |
+|    ep_len_mean            | 676         |
+|    ep_rew_mean            | 662         |
+| time/                     |             |
+|    fps                    | 195         |
+|    iterations             | 10          |
+|    time_elapsed           | 157         |
+|    total_timesteps        | 30720       |
+| train/                    |             |
+|    approx_kl              | 0.022982446 |
+|    clip_fraction          | 0.234       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.76       |
+|    explained_variance     | 0.685       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0386     |
+|    n_updates              | 90          |
+|    policy_gradient_loss   | -0.0204     |
+|    std                    | 0.968       |
+|    value_loss             | 0.0385      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0           |
+| rollout/                |             |
+|    ep_len_mean          | 678         |
+|    ep_rew_mean          | 694         |
+| time/                   |             |
+|    fps                  | 209         |
+|    iterations           | 11          |
+|    time_elapsed         | 161         |
+|    total_timesteps      | 33792       |
+| train/                  |             |
+|    approx_kl            | 0.024780883 |
+|    clip_fraction        | 0.233       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.77       |
+|    explained_variance   | 0.672       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0528     |
+|    n_updates            | 100         |
+|    policy_gradient_loss | -0.0263     |
+|    std                  | 0.962       |
+|    value_loss           | 0.0244      |
+-----------------------------------------
+[Step    36864] SR=0.250 | FracGoal=0.292 | Ret=674.60 | Vis=0.50 | Prog=0.033 | CollEvt=34.83 | Stage=0.00
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0           |
+| research/                 |             |
+|    collision_count        | 80.4        |
+|    collision_event_count  | 34.8        |
+|    curriculum_stage       | 0           |
+|    episode_length         | 651         |
+|    episode_return         | 675         |
+|    fraction_at_goal       | 0.292       |
+|    reward_collision       | -0.0129     |
+|    reward_progress        | 0.0331      |
+|    reward_zero_visibility | -0.0709     |
+|    stray_count            | 0.135       |
+|    success_rate           | 0.25        |
+|    visibility_ratio       | 0.502       |
+| rollout/                  |             |
+|    ep_len_mean            | 651         |
+|    ep_rew_mean            | 675         |
+| time/                     |             |
+|    fps                    | 193         |
+|    iterations             | 12          |
+|    time_elapsed           | 190         |
+|    total_timesteps        | 36864       |
+| train/                    |             |
+|    approx_kl              | 0.034656063 |
+|    clip_fraction          | 0.234       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.76       |
+|    explained_variance     | 0.681       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0328     |
+|    n_updates              | 110         |
+|    policy_gradient_loss   | -0.0279     |
+|    std                    | 0.957       |
+|    value_loss             | 0.0613      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0           |
+| rollout/                |             |
+|    ep_len_mean          | 643         |
+|    ep_rew_mean          | 679         |
+| time/                   |             |
+|    fps                  | 196         |
+|    iterations           | 13          |
+|    time_elapsed         | 202         |
+|    total_timesteps      | 39936       |
+| train/                  |             |
+|    approx_kl            | 0.023973506 |
+|    clip_fraction        | 0.223       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.74       |
+|    explained_variance   | 0.704       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0243     |
+|    n_updates            | 120         |
+|    policy_gradient_loss | -0.0213     |
+|    std                  | 0.95        |
+|    value_loss           | 0.0429      |
+-----------------------------------------
+[Step    43008] SR=0.286 | FracGoal=0.333 | Ret=687.18 | Vis=0.52 | Prog=0.040 | CollEvt=31.57 | Stage=0.00
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0           |
+| research/                 |             |
+|    collision_count        | 72.1        |
+|    collision_event_count  | 31.6        |
+|    curriculum_stage       | 0           |
+|    episode_length         | 633         |
+|    episode_return         | 687         |
+|    fraction_at_goal       | 0.333       |
+|    reward_collision       | -0.0117     |
+|    reward_progress        | 0.0398      |
+|    reward_zero_visibility | -0.0626     |
+|    stray_count            | 0.111       |
+|    success_rate           | 0.286       |
+|    visibility_ratio       | 0.519       |
+| rollout/                  |             |
+|    ep_len_mean            | 633         |
+|    ep_rew_mean            | 687         |
+| time/                     |             |
+|    fps                    | 196         |
+|    iterations             | 14          |
+|    time_elapsed           | 218         |
+|    total_timesteps        | 43008       |
+| train/                    |             |
+|    approx_kl              | 0.020230714 |
+|    clip_fraction          | 0.224       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.73       |
+|    explained_variance     | 0.709       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.00877    |
+|    n_updates              | 130         |
+|    policy_gradient_loss   | -0.024      |
+|    std                    | 0.946       |
+|    value_loss             | 0.0538      |
+-------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0          |
+| rollout/                |            |
+|    ep_len_mean          | 627        |
+|    ep_rew_mean          | 694        |
+| time/                   |            |
+|    fps                  | 192        |
+|    iterations           | 15         |
+|    time_elapsed         | 239        |
+|    total_timesteps      | 46080      |
+| train/                  |            |
+|    approx_kl            | 0.01770778 |
+|    clip_fraction        | 0.207      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.72      |
+|    explained_variance   | 0.839      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0506    |
+|    n_updates            | 140        |
+|    policy_gradient_loss | -0.0235    |
+|    std                  | 0.944      |
+|    value_loss           | 0.0427     |
+----------------------------------------
+[Step    49152] SR=0.333 | FracGoal=0.387 | Ret=685.77 | Vis=0.54 | Prog=0.045 | CollEvt=28.51 | Stage=0.00
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0           |
+| research/                 |             |
+|    collision_count        | 64.1        |
+|    collision_event_count  | 28.5        |
+|    curriculum_stage       | 0           |
+|    episode_length         | 608         |
+|    episode_return         | 686         |
+|    fraction_at_goal       | 0.387       |
+|    reward_collision       | -0.0107     |
+|    reward_progress        | 0.0448      |
+|    reward_zero_visibility | -0.0551     |
+|    stray_count            | 0.133       |
+|    success_rate           | 0.333       |
+|    visibility_ratio       | 0.539       |
+| rollout/                  |             |
+|    ep_len_mean            | 608         |
+|    ep_rew_mean            | 686         |
+| time/                     |             |
+|    fps                    | 193         |
+|    iterations             | 16          |
+|    time_elapsed           | 254         |
+|    total_timesteps        | 49152       |
+| train/                    |             |
+|    approx_kl              | 0.026830342 |
+|    clip_fraction          | 0.217       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.72       |
+|    explained_variance     | 0.727       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0571     |
+|    n_updates              | 150         |
+|    policy_gradient_loss   | -0.0263     |
+|    std                    | 0.941       |
+|    value_loss             | 0.031       |
+-------------------------------------------
+Adaptive curriculum advanced to stage 0.33 at timestep 50,004
+[validation @ 50,016] SR=0.250 | FracGoal=0.348 | MeanDist=5.72 | best=0.348
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 605         |
+|    ep_rew_mean          | 692         |
+| time/                   |             |
+|    fps                  | 179         |
+|    iterations           | 17          |
+|    time_elapsed         | 291         |
+|    total_timesteps      | 52224       |
+| train/                  |             |
+|    approx_kl            | 0.029607803 |
+|    clip_fraction        | 0.245       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.71       |
+|    explained_variance   | 0.669       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0301     |
+|    n_updates            | 160         |
+|    policy_gradient_loss | -0.0242     |
+|    std                  | 0.935       |
+|    value_loss           | 0.0606      |
+| validation/             |             |
+|    episode_length       | 582         |
+|    fraction_at_goal     | 0.348       |
+|    mean_dist_to_goal    | 5.72        |
+|    success_rate         | 0.25        |
+-----------------------------------------
+[Step    55296] SR=0.357 | FracGoal=0.414 | Ret=700.14 | Vis=0.54 | Prog=0.046 | CollEvt=28.00 | Stage=0.20
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 62.5        |
+|    collision_event_count  | 28          |
+|    curriculum_stage       | 0.198       |
+|    episode_length         | 605         |
+|    episode_return         | 700         |
+|    fraction_at_goal       | 0.414       |
+|    reward_collision       | -0.0105     |
+|    reward_progress        | 0.0458      |
+|    reward_zero_visibility | -0.0517     |
+|    stray_count            | 0.119       |
+|    success_rate           | 0.357       |
+|    visibility_ratio       | 0.544       |
+| rollout/                  |             |
+|    ep_len_mean            | 605         |
+|    ep_rew_mean            | 700         |
+| time/                     |             |
+|    fps                    | 178         |
+|    iterations             | 18          |
+|    time_elapsed           | 309         |
+|    total_timesteps        | 55296       |
+| train/                    |             |
+|    approx_kl              | 0.023887567 |
+|    clip_fraction          | 0.25        |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.7        |
+|    explained_variance     | 0.753       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0576     |
+|    n_updates              | 170         |
+|    policy_gradient_loss   | -0.0218     |
+|    std                    | 0.929       |
+|    value_loss             | 0.0521      |
+-------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 601        |
+|    ep_rew_mean          | 701        |
+| time/                   |            |
+|    fps                  | 180        |
+|    iterations           | 19         |
+|    time_elapsed         | 322        |
+|    total_timesteps      | 58368      |
+| train/                  |            |
+|    approx_kl            | 0.03091953 |
+|    clip_fraction        | 0.248      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.69      |
+|    explained_variance   | 0.724      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.042     |
+|    n_updates            | 180        |
+|    policy_gradient_loss | -0.0239    |
+|    std                  | 0.925      |
+|    value_loss           | 0.0344     |
+----------------------------------------
+[Step    61440] SR=0.361 | FracGoal=0.418 | Ret=698.11 | Vis=0.56 | Prog=0.049 | CollEvt=27.19 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 61.5        |
+|    collision_event_count  | 27.2        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 595         |
+|    episode_return         | 698         |
+|    fraction_at_goal       | 0.418       |
+|    reward_collision       | -0.0103     |
+|    reward_progress        | 0.0491      |
+|    reward_zero_visibility | -0.0467     |
+|    stray_count            | 0.124       |
+|    success_rate           | 0.361       |
+|    visibility_ratio       | 0.565       |
+| rollout/                  |             |
+|    ep_len_mean            | 595         |
+|    ep_rew_mean            | 698         |
+| time/                     |             |
+|    fps                    | 178         |
+|    iterations             | 20          |
+|    time_elapsed           | 344         |
+|    total_timesteps        | 61440       |
+| train/                    |             |
+|    approx_kl              | 0.024997393 |
+|    clip_fraction          | 0.248       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.68       |
+|    explained_variance     | 0.749       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0383     |
+|    n_updates              | 190         |
+|    policy_gradient_loss   | -0.0244     |
+|    std                    | 0.92        |
+|    value_loss             | 0.0427      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 598         |
+|    ep_rew_mean          | 703         |
+| time/                   |             |
+|    fps                  | 180         |
+|    iterations           | 21          |
+|    time_elapsed         | 356         |
+|    total_timesteps      | 64512       |
+| train/                  |             |
+|    approx_kl            | 0.041442025 |
+|    clip_fraction        | 0.274       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.67       |
+|    explained_variance   | 0.794       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0562     |
+|    n_updates            | 200         |
+|    policy_gradient_loss | -0.0223     |
+|    std                  | 0.918       |
+|    value_loss           | 0.0467      |
+-----------------------------------------
+[Step    67584] SR=0.360 | FracGoal=0.433 | Ret=718.95 | Vis=0.59 | Prog=0.052 | CollEvt=27.22 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 64.7        |
+|    collision_event_count  | 27.2        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 593         |
+|    episode_return         | 719         |
+|    fraction_at_goal       | 0.433       |
+|    reward_collision       | -0.0105     |
+|    reward_progress        | 0.0522      |
+|    reward_zero_visibility | -0.0392     |
+|    stray_count            | 0.12        |
+|    success_rate           | 0.36        |
+|    visibility_ratio       | 0.587       |
+| rollout/                  |             |
+|    ep_len_mean            | 593         |
+|    ep_rew_mean            | 719         |
+| time/                     |             |
+|    fps                    | 183         |
+|    iterations             | 22          |
+|    time_elapsed           | 367         |
+|    total_timesteps        | 67584       |
+| train/                    |             |
+|    approx_kl              | 0.041527443 |
+|    clip_fraction          | 0.282       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.66       |
+|    explained_variance     | 0.894       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0551     |
+|    n_updates              | 210         |
+|    policy_gradient_loss   | -0.0271     |
+|    std                    | 0.914       |
+|    value_loss             | 0.024       |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 589         |
+|    ep_rew_mean          | 742         |
+| time/                   |             |
+|    fps                  | 183         |
+|    iterations           | 23          |
+|    time_elapsed         | 384         |
+|    total_timesteps      | 70656       |
+| train/                  |             |
+|    approx_kl            | 0.037982933 |
+|    clip_fraction        | 0.293       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.65       |
+|    explained_variance   | 0.726       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0422     |
+|    n_updates            | 220         |
+|    policy_gradient_loss | -0.0227     |
+|    std                  | 0.91        |
+|    value_loss           | 0.042       |
+-----------------------------------------
+[Step    73728] SR=0.380 | FracGoal=0.466 | Ret=746.11 | Vis=0.62 | Prog=0.054 | CollEvt=25.49 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 60.4        |
+|    collision_event_count  | 25.5        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 589         |
+|    episode_return         | 746         |
+|    fraction_at_goal       | 0.466       |
+|    reward_collision       | -0.00992    |
+|    reward_progress        | 0.0539      |
+|    reward_zero_visibility | -0.0303     |
+|    stray_count            | 0.12        |
+|    success_rate           | 0.38        |
+|    visibility_ratio       | 0.616       |
+| rollout/                  |             |
+|    ep_len_mean            | 589         |
+|    ep_rew_mean            | 746         |
+| time/                     |             |
+|    fps                    | 182         |
+|    iterations             | 24          |
+|    time_elapsed           | 404         |
+|    total_timesteps        | 73728       |
+| train/                    |             |
+|    approx_kl              | 0.034362182 |
+|    clip_fraction          | 0.238       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.64       |
+|    explained_variance     | 0.738       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0394     |
+|    n_updates              | 230         |
+|    policy_gradient_loss   | -0.0247     |
+|    std                    | 0.904       |
+|    value_loss             | 0.0499      |
+-------------------------------------------
+[validation @ 75,024] SR=0.167 | FracGoal=0.219 | MeanDist=5.26 | best=0.348
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 585         |
+|    ep_rew_mean          | 754         |
+| time/                   |             |
+|    fps                  | 173         |
+|    iterations           | 25          |
+|    time_elapsed         | 441         |
+|    total_timesteps      | 76800       |
+| train/                  |             |
+|    approx_kl            | 0.046802804 |
+|    clip_fraction        | 0.294       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.63       |
+|    explained_variance   | 0.861       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0433     |
+|    n_updates            | 240         |
+|    policy_gradient_loss | -0.0187     |
+|    std                  | 0.901       |
+|    value_loss           | 0.0206      |
+| validation/             |             |
+|    episode_length       | 649         |
+|    fraction_at_goal     | 0.219       |
+|    mean_dist_to_goal    | 5.26        |
+|    success_rate         | 0.167       |
+-----------------------------------------
+[Step    79872] SR=0.390 | FracGoal=0.489 | Ret=753.19 | Vis=0.65 | Prog=0.063 | CollEvt=22.43 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 52          |
+|    collision_event_count  | 22.4        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 575         |
+|    episode_return         | 753         |
+|    fraction_at_goal       | 0.489       |
+|    reward_collision       | -0.00888    |
+|    reward_progress        | 0.0627      |
+|    reward_zero_visibility | -0.0206     |
+|    stray_count            | 0.07        |
+|    success_rate           | 0.39        |
+|    visibility_ratio       | 0.651       |
+| rollout/                  |             |
+|    ep_len_mean            | 575         |
+|    ep_rew_mean            | 753         |
+| time/                     |             |
+|    fps                    | 174         |
+|    iterations             | 26          |
+|    time_elapsed           | 458         |
+|    total_timesteps        | 79872       |
+| train/                    |             |
+|    approx_kl              | 0.042025976 |
+|    clip_fraction          | 0.278       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.62       |
+|    explained_variance     | 0.796       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0425     |
+|    n_updates              | 250         |
+|    policy_gradient_loss   | -0.0275     |
+|    std                    | 0.894       |
+|    value_loss             | 0.0237      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 569         |
+|    ep_rew_mean          | 753         |
+| time/                   |             |
+|    fps                  | 173         |
+|    iterations           | 27          |
+|    time_elapsed         | 478         |
+|    total_timesteps      | 82944       |
+| train/                  |             |
+|    approx_kl            | 0.029257087 |
+|    clip_fraction        | 0.271       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.61       |
+|    explained_variance   | 0.757       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0596     |
+|    n_updates            | 260         |
+|    policy_gradient_loss | -0.0252     |
+|    std                  | 0.891       |
+|    value_loss           | 0.0345      |
+-----------------------------------------
+[Step    86016] SR=0.420 | FracGoal=0.527 | Ret=756.09 | Vis=0.67 | Prog=0.066 | CollEvt=21.32 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 50.8        |
+|    collision_event_count  | 21.3        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 563         |
+|    episode_return         | 756         |
+|    fraction_at_goal       | 0.527       |
+|    reward_collision       | -0.00876    |
+|    reward_progress        | 0.0662      |
+|    reward_zero_visibility | -0.0166     |
+|    stray_count            | 0.09        |
+|    success_rate           | 0.42        |
+|    visibility_ratio       | 0.668       |
+| rollout/                  |             |
+|    ep_len_mean            | 563         |
+|    ep_rew_mean            | 756         |
+| time/                     |             |
+|    fps                    | 173         |
+|    iterations             | 28          |
+|    time_elapsed           | 495         |
+|    total_timesteps        | 86016       |
+| train/                    |             |
+|    approx_kl              | 0.035281613 |
+|    clip_fraction          | 0.303       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.61       |
+|    explained_variance     | 0.853       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0564     |
+|    n_updates              | 270         |
+|    policy_gradient_loss   | -0.0296     |
+|    std                    | 0.893       |
+|    value_loss             | 0.0216      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 560         |
+|    ep_rew_mean          | 757         |
+| time/                   |             |
+|    fps                  | 174         |
+|    iterations           | 29          |
+|    time_elapsed         | 511         |
+|    total_timesteps      | 89088       |
+| train/                  |             |
+|    approx_kl            | 0.035983935 |
+|    clip_fraction        | 0.275       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.61       |
+|    explained_variance   | 0.72        |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0291     |
+|    n_updates            | 280         |
+|    policy_gradient_loss | -0.028      |
+|    std                  | 0.893       |
+|    value_loss           | 0.0289      |
+-----------------------------------------
+[Step    92160] SR=0.400 | FracGoal=0.520 | Ret=766.23 | Vis=0.68 | Prog=0.067 | CollEvt=20.99 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 50.3        |
+|    collision_event_count  | 21          |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 560         |
+|    episode_return         | 766         |
+|    fraction_at_goal       | 0.52        |
+|    reward_collision       | -0.00872    |
+|    reward_progress        | 0.0675      |
+|    reward_zero_visibility | -0.0132     |
+|    stray_count            | 0.08        |
+|    success_rate           | 0.4         |
+|    visibility_ratio       | 0.684       |
+| rollout/                  |             |
+|    ep_len_mean            | 560         |
+|    ep_rew_mean            | 766         |
+| time/                     |             |
+|    fps                    | 175         |
+|    iterations             | 30          |
+|    time_elapsed           | 526         |
+|    total_timesteps        | 92160       |
+| train/                    |             |
+|    approx_kl              | 0.036791548 |
+|    clip_fraction          | 0.292       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.61       |
+|    explained_variance     | 0.782       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0306     |
+|    n_updates              | 290         |
+|    policy_gradient_loss   | -0.0233     |
+|    std                    | 0.891       |
+|    value_loss             | 0.0232      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 572         |
+|    ep_rew_mean          | 781         |
+| time/                   |             |
+|    fps                  | 176         |
+|    iterations           | 31          |
+|    time_elapsed         | 540         |
+|    total_timesteps      | 95232       |
+| train/                  |             |
+|    approx_kl            | 0.037870634 |
+|    clip_fraction        | 0.322       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.6        |
+|    explained_variance   | 0.891       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0497     |
+|    n_updates            | 300         |
+|    policy_gradient_loss | -0.0197     |
+|    std                  | 0.888       |
+|    value_loss           | 0.00923     |
+-----------------------------------------
+[Step    98304] SR=0.360 | FracGoal=0.505 | Ret=787.27 | Vis=0.68 | Prog=0.064 | CollEvt=21.06 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 50.8        |
+|    collision_event_count  | 21.1        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 575         |
+|    episode_return         | 787         |
+|    fraction_at_goal       | 0.505       |
+|    reward_collision       | -0.00844    |
+|    reward_progress        | 0.0638      |
+|    reward_zero_visibility | -0.013      |
+|    stray_count            | 0.07        |
+|    success_rate           | 0.36        |
+|    visibility_ratio       | 0.684       |
+| rollout/                  |             |
+|    ep_len_mean            | 575         |
+|    ep_rew_mean            | 787         |
+| time/                     |             |
+|    fps                    | 176         |
+|    iterations             | 32          |
+|    time_elapsed           | 556         |
+|    total_timesteps        | 98304       |
+| train/                    |             |
+|    approx_kl              | 0.053147785 |
+|    clip_fraction          | 0.296       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.6        |
+|    explained_variance     | 0.921       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0336     |
+|    n_updates              | 310         |
+|    policy_gradient_loss   | -0.0262     |
+|    std                    | 0.89        |
+|    value_loss             | 0.00801     |
+-------------------------------------------
+[validation @ 100,032] SR=0.167 | FracGoal=0.248 | MeanDist=4.34 | best=0.348
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 573         |
+|    ep_rew_mean          | 786         |
+| time/                   |             |
+|    fps                  | 171         |
+|    iterations           | 33          |
+|    time_elapsed         | 590         |
+|    total_timesteps      | 101376      |
+| train/                  |             |
+|    approx_kl            | 0.040942892 |
+|    clip_fraction        | 0.242       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.6        |
+|    explained_variance   | 0.643       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0489     |
+|    n_updates            | 320         |
+|    policy_gradient_loss | -0.0252     |
+|    std                  | 0.887       |
+|    value_loss           | 0.0447      |
+| validation/             |             |
+|    episode_length       | 606         |
+|    fraction_at_goal     | 0.248       |
+|    mean_dist_to_goal    | 4.34        |
+|    success_rate         | 0.167       |
+-----------------------------------------
+[Step   104448] SR=0.370 | FracGoal=0.502 | Ret=790.99 | Vis=0.70 | Prog=0.063 | CollEvt=21.06 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 50.7        |
+|    collision_event_count  | 21.1        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 576         |
+|    episode_return         | 791         |
+|    fraction_at_goal       | 0.502       |
+|    reward_collision       | -0.00843    |
+|    reward_progress        | 0.0632      |
+|    reward_zero_visibility | -0.012      |
+|    stray_count            | 0.05        |
+|    success_rate           | 0.37        |
+|    visibility_ratio       | 0.696       |
+| rollout/                  |             |
+|    ep_len_mean            | 576         |
+|    ep_rew_mean            | 791         |
+| time/                     |             |
+|    fps                    | 172         |
+|    iterations             | 34          |
+|    time_elapsed           | 606         |
+|    total_timesteps        | 104448      |
+| train/                    |             |
+|    approx_kl              | 0.037024308 |
+|    clip_fraction          | 0.284       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.6        |
+|    explained_variance     | 0.517       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0515     |
+|    n_updates              | 330         |
+|    policy_gradient_loss   | -0.0258     |
+|    std                    | 0.887       |
+|    value_loss             | 0.0467      |
+-------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 581        |
+|    ep_rew_mean          | 788        |
+| time/                   |            |
+|    fps                  | 171        |
+|    iterations           | 35         |
+|    time_elapsed         | 626        |
+|    total_timesteps      | 107520     |
+| train/                  |            |
+|    approx_kl            | 0.04066504 |
+|    clip_fraction        | 0.305      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.6       |
+|    explained_variance   | 0.753      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0516    |
+|    n_updates            | 340        |
+|    policy_gradient_loss | -0.0256    |
+|    std                  | 0.884      |
+|    value_loss           | 0.0552     |
+----------------------------------------
+[Step   110592] SR=0.330 | FracGoal=0.463 | Ret=787.08 | Vis=0.71 | Prog=0.065 | CollEvt=22.47 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 53.5       |
+|    collision_event_count  | 22.5       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 586        |
+|    episode_return         | 787        |
+|    fraction_at_goal       | 0.463      |
+|    reward_collision       | -0.00887   |
+|    reward_progress        | 0.0647     |
+|    reward_zero_visibility | -0.0116    |
+|    stray_count            | 0.07       |
+|    success_rate           | 0.33       |
+|    visibility_ratio       | 0.709      |
+| rollout/                  |            |
+|    ep_len_mean            | 586        |
+|    ep_rew_mean            | 787        |
+| time/                     |            |
+|    fps                    | 171        |
+|    iterations             | 36         |
+|    time_elapsed           | 645        |
+|    total_timesteps        | 110592     |
+| train/                    |            |
+|    approx_kl              | 0.07212893 |
+|    clip_fraction          | 0.309      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.59      |
+|    explained_variance     | 0.653      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0508    |
+|    n_updates              | 350        |
+|    policy_gradient_loss   | -0.0243    |
+|    std                    | 0.88       |
+|    value_loss             | 0.027      |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 589        |
+|    ep_rew_mean          | 786        |
+| time/                   |            |
+|    fps                  | 171        |
+|    iterations           | 37         |
+|    time_elapsed         | 662        |
+|    total_timesteps      | 113664     |
+| train/                  |            |
+|    approx_kl            | 0.03918594 |
+|    clip_fraction        | 0.273      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.58      |
+|    explained_variance   | 0.886      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0661    |
+|    n_updates            | 360        |
+|    policy_gradient_loss | -0.0251    |
+|    std                  | 0.878      |
+|    value_loss           | 0.0165     |
+----------------------------------------
+[Step   116736] SR=0.320 | FracGoal=0.462 | Ret=784.86 | Vis=0.71 | Prog=0.066 | CollEvt=20.81 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 48.5       |
+|    collision_event_count  | 20.8       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 584        |
+|    episode_return         | 785        |
+|    fraction_at_goal       | 0.462      |
+|    reward_collision       | -0.00821   |
+|    reward_progress        | 0.0665     |
+|    reward_zero_visibility | -0.0115    |
+|    stray_count            | 0.07       |
+|    success_rate           | 0.32       |
+|    visibility_ratio       | 0.707      |
+| rollout/                  |            |
+|    ep_len_mean            | 584        |
+|    ep_rew_mean            | 785        |
+| time/                     |            |
+|    fps                    | 171        |
+|    iterations             | 38         |
+|    time_elapsed           | 681        |
+|    total_timesteps        | 116736     |
+| train/                    |            |
+|    approx_kl              | 0.05066465 |
+|    clip_fraction          | 0.309      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.58      |
+|    explained_variance     | 0.893      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.036     |
+|    n_updates              | 370        |
+|    policy_gradient_loss   | -0.0293    |
+|    std                    | 0.878      |
+|    value_loss             | 0.00772    |
+------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 588         |
+|    ep_rew_mean          | 794         |
+| time/                   |             |
+|    fps                  | 172         |
+|    iterations           | 39          |
+|    time_elapsed         | 695         |
+|    total_timesteps      | 119808      |
+| train/                  |             |
+|    approx_kl            | 0.037452854 |
+|    clip_fraction        | 0.297       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.57       |
+|    explained_variance   | 0.68        |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0469     |
+|    n_updates            | 380         |
+|    policy_gradient_loss | -0.0246     |
+|    std                  | 0.871       |
+|    value_loss           | 0.0241      |
+-----------------------------------------
+[Step   122880] SR=0.320 | FracGoal=0.461 | Ret=796.90 | Vis=0.70 | Prog=0.067 | CollEvt=19.81 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 45.1       |
+|    collision_event_count  | 19.8       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 589        |
+|    episode_return         | 797        |
+|    fraction_at_goal       | 0.461      |
+|    reward_collision       | -0.00777   |
+|    reward_progress        | 0.0669     |
+|    reward_zero_visibility | -0.0117    |
+|    stray_count            | 0.07       |
+|    success_rate           | 0.32       |
+|    visibility_ratio       | 0.705      |
+| rollout/                  |            |
+|    ep_len_mean            | 589        |
+|    ep_rew_mean            | 797        |
+| time/                     |            |
+|    fps                    | 172        |
+|    iterations             | 40         |
+|    time_elapsed           | 712        |
+|    total_timesteps        | 122880     |
+| train/                    |            |
+|    approx_kl              | 0.05751613 |
+|    clip_fraction          | 0.291      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.56      |
+|    explained_variance     | 0.716      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.05      |
+|    n_updates              | 390        |
+|    policy_gradient_loss   | -0.0214    |
+|    std                    | 0.866      |
+|    value_loss             | 0.0225     |
+------------------------------------------
+[validation @ 125,040] SR=0.167 | FracGoal=0.274 | MeanDist=3.74 | best=0.348
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 587         |
+|    ep_rew_mean          | 794         |
+| time/                   |             |
+|    fps                  | 168         |
+|    iterations           | 41          |
+|    time_elapsed         | 748         |
+|    total_timesteps      | 125952      |
+| train/                  |             |
+|    approx_kl            | 0.042660408 |
+|    clip_fraction        | 0.296       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.54       |
+|    explained_variance   | 0.823       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0442     |
+|    n_updates            | 400         |
+|    policy_gradient_loss | -0.0259     |
+|    std                  | 0.859       |
+|    value_loss           | 0.0123      |
+| validation/             |             |
+|    episode_length       | 597         |
+|    fraction_at_goal     | 0.274       |
+|    mean_dist_to_goal    | 3.74        |
+|    success_rate         | 0.167       |
+-----------------------------------------
+[Step   129024] SR=0.330 | FracGoal=0.469 | Ret=794.23 | Vis=0.70 | Prog=0.067 | CollEvt=20.65 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 48.7       |
+|    collision_event_count  | 20.6       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 587        |
+|    episode_return         | 794        |
+|    fraction_at_goal       | 0.469      |
+|    reward_collision       | -0.0081    |
+|    reward_progress        | 0.0669     |
+|    reward_zero_visibility | -0.0123    |
+|    stray_count            | 0.07       |
+|    success_rate           | 0.33       |
+|    visibility_ratio       | 0.703      |
+| rollout/                  |            |
+|    ep_len_mean            | 587        |
+|    ep_rew_mean            | 794        |
+| time/                     |            |
+|    fps                    | 168        |
+|    iterations             | 42         |
+|    time_elapsed           | 765        |
+|    total_timesteps        | 129024     |
+| train/                    |            |
+|    approx_kl              | 0.07168253 |
+|    clip_fraction          | 0.323      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.53      |
+|    explained_variance     | 0.735      |
+|    learning_rate          | 0.0003     |
+|    loss                   | 0.00496    |
+|    n_updates              | 410        |
+|    policy_gradient_loss   | -0.0257    |
+|    std                    | 0.857      |
+|    value_loss             | 0.0222     |
+------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 582         |
+|    ep_rew_mean          | 786         |
+| time/                   |             |
+|    fps                  | 169         |
+|    iterations           | 43          |
+|    time_elapsed         | 777         |
+|    total_timesteps      | 132096      |
+| train/                  |             |
+|    approx_kl            | 0.051725015 |
+|    clip_fraction        | 0.345       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.53       |
+|    explained_variance   | 0.74        |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0614     |
+|    n_updates            | 420         |
+|    policy_gradient_loss | -0.0235     |
+|    std                  | 0.859       |
+|    value_loss           | 0.0196      |
+-----------------------------------------
+[Step   135168] SR=0.330 | FracGoal=0.468 | Ret=783.49 | Vis=0.68 | Prog=0.066 | CollEvt=19.82 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 46.8        |
+|    collision_event_count  | 19.8        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 584         |
+|    episode_return         | 783         |
+|    fraction_at_goal       | 0.468       |
+|    reward_collision       | -0.00766    |
+|    reward_progress        | 0.066       |
+|    reward_zero_visibility | -0.0134     |
+|    stray_count            | 0.12        |
+|    success_rate           | 0.33        |
+|    visibility_ratio       | 0.684       |
+| rollout/                  |             |
+|    ep_len_mean            | 584         |
+|    ep_rew_mean            | 783         |
+| time/                     |             |
+|    fps                    | 169         |
+|    iterations             | 44          |
+|    time_elapsed           | 796         |
+|    total_timesteps        | 135168      |
+| train/                    |             |
+|    approx_kl              | 0.039572593 |
+|    clip_fraction          | 0.287       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.54       |
+|    explained_variance     | 0.646       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0273     |
+|    n_updates              | 430         |
+|    policy_gradient_loss   | -0.0229     |
+|    std                    | 0.86        |
+|    value_loss             | 0.049       |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 580         |
+|    ep_rew_mean          | 780         |
+| time/                   |             |
+|    fps                  | 170         |
+|    iterations           | 45          |
+|    time_elapsed         | 811         |
+|    total_timesteps      | 138240      |
+| train/                  |             |
+|    approx_kl            | 0.059969343 |
+|    clip_fraction        | 0.31        |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.53       |
+|    explained_variance   | 0.765       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0395     |
+|    n_updates            | 440         |
+|    policy_gradient_loss | -0.0285     |
+|    std                  | 0.854       |
+|    value_loss           | 0.0288      |
+-----------------------------------------
+[Step   141312] SR=0.340 | FracGoal=0.469 | Ret=782.91 | Vis=0.67 | Prog=0.065 | CollEvt=18.97 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 42.9       |
+|    collision_event_count  | 19         |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 582        |
+|    episode_return         | 783        |
+|    fraction_at_goal       | 0.469      |
+|    reward_collision       | -0.00722   |
+|    reward_progress        | 0.0645     |
+|    reward_zero_visibility | -0.0152    |
+|    stray_count            | 0.12       |
+|    success_rate           | 0.34       |
+|    visibility_ratio       | 0.674      |
+| rollout/                  |            |
+|    ep_len_mean            | 582        |
+|    ep_rew_mean            | 783        |
+| time/                     |            |
+|    fps                    | 172        |
+|    iterations             | 46         |
+|    time_elapsed           | 821        |
+|    total_timesteps        | 141312     |
+| train/                    |            |
+|    approx_kl              | 0.04421603 |
+|    clip_fraction          | 0.311      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.52      |
+|    explained_variance     | 0.727      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0754    |
+|    n_updates              | 450        |
+|    policy_gradient_loss   | -0.0224    |
+|    std                    | 0.852      |
+|    value_loss             | 0.022      |
+------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 573         |
+|    ep_rew_mean          | 773         |
+| time/                   |             |
+|    fps                  | 172         |
+|    iterations           | 47          |
+|    time_elapsed         | 838         |
+|    total_timesteps      | 144384      |
+| train/                  |             |
+|    approx_kl            | 0.048109956 |
+|    clip_fraction        | 0.303       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.51       |
+|    explained_variance   | 0.816       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0531     |
+|    n_updates            | 460         |
+|    policy_gradient_loss | -0.0236     |
+|    std                  | 0.851       |
+|    value_loss           | 0.0257      |
+-----------------------------------------
+[Step   147456] SR=0.360 | FracGoal=0.486 | Ret=770.31 | Vis=0.68 | Prog=0.072 | CollEvt=17.32 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 38.3        |
+|    collision_event_count  | 17.3        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 570         |
+|    episode_return         | 770         |
+|    fraction_at_goal       | 0.486       |
+|    reward_collision       | -0.0068     |
+|    reward_progress        | 0.0716      |
+|    reward_zero_visibility | -0.0153     |
+|    stray_count            | 0.11        |
+|    success_rate           | 0.36        |
+|    visibility_ratio       | 0.679       |
+| rollout/                  |             |
+|    ep_len_mean            | 570         |
+|    ep_rew_mean            | 770         |
+| time/                     |             |
+|    fps                    | 171         |
+|    iterations             | 48          |
+|    time_elapsed           | 859         |
+|    total_timesteps        | 147456      |
+| train/                    |             |
+|    approx_kl              | 0.052738246 |
+|    clip_fraction          | 0.308       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.51       |
+|    explained_variance     | 0.643       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0602     |
+|    n_updates              | 470         |
+|    policy_gradient_loss   | -0.0263     |
+|    std                    | 0.846       |
+|    value_loss             | 0.0629      |
+-------------------------------------------
+[validation @ 150,048] SR=0.500 | FracGoal=0.592 | MeanDist=2.74 | best=0.592
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 567         |
+|    ep_rew_mean          | 767         |
+| time/                   |             |
+|    fps                  | 169         |
+|    iterations           | 49          |
+|    time_elapsed         | 885         |
+|    total_timesteps      | 150528      |
+| train/                  |             |
+|    approx_kl            | 0.045433644 |
+|    clip_fraction        | 0.287       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.5        |
+|    explained_variance   | 0.831       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.066      |
+|    n_updates            | 480         |
+|    policy_gradient_loss | -0.0231     |
+|    std                  | 0.842       |
+|    value_loss           | 0.0319      |
+| validation/             |             |
+|    episode_length       | 460         |
+|    fraction_at_goal     | 0.592       |
+|    mean_dist_to_goal    | 2.74        |
+|    success_rate         | 0.5         |
+-----------------------------------------
+[Step   153600] SR=0.370 | FracGoal=0.485 | Ret=769.17 | Vis=0.68 | Prog=0.071 | CollEvt=17.89 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 41.8        |
+|    collision_event_count  | 17.9        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 568         |
+|    episode_return         | 769         |
+|    fraction_at_goal       | 0.485       |
+|    reward_collision       | -0.00703    |
+|    reward_progress        | 0.0714      |
+|    reward_zero_visibility | -0.015      |
+|    stray_count            | 0.15        |
+|    success_rate           | 0.37        |
+|    visibility_ratio       | 0.681       |
+| rollout/                  |             |
+|    ep_len_mean            | 568         |
+|    ep_rew_mean            | 769         |
+| time/                     |             |
+|    fps                    | 169         |
+|    iterations             | 50          |
+|    time_elapsed           | 908         |
+|    total_timesteps        | 153600      |
+| train/                    |             |
+|    approx_kl              | 0.047474504 |
+|    clip_fraction          | 0.307       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.49       |
+|    explained_variance     | 0.839       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0628     |
+|    n_updates              | 490         |
+|    policy_gradient_loss   | -0.031      |
+|    std                    | 0.839       |
+|    value_loss             | 0.0222      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 570         |
+|    ep_rew_mean          | 770         |
+| time/                   |             |
+|    fps                  | 169         |
+|    iterations           | 51          |
+|    time_elapsed         | 922         |
+|    total_timesteps      | 156672      |
+| train/                  |             |
+|    approx_kl            | 0.047758147 |
+|    clip_fraction        | 0.294       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.48       |
+|    explained_variance   | 0.694       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0518     |
+|    n_updates            | 500         |
+|    policy_gradient_loss | -0.0292     |
+|    std                  | 0.835       |
+|    value_loss           | 0.0246      |
+-----------------------------------------
+[Step   159744] SR=0.370 | FracGoal=0.485 | Ret=767.78 | Vis=0.67 | Prog=0.071 | CollEvt=17.28 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 41.8        |
+|    collision_event_count  | 17.3        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 568         |
+|    episode_return         | 768         |
+|    fraction_at_goal       | 0.485       |
+|    reward_collision       | -0.00691    |
+|    reward_progress        | 0.0707      |
+|    reward_zero_visibility | -0.0173     |
+|    stray_count            | 0.16        |
+|    success_rate           | 0.37        |
+|    visibility_ratio       | 0.672       |
+| rollout/                  |             |
+|    ep_len_mean            | 568         |
+|    ep_rew_mean            | 768         |
+| time/                     |             |
+|    fps                    | 170         |
+|    iterations             | 52          |
+|    time_elapsed           | 937         |
+|    total_timesteps        | 159744      |
+| train/                    |             |
+|    approx_kl              | 0.049316343 |
+|    clip_fraction          | 0.313       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.48       |
+|    explained_variance     | 0.639       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0449     |
+|    n_updates              | 510         |
+|    policy_gradient_loss   | -0.0223     |
+|    std                    | 0.836       |
+|    value_loss             | 0.0412      |
+-------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 564        |
+|    ep_rew_mean          | 767        |
+| time/                   |            |
+|    fps                  | 170        |
+|    iterations           | 53         |
+|    time_elapsed         | 955        |
+|    total_timesteps      | 162816     |
+| train/                  |            |
+|    approx_kl            | 0.06904098 |
+|    clip_fraction        | 0.329      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.49      |
+|    explained_variance   | 0.739      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0446    |
+|    n_updates            | 520        |
+|    policy_gradient_loss | -0.0315    |
+|    std                  | 0.841      |
+|    value_loss           | 0.0321     |
+----------------------------------------
+[Step   165888] SR=0.370 | FracGoal=0.509 | Ret=783.72 | Vis=0.66 | Prog=0.071 | CollEvt=16.25 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 42.2        |
+|    collision_event_count  | 16.2        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 567         |
+|    episode_return         | 784         |
+|    fraction_at_goal       | 0.509       |
+|    reward_collision       | -0.00666    |
+|    reward_progress        | 0.0714      |
+|    reward_zero_visibility | -0.0167     |
+|    stray_count            | 0.15        |
+|    success_rate           | 0.37        |
+|    visibility_ratio       | 0.662       |
+| rollout/                  |             |
+|    ep_len_mean            | 567         |
+|    ep_rew_mean            | 784         |
+| time/                     |             |
+|    fps                    | 171         |
+|    iterations             | 54          |
+|    time_elapsed           | 969         |
+|    total_timesteps        | 165888      |
+| train/                    |             |
+|    approx_kl              | 0.039943423 |
+|    clip_fraction          | 0.281       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.49       |
+|    explained_variance     | 0.71        |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0581     |
+|    n_updates              | 530         |
+|    policy_gradient_loss   | -0.0272     |
+|    std                    | 0.842       |
+|    value_loss             | 0.0545      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 556         |
+|    ep_rew_mean          | 773         |
+| time/                   |             |
+|    fps                  | 170         |
+|    iterations           | 55          |
+|    time_elapsed         | 993         |
+|    total_timesteps      | 168960      |
+| train/                  |             |
+|    approx_kl            | 0.056754906 |
+|    clip_fraction        | 0.305       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.49       |
+|    explained_variance   | 0.799       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.058      |
+|    n_updates            | 540         |
+|    policy_gradient_loss | -0.0291     |
+|    std                  | 0.835       |
+|    value_loss           | 0.0294      |
+-----------------------------------------
+[Step   172032] SR=0.400 | FracGoal=0.525 | Ret=775.09 | Vis=0.66 | Prog=0.074 | CollEvt=14.61 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 39.1       |
+|    collision_event_count  | 14.6       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 554        |
+|    episode_return         | 775        |
+|    fraction_at_goal       | 0.525      |
+|    reward_collision       | -0.00615   |
+|    reward_progress        | 0.0744     |
+|    reward_zero_visibility | -0.0172    |
+|    stray_count            | 0.14       |
+|    success_rate           | 0.4        |
+|    visibility_ratio       | 0.661      |
+| rollout/                  |            |
+|    ep_len_mean            | 554        |
+|    ep_rew_mean            | 775        |
+| time/                     |            |
+|    fps                    | 170        |
+|    iterations             | 56         |
+|    time_elapsed           | 1008       |
+|    total_timesteps        | 172032     |
+| train/                    |            |
+|    approx_kl              | 0.04050655 |
+|    clip_fraction          | 0.333      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.47      |
+|    explained_variance     | 0.731      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0323    |
+|    n_updates              | 550        |
+|    policy_gradient_loss   | -0.0139    |
+|    std                    | 0.832      |
+|    value_loss             | 0.0423     |
+------------------------------------------
+Adaptive curriculum advanced to stage 0.66 at timestep 172,044
+[validation @ 175,056] SR=0.167 | FracGoal=0.410 | MeanDist=3.09 | best=0.592
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 554        |
+|    ep_rew_mean          | 774        |
+| time/                   |            |
+|    fps                  | 167        |
+|    iterations           | 57         |
+|    time_elapsed         | 1047       |
+|    total_timesteps      | 175104     |
+| train/                  |            |
+|    approx_kl            | 0.03894043 |
+|    clip_fraction        | 0.327      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.47      |
+|    explained_variance   | 0.743      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0158    |
+|    n_updates            | 560        |
+|    policy_gradient_loss | -0.013     |
+|    std                  | 0.831      |
+|    value_loss           | 0.0369     |
+| validation/             |            |
+|    episode_length       | 621        |
+|    fraction_at_goal     | 0.41       |
+|    mean_dist_to_goal    | 3.09       |
+|    success_rate         | 0.167      |
+----------------------------------------
+[Step   178176] SR=0.410 | FracGoal=0.532 | Ret=774.96 | Vis=0.67 | Prog=0.075 | CollEvt=15.37 | Stage=0.56
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.66       |
+| research/                 |            |
+|    collision_count        | 43.3       |
+|    collision_event_count  | 15.4       |
+|    curriculum_stage       | 0.561      |
+|    episode_length         | 554        |
+|    episode_return         | 775        |
+|    fraction_at_goal       | 0.532      |
+|    reward_collision       | -0.0065    |
+|    reward_progress        | 0.0745     |
+|    reward_zero_visibility | -0.0161    |
+|    stray_count            | 0.15       |
+|    success_rate           | 0.41       |
+|    visibility_ratio       | 0.666      |
+| rollout/                  |            |
+|    ep_len_mean            | 554        |
+|    ep_rew_mean            | 775        |
+| time/                     |            |
+|    fps                    | 167        |
+|    iterations             | 58         |
+|    time_elapsed           | 1064       |
+|    total_timesteps        | 178176     |
+| train/                    |            |
+|    approx_kl              | 0.06066687 |
+|    clip_fraction          | 0.375      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.47      |
+|    explained_variance     | 0.671      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0176    |
+|    n_updates              | 570        |
+|    policy_gradient_loss   | -0.0152    |
+|    std                    | 0.829      |
+|    value_loss             | 0.0434     |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 559        |
+|    ep_rew_mean          | 785        |
+| time/                   |            |
+|    fps                  | 168        |
+|    iterations           | 59         |
+|    time_elapsed         | 1076       |
+|    total_timesteps      | 181248     |
+| train/                  |            |
+|    approx_kl            | 0.06667364 |
+|    clip_fraction        | 0.366      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.46      |
+|    explained_variance   | 0.777      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0583    |
+|    n_updates            | 580        |
+|    policy_gradient_loss | -0.00714   |
+|    std                  | 0.829      |
+|    value_loss           | 0.0193     |
+----------------------------------------
+[Step   184320] SR=0.400 | FracGoal=0.524 | Ret=772.09 | Vis=0.66 | Prog=0.075 | CollEvt=13.14 | Stage=0.66
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.66        |
+| research/                 |             |
+|    collision_count        | 36.5        |
+|    collision_event_count  | 13.1        |
+|    curriculum_stage       | 0.66        |
+|    episode_length         | 554         |
+|    episode_return         | 772         |
+|    fraction_at_goal       | 0.524       |
+|    reward_collision       | -0.0058     |
+|    reward_progress        | 0.0754      |
+|    reward_zero_visibility | -0.0174     |
+|    stray_count            | 0.15        |
+|    success_rate           | 0.4         |
+|    visibility_ratio       | 0.665       |
+| rollout/                  |             |
+|    ep_len_mean            | 554         |
+|    ep_rew_mean            | 772         |
+| time/                     |             |
+|    fps                    | 167         |
+|    iterations             | 60          |
+|    time_elapsed           | 1101        |
+|    total_timesteps        | 184320      |
+| train/                    |             |
+|    approx_kl              | 0.054932237 |
+|    clip_fraction          | 0.308       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.47       |
+|    explained_variance     | 0.764       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0411     |
+|    n_updates              | 590         |
+|    policy_gradient_loss   | -0.0191     |
+|    std                    | 0.832       |
+|    value_loss             | 0.0287      |
+-------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 559        |
+|    ep_rew_mean          | 781        |
+| time/                   |            |
+|    fps                  | 168        |
+|    iterations           | 61         |
+|    time_elapsed         | 1115       |
+|    total_timesteps      | 187392     |
+| train/                  |            |
+|    approx_kl            | 0.07097389 |
+|    clip_fraction        | 0.37       |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.47      |
+|    explained_variance   | 0.903      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0347    |
+|    n_updates            | 600        |
+|    policy_gradient_loss | -0.017     |
+|    std                  | 0.832      |
+|    value_loss           | 0.0113     |
+----------------------------------------
+[Step   190464] SR=0.370 | FracGoal=0.497 | Ret=787.59 | Vis=0.67 | Prog=0.071 | CollEvt=12.95 | Stage=0.66
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.66       |
+| research/                 |            |
+|    collision_count        | 37.2       |
+|    collision_event_count  | 12.9       |
+|    curriculum_stage       | 0.66       |
+|    episode_length         | 568        |
+|    episode_return         | 788        |
+|    fraction_at_goal       | 0.497      |
+|    reward_collision       | -0.00579   |
+|    reward_progress        | 0.0707     |
+|    reward_zero_visibility | -0.0197    |
+|    stray_count            | 0.1        |
+|    success_rate           | 0.37       |
+|    visibility_ratio       | 0.668      |
+| rollout/                  |            |
+|    ep_len_mean            | 568        |
+|    ep_rew_mean            | 788        |
+| time/                     |            |
+|    fps                    | 167        |
+|    iterations             | 62         |
+|    time_elapsed           | 1135       |
+|    total_timesteps        | 190464     |
+| train/                    |            |
+|    approx_kl              | 0.06700895 |
+|    clip_fraction          | 0.342      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.47      |
+|    explained_variance     | 0.848      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0414    |
+|    n_updates              | 610        |
+|    policy_gradient_loss   | -0.0197    |
+|    std                    | 0.831      |
+|    value_loss             | 0.0117     |
+------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.66        |
+| rollout/                |             |
+|    ep_len_mean          | 576         |
+|    ep_rew_mean          | 791         |
+| time/                   |             |
+|    fps                  | 168         |
+|    iterations           | 63          |
+|    time_elapsed         | 1151        |
+|    total_timesteps      | 193536      |
+| train/                  |             |
+|    approx_kl            | 0.048943803 |
+|    clip_fraction        | 0.301       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.47       |
+|    explained_variance   | 0.855       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0868     |
+|    n_updates            | 620         |
+|    policy_gradient_loss | -0.034      |
+|    std                  | 0.829       |
+|    value_loss           | 0.0203      |
+-----------------------------------------
+[Step   196608] SR=0.340 | FracGoal=0.460 | Ret=798.98 | Vis=0.67 | Prog=0.065 | CollEvt=15.03 | Stage=0.66
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.66        |
+| research/                 |             |
+|    collision_count        | 44.5        |
+|    collision_event_count  | 15          |
+|    curriculum_stage       | 0.66        |
+|    episode_length         | 583         |
+|    episode_return         | 799         |
+|    fraction_at_goal       | 0.46        |
+|    reward_collision       | -0.00655    |
+|    reward_progress        | 0.0652      |
+|    reward_zero_visibility | -0.0211     |
+|    stray_count            | 0.15        |
+|    success_rate           | 0.34        |
+|    visibility_ratio       | 0.667       |
+| rollout/                  |             |
+|    ep_len_mean            | 583         |
+|    ep_rew_mean            | 799         |
+| time/                     |             |
+|    fps                    | 168         |
+|    iterations             | 64          |
+|    time_elapsed           | 1165        |
+|    total_timesteps        | 196608      |
+| train/                    |             |
+|    approx_kl              | 0.039547563 |
+|    clip_fraction          | 0.293       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.45       |
+|    explained_variance     | 0.864       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0393     |
+|    n_updates              | 630         |
+|    policy_gradient_loss   | -0.0359     |
+|    std                    | 0.818       |
+|    value_loss             | 0.012       |
+-------------------------------------------
+Adaptive curriculum fell back to stage 0.33 at timestep 197,052
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 583         |
+|    ep_rew_mean          | 792         |
+| time/                   |             |
+|    fps                  | 169         |
+|    iterations           | 65          |
+|    time_elapsed         | 1178        |
+|    total_timesteps      | 199680      |
+| train/                  |             |
+|    approx_kl            | 0.059326686 |
+|    clip_fraction        | 0.345       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.43       |
+|    explained_variance   | 0.851       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0478     |
+|    n_updates            | 640         |
+|    policy_gradient_loss | -0.0238     |
+|    std                  | 0.815       |
+|    value_loss           | 0.0148      |
+-----------------------------------------
+[validation @ 200,064] SR=0.333 | FracGoal=0.411 | MeanDist=3.45 | best=0.592
+[Step   202752] SR=0.310 | FracGoal=0.423 | Ret=800.42 | Vis=0.66 | Prog=0.063 | CollEvt=15.90 | Stage=0.36
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 48.4       |
+|    collision_event_count  | 15.9       |
+|    curriculum_stage       | 0.363      |
+|    episode_length         | 591        |
+|    episode_return         | 800        |
+|    fraction_at_goal       | 0.423      |
+|    reward_collision       | -0.00661   |
+|    reward_progress        | 0.0626     |
+|    reward_zero_visibility | -0.0219    |
+|    stray_count            | 0.18       |
+|    success_rate           | 0.31       |
+|    visibility_ratio       | 0.664      |
+| rollout/                  |            |
+|    ep_len_mean            | 591        |
+|    ep_rew_mean            | 800        |
+| time/                     |            |
+|    fps                    | 167        |
+|    iterations             | 66         |
+|    time_elapsed           | 1211       |
+|    total_timesteps        | 202752     |
+| train/                    |            |
+|    approx_kl              | 0.03934576 |
+|    clip_fraction          | 0.306      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.43      |
+|    explained_variance     | 0.875      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0658    |
+|    n_updates              | 650        |
+|    policy_gradient_loss   | -0.0282    |
+|    std                    | 0.815      |
+|    value_loss             | 0.021      |
+| validation/               |            |
+|    episode_length         | 549        |
+|    fraction_at_goal       | 0.411      |
+|    mean_dist_to_goal      | 3.45       |
+|    success_rate           | 0.333      |
+------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 597         |
+|    ep_rew_mean          | 805         |
+| time/                   |             |
+|    fps                  | 168         |
+|    iterations           | 67          |
+|    time_elapsed         | 1224        |
+|    total_timesteps      | 205824      |
+| train/                  |             |
+|    approx_kl            | 0.049237024 |
+|    clip_fraction        | 0.321       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.42       |
+|    explained_variance   | 0.832       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0477     |
+|    n_updates            | 660         |
+|    policy_gradient_loss | -0.0295     |
+|    std                  | 0.811       |
+|    value_loss           | 0.0148      |
+-----------------------------------------
+[Step   208896] SR=0.330 | FracGoal=0.441 | Ret=789.82 | Vis=0.64 | Prog=0.063 | CollEvt=13.50 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 40.2       |
+|    collision_event_count  | 13.5       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 584        |
+|    episode_return         | 790        |
+|    fraction_at_goal       | 0.441      |
+|    reward_collision       | -0.00569   |
+|    reward_progress        | 0.0628     |
+|    reward_zero_visibility | -0.0257    |
+|    stray_count            | 0.13       |
+|    success_rate           | 0.33       |
+|    visibility_ratio       | 0.639      |
+| rollout/                  |            |
+|    ep_len_mean            | 584        |
+|    ep_rew_mean            | 790        |
+| time/                     |            |
+|    fps                    | 167        |
+|    iterations             | 68         |
+|    time_elapsed           | 1247       |
+|    total_timesteps        | 208896     |
+| train/                    |            |
+|    approx_kl              | 0.06600473 |
+|    clip_fraction          | 0.306      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.41      |
+|    explained_variance     | 0.713      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0591    |
+|    n_updates              | 670        |
+|    policy_gradient_loss   | -0.0327    |
+|    std                    | 0.806      |
+|    value_loss             | 0.0578     |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 585        |
+|    ep_rew_mean          | 790        |
+| time/                   |            |
+|    fps                  | 167        |
+|    iterations           | 69         |
+|    time_elapsed         | 1264       |
+|    total_timesteps      | 211968     |
+| train/                  |            |
+|    approx_kl            | 0.06881049 |
+|    clip_fraction        | 0.318      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.4       |
+|    explained_variance   | 0.7        |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.051     |
+|    n_updates            | 680        |
+|    policy_gradient_loss | -0.0363    |
+|    std                  | 0.8        |
+|    value_loss           | 0.0385     |
+----------------------------------------
+[Step   215040] SR=0.290 | FracGoal=0.411 | Ret=800.78 | Vis=0.64 | Prog=0.060 | CollEvt=13.57 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 40.7        |
+|    collision_event_count  | 13.6        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 596         |
+|    episode_return         | 801         |
+|    fraction_at_goal       | 0.411       |
+|    reward_collision       | -0.00566    |
+|    reward_progress        | 0.0602      |
+|    reward_zero_visibility | -0.0256     |
+|    stray_count            | 0.17        |
+|    success_rate           | 0.29        |
+|    visibility_ratio       | 0.641       |
+| rollout/                  |             |
+|    ep_len_mean            | 596         |
+|    ep_rew_mean            | 801         |
+| time/                     |             |
+|    fps                    | 168         |
+|    iterations             | 70          |
+|    time_elapsed           | 1276        |
+|    total_timesteps        | 215040      |
+| train/                    |             |
+|    approx_kl              | 0.054699294 |
+|    clip_fraction          | 0.312       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.38       |
+|    explained_variance     | 0.882       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0463     |
+|    n_updates              | 690         |
+|    policy_gradient_loss   | -0.0311     |
+|    std                    | 0.793       |
+|    value_loss             | 0.0199      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 601         |
+|    ep_rew_mean          | 807         |
+| time/                   |             |
+|    fps                  | 169         |
+|    iterations           | 71          |
+|    time_elapsed         | 1290        |
+|    total_timesteps      | 218112      |
+| train/                  |             |
+|    approx_kl            | 0.068218604 |
+|    clip_fraction        | 0.342       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.37       |
+|    explained_variance   | 0.9         |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0407     |
+|    n_updates            | 700         |
+|    policy_gradient_loss | -0.0281     |
+|    std                  | 0.788       |
+|    value_loss           | 0.0162      |
+-----------------------------------------
+[Step   221184] SR=0.300 | FracGoal=0.426 | Ret=805.38 | Vis=0.64 | Prog=0.059 | CollEvt=13.90 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 38.1       |
+|    collision_event_count  | 13.9       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 601        |
+|    episode_return         | 805        |
+|    fraction_at_goal       | 0.426      |
+|    reward_collision       | -0.00563   |
+|    reward_progress        | 0.0586     |
+|    reward_zero_visibility | -0.0261    |
+|    stray_count            | 0.17       |
+|    success_rate           | 0.3        |
+|    visibility_ratio       | 0.642      |
+| rollout/                  |            |
+|    ep_len_mean            | 601        |
+|    ep_rew_mean            | 805        |
+| time/                     |            |
+|    fps                    | 168        |
+|    iterations             | 72         |
+|    time_elapsed           | 1310       |
+|    total_timesteps        | 221184     |
+| train/                    |            |
+|    approx_kl              | 0.05859726 |
+|    clip_fraction          | 0.363      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.36      |
+|    explained_variance     | 0.796      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.00774   |
+|    n_updates              | 710        |
+|    policy_gradient_loss   | -0.023     |
+|    std                    | 0.788      |
+|    value_loss             | 0.0199     |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 607        |
+|    ep_rew_mean          | 811        |
+| time/                   |            |
+|    fps                  | 168        |
+|    iterations           | 73         |
+|    time_elapsed         | 1331       |
+|    total_timesteps      | 224256     |
+| train/                  |            |
+|    approx_kl            | 0.07893273 |
+|    clip_fraction        | 0.325      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.36      |
+|    explained_variance   | 0.728      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.00426   |
+|    n_updates            | 720        |
+|    policy_gradient_loss | -0.0177    |
+|    std                  | 0.787      |
+|    value_loss           | 0.0371     |
+----------------------------------------
+[validation @ 225,072] SR=0.417 | FracGoal=0.479 | MeanDist=3.09 | best=0.592
+[Step   227328] SR=0.300 | FracGoal=0.420 | Ret=801.97 | Vis=0.65 | Prog=0.059 | CollEvt=13.50 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 40.9       |
+|    collision_event_count  | 13.5       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 599        |
+|    episode_return         | 802        |
+|    fraction_at_goal       | 0.42       |
+|    reward_collision       | -0.00568   |
+|    reward_progress        | 0.0593     |
+|    reward_zero_visibility | -0.0252    |
+|    stray_count            | 0.18       |
+|    success_rate           | 0.3        |
+|    visibility_ratio       | 0.653      |
+| rollout/                  |            |
+|    ep_len_mean            | 599        |
+|    ep_rew_mean            | 802        |
+| time/                     |            |
+|    fps                    | 166        |
+|    iterations             | 74         |
+|    time_elapsed           | 1361       |
+|    total_timesteps        | 227328     |
+| train/                    |            |
+|    approx_kl              | 0.06741803 |
+|    clip_fraction          | 0.34       |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.36      |
+|    explained_variance     | 0.793      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0459    |
+|    n_updates              | 730        |
+|    policy_gradient_loss   | -0.0195    |
+|    std                    | 0.789      |
+|    value_loss             | 0.0182     |
+| validation/               |            |
+|    episode_length         | 483        |
+|    fraction_at_goal       | 0.479      |
+|    mean_dist_to_goal      | 3.09       |
+|    success_rate           | 0.417      |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 611        |
+|    ep_rew_mean          | 818        |
+| time/                   |            |
+|    fps                  | 167        |
+|    iterations           | 75         |
+|    time_elapsed         | 1376       |
+|    total_timesteps      | 230400     |
+| train/                  |            |
+|    approx_kl            | 0.07561078 |
+|    clip_fraction        | 0.325      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.36      |
+|    explained_variance   | 0.802      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0437    |
+|    n_updates            | 740        |
+|    policy_gradient_loss | -0.0265    |
+|    std                  | 0.787      |
+|    value_loss           | 0.0503     |
+----------------------------------------
+[Step   233472] SR=0.280 | FracGoal=0.411 | Ret=813.32 | Vis=0.65 | Prog=0.054 | CollEvt=13.94 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 44.2        |
+|    collision_event_count  | 13.9        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 608         |
+|    episode_return         | 813         |
+|    fraction_at_goal       | 0.411       |
+|    reward_collision       | -0.00597    |
+|    reward_progress        | 0.0535      |
+|    reward_zero_visibility | -0.0231     |
+|    stray_count            | 0.2         |
+|    success_rate           | 0.28        |
+|    visibility_ratio       | 0.655       |
+| rollout/                  |             |
+|    ep_len_mean            | 608         |
+|    ep_rew_mean            | 813         |
+| time/                     |             |
+|    fps                    | 166         |
+|    iterations             | 76          |
+|    time_elapsed           | 1399        |
+|    total_timesteps        | 233472      |
+| train/                    |             |
+|    approx_kl              | 0.082240865 |
+|    clip_fraction          | 0.319       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.35       |
+|    explained_variance     | 0.84        |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0267     |
+|    n_updates              | 750         |
+|    policy_gradient_loss   | -0.0299     |
+|    std                    | 0.781       |
+|    value_loss             | 0.0239      |
+-------------------------------------------
+Adaptive curriculum advanced to stage 0.66 at timestep 235,212
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 596        |
+|    ep_rew_mean          | 800        |
+| time/                   |            |
+|    fps                  | 166        |
+|    iterations           | 77         |
+|    time_elapsed         | 1424       |
+|    total_timesteps      | 236544     |
+| train/                  |            |
+|    approx_kl            | 0.04909777 |
+|    clip_fraction        | 0.293      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.34      |
+|    explained_variance   | 0.703      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0256    |
+|    n_updates            | 760        |
+|    policy_gradient_loss | -0.0254    |
+|    std                  | 0.781      |
+|    value_loss           | 0.0593     |
+----------------------------------------
+[Step   239616] SR=0.300 | FracGoal=0.414 | Ret=794.80 | Vis=0.66 | Prog=0.058 | CollEvt=14.91 | Stage=0.56
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.66        |
+| research/                 |             |
+|    collision_count        | 43          |
+|    collision_event_count  | 14.9        |
+|    curriculum_stage       | 0.561       |
+|    episode_length         | 594         |
+|    episode_return         | 795         |
+|    fraction_at_goal       | 0.414       |
+|    reward_collision       | -0.00633    |
+|    reward_progress        | 0.0576      |
+|    reward_zero_visibility | -0.024      |
+|    stray_count            | 0.24        |
+|    success_rate           | 0.3         |
+|    visibility_ratio       | 0.661       |
+| rollout/                  |             |
+|    ep_len_mean            | 594         |
+|    ep_rew_mean            | 795         |
+| time/                     |             |
+|    fps                    | 166         |
+|    iterations             | 78          |
+|    time_elapsed           | 1442        |
+|    total_timesteps        | 239616      |
+| train/                    |             |
+|    approx_kl              | 0.057930447 |
+|    clip_fraction          | 0.314       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.34       |
+|    explained_variance     | 0.757       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0725     |
+|    n_updates              | 770         |
+|    policy_gradient_loss   | -0.0288     |
+|    std                    | 0.777       |
+|    value_loss             | 0.0297      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.66        |
+| rollout/                |             |
+|    ep_len_mean          | 568         |
+|    ep_rew_mean          | 772         |
+| time/                   |             |
+|    fps                  | 165         |
+|    iterations           | 79          |
+|    time_elapsed         | 1465        |
+|    total_timesteps      | 242688      |
+| train/                  |             |
+|    approx_kl            | 0.076391086 |
+|    clip_fraction        | 0.317       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.33       |
+|    explained_variance   | 0.888       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0489     |
+|    n_updates            | 780         |
+|    policy_gradient_loss | -0.0241     |
+|    std                  | 0.776       |
+|    value_loss           | 0.027       |
+-----------------------------------------
+[Step   245760] SR=0.370 | FracGoal=0.478 | Ret=772.64 | Vis=0.69 | Prog=0.070 | CollEvt=14.87 | Stage=0.66
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.66       |
+| research/                 |            |
+|    collision_count        | 40.3       |
+|    collision_event_count  | 14.9       |
+|    curriculum_stage       | 0.66       |
+|    episode_length         | 564        |
+|    episode_return         | 773        |
+|    fraction_at_goal       | 0.478      |
+|    reward_collision       | -0.00614   |
+|    reward_progress        | 0.0695     |
+|    reward_zero_visibility | -0.0184    |
+|    stray_count            | 0.27       |
+|    success_rate           | 0.37       |
+|    visibility_ratio       | 0.689      |
+| rollout/                  |            |
+|    ep_len_mean            | 564        |
+|    ep_rew_mean            | 773        |
+| time/                     |            |
+|    fps                    | 165        |
+|    iterations             | 80         |
+|    time_elapsed           | 1487       |
+|    total_timesteps        | 245760     |
+| train/                    |            |
+|    approx_kl              | 0.08571412 |
+|    clip_fraction          | 0.349      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.33      |
+|    explained_variance     | 0.804      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0676    |
+|    n_updates              | 790        |
+|    policy_gradient_loss   | -0.0256    |
+|    std                    | 0.772      |
+|    value_loss             | 0.0565     |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 564        |
+|    ep_rew_mean          | 768        |
+| time/                   |            |
+|    fps                  | 165        |
+|    iterations           | 81         |
+|    time_elapsed         | 1500       |
+|    total_timesteps      | 248832     |
+| train/                  |            |
+|    approx_kl            | 0.07482848 |
+|    clip_fraction        | 0.36       |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.32      |
+|    explained_variance   | 0.871      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0348    |
+|    n_updates            | 800        |
+|    policy_gradient_loss | -0.029     |
+|    std                  | 0.769      |
+|    value_loss           | 0.0226     |
+----------------------------------------
+[validation @ 250,080] SR=0.250 | FracGoal=0.351 | MeanDist=4.34 | best=0.592
+[Step   251904] SR=0.370 | FracGoal=0.486 | Ret=769.69 | Vis=0.68 | Prog=0.071 | CollEvt=13.53 | Stage=0.66
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.66        |
+| research/                 |             |
+|    collision_count        | 33.8        |
+|    collision_event_count  | 13.5        |
+|    curriculum_stage       | 0.66        |
+|    episode_length         | 560         |
+|    episode_return         | 770         |
+|    fraction_at_goal       | 0.486       |
+|    reward_collision       | -0.00553    |
+|    reward_progress        | 0.071       |
+|    reward_zero_visibility | -0.0191     |
+|    stray_count            | 0.22        |
+|    success_rate           | 0.37        |
+|    visibility_ratio       | 0.678       |
+| rollout/                  |             |
+|    ep_len_mean            | 560         |
+|    ep_rew_mean            | 770         |
+| time/                     |             |
+|    fps                    | 164         |
+|    iterations             | 82          |
+|    time_elapsed           | 1535        |
+|    total_timesteps        | 251904      |
+| train/                    |             |
+|    approx_kl              | 0.072335556 |
+|    clip_fraction          | 0.378       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.31       |
+|    explained_variance     | 0.884       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0574     |
+|    n_updates              | 810         |
+|    policy_gradient_loss   | -0.0196     |
+|    std                    | 0.768       |
+|    value_loss             | 0.0189      |
+| validation/               |             |
+|    episode_length         | 561         |
+|    fraction_at_goal       | 0.351       |
+|    mean_dist_to_goal      | 4.34        |
+|    success_rate           | 0.25        |
+-------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 560        |
+|    ep_rew_mean          | 769        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 83         |
+|    time_elapsed         | 1558       |
+|    total_timesteps      | 254976     |
+| train/                  |            |
+|    approx_kl            | 0.08090178 |
+|    clip_fraction        | 0.378      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.31      |
+|    explained_variance   | 0.9        |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0422    |
+|    n_updates            | 820        |
+|    policy_gradient_loss | -0.0222    |
+|    std                  | 0.768      |
+|    value_loss           | 0.0217     |
+----------------------------------------
+[Step   258048] SR=0.370 | FracGoal=0.505 | Ret=776.86 | Vis=0.68 | Prog=0.070 | CollEvt=13.43 | Stage=0.66
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.66       |
+| research/                 |            |
+|    collision_count        | 33.8       |
+|    collision_event_count  | 13.4       |
+|    curriculum_stage       | 0.66       |
+|    episode_length         | 565        |
+|    episode_return         | 777        |
+|    fraction_at_goal       | 0.505      |
+|    reward_collision       | -0.00552   |
+|    reward_progress        | 0.0702     |
+|    reward_zero_visibility | -0.0188    |
+|    stray_count            | 0.22       |
+|    success_rate           | 0.37       |
+|    visibility_ratio       | 0.675      |
+| rollout/                  |            |
+|    ep_len_mean            | 565        |
+|    ep_rew_mean            | 777        |
+| time/                     |            |
+|    fps                    | 164        |
+|    iterations             | 84         |
+|    time_elapsed           | 1569       |
+|    total_timesteps        | 258048     |
+| train/                    |            |
+|    approx_kl              | 0.08102533 |
+|    clip_fraction          | 0.351      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.3       |
+|    explained_variance     | 0.879      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0717    |
+|    n_updates              | 830        |
+|    policy_gradient_loss   | -0.0329    |
+|    std                    | 0.763      |
+|    value_loss             | 0.0117     |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 567        |
+|    ep_rew_mean          | 770        |
+| time/                   |            |
+|    fps                  | 164        |
+|    iterations           | 85         |
+|    time_elapsed         | 1584       |
+|    total_timesteps      | 261120     |
+| train/                  |            |
+|    approx_kl            | 0.06366108 |
+|    clip_fraction        | 0.349      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.29      |
+|    explained_variance   | 0.852      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0815    |
+|    n_updates            | 840        |
+|    policy_gradient_loss | -0.0308    |
+|    std                  | 0.759      |
+|    value_loss           | 0.0129     |
+----------------------------------------
+[Step   264192] SR=0.350 | FracGoal=0.473 | Ret=770.23 | Vis=0.69 | Prog=0.070 | CollEvt=14.00 | Stage=0.66
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.66       |
+| research/                 |            |
+|    collision_count        | 35.6       |
+|    collision_event_count  | 14         |
+|    curriculum_stage       | 0.66       |
+|    episode_length         | 567        |
+|    episode_return         | 770        |
+|    fraction_at_goal       | 0.473      |
+|    reward_collision       | -0.00577   |
+|    reward_progress        | 0.07       |
+|    reward_zero_visibility | -0.0156    |
+|    stray_count            | 0.22       |
+|    success_rate           | 0.35       |
+|    visibility_ratio       | 0.69       |
+| rollout/                  |            |
+|    ep_len_mean            | 567        |
+|    ep_rew_mean            | 770        |
+| time/                     |            |
+|    fps                    | 164        |
+|    iterations             | 86         |
+|    time_elapsed           | 1603       |
+|    total_timesteps        | 264192     |
+| train/                    |            |
+|    approx_kl              | 0.06714456 |
+|    clip_fraction          | 0.336      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.28      |
+|    explained_variance     | 0.847      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0577    |
+|    n_updates              | 850        |
+|    policy_gradient_loss   | -0.0193    |
+|    std                    | 0.754      |
+|    value_loss             | 0.0132     |
+------------------------------------------
+Adaptive curriculum fell back to stage 0.33 at timestep 264,300
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 580        |
+|    ep_rew_mean          | 783        |
+| time/                   |            |
+|    fps                  | 165        |
+|    iterations           | 87         |
+|    time_elapsed         | 1614       |
+|    total_timesteps      | 267264     |
+| train/                  |            |
+|    approx_kl            | 0.07962878 |
+|    clip_fraction        | 0.363      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.27      |
+|    explained_variance   | 0.828      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.024     |
+|    n_updates            | 860        |
+|    policy_gradient_loss | -0.0136    |
+|    std                  | 0.751      |
+|    value_loss           | 0.00957    |
+----------------------------------------
+[Step   270336] SR=0.360 | FracGoal=0.476 | Ret=768.31 | Vis=0.69 | Prog=0.070 | CollEvt=14.81 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 36.9        |
+|    collision_event_count  | 14.8        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 567         |
+|    episode_return         | 768         |
+|    fraction_at_goal       | 0.476       |
+|    reward_collision       | -0.00606    |
+|    reward_progress        | 0.0695      |
+|    reward_zero_visibility | -0.0171     |
+|    stray_count            | 0.2         |
+|    success_rate           | 0.36        |
+|    visibility_ratio       | 0.687       |
+| rollout/                  |             |
+|    ep_len_mean            | 567         |
+|    ep_rew_mean            | 768         |
+| time/                     |             |
+|    fps                    | 164         |
+|    iterations             | 88          |
+|    time_elapsed           | 1639        |
+|    total_timesteps        | 270336      |
+| train/                    |             |
+|    approx_kl              | 0.046712913 |
+|    clip_fraction          | 0.338       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.26       |
+|    explained_variance     | 0.852       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0336     |
+|    n_updates              | 870         |
+|    policy_gradient_loss   | -0.0176     |
+|    std                    | 0.747       |
+|    value_loss             | 0.0234      |
+-------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 568         |
+|    ep_rew_mean          | 768         |
+| time/                   |             |
+|    fps                  | 164         |
+|    iterations           | 89          |
+|    time_elapsed         | 1659        |
+|    total_timesteps      | 273408      |
+| train/                  |             |
+|    approx_kl            | 0.067372896 |
+|    clip_fraction        | 0.338       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.25       |
+|    explained_variance   | 0.819       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0562     |
+|    n_updates            | 880         |
+|    policy_gradient_loss | -0.0357     |
+|    std                  | 0.743       |
+|    value_loss           | 0.0246      |
+-----------------------------------------
+[validation @ 275,088] SR=0.333 | FracGoal=0.420 | MeanDist=4.06 | best=0.592
+[Step   276480] SR=0.370 | FracGoal=0.484 | Ret=765.52 | Vis=0.68 | Prog=0.070 | CollEvt=14.89 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 37.9       |
+|    collision_event_count  | 14.9       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 565        |
+|    episode_return         | 766        |
+|    fraction_at_goal       | 0.484      |
+|    reward_collision       | -0.00612   |
+|    reward_progress        | 0.0697     |
+|    reward_zero_visibility | -0.0192    |
+|    stray_count            | 0.18       |
+|    success_rate           | 0.37       |
+|    visibility_ratio       | 0.68       |
+| rollout/                  |            |
+|    ep_len_mean            | 565        |
+|    ep_rew_mean            | 766        |
+| time/                     |            |
+|    fps                    | 164        |
+|    iterations             | 90         |
+|    time_elapsed           | 1684       |
+|    total_timesteps        | 276480     |
+| train/                    |            |
+|    approx_kl              | 0.05916829 |
+|    clip_fraction          | 0.312      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.24      |
+|    explained_variance     | 0.889      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0429    |
+|    n_updates              | 890        |
+|    policy_gradient_loss   | -0.0364    |
+|    std                    | 0.739      |
+|    value_loss             | 0.0109     |
+| validation/               |            |
+|    episode_length         | 541        |
+|    fraction_at_goal       | 0.42       |
+|    mean_dist_to_goal      | 4.06       |
+|    success_rate           | 0.333      |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 563        |
+|    ep_rew_mean          | 763        |
+| time/                   |            |
+|    fps                  | 164        |
+|    iterations           | 91         |
+|    time_elapsed         | 1702       |
+|    total_timesteps      | 279552     |
+| train/                  |            |
+|    approx_kl            | 0.07920315 |
+|    clip_fraction        | 0.365      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.23      |
+|    explained_variance   | 0.8        |
+|    learning_rate        | 0.0003     |
+|    loss                 | 0.0065     |
+|    n_updates            | 900        |
+|    policy_gradient_loss | -0.0216    |
+|    std                  | 0.738      |
+|    value_loss           | 0.0448     |
+----------------------------------------
+[Step   282624] SR=0.360 | FracGoal=0.467 | Ret=765.62 | Vis=0.68 | Prog=0.070 | CollEvt=14.62 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 35         |
+|    collision_event_count  | 14.6       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 563        |
+|    episode_return         | 766        |
+|    fraction_at_goal       | 0.467      |
+|    reward_collision       | -0.00585   |
+|    reward_progress        | 0.0702     |
+|    reward_zero_visibility | -0.0195    |
+|    stray_count            | 0.16       |
+|    success_rate           | 0.36       |
+|    visibility_ratio       | 0.676      |
+| rollout/                  |            |
+|    ep_len_mean            | 563        |
+|    ep_rew_mean            | 766        |
+| time/                     |            |
+|    fps                    | 164        |
+|    iterations             | 92         |
+|    time_elapsed           | 1722       |
+|    total_timesteps        | 282624     |
+| train/                    |            |
+|    approx_kl              | 0.07194981 |
+|    clip_fraction          | 0.34       |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.22      |
+|    explained_variance     | 0.618      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0454    |
+|    n_updates              | 910        |
+|    policy_gradient_loss   | -0.0315    |
+|    std                    | 0.728      |
+|    value_loss             | 0.0213     |
+------------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 553         |
+|    ep_rew_mean          | 751         |
+| time/                   |             |
+|    fps                  | 164         |
+|    iterations           | 93          |
+|    time_elapsed         | 1734        |
+|    total_timesteps      | 285696      |
+| train/                  |             |
+|    approx_kl            | 0.069944695 |
+|    clip_fraction        | 0.349       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2.2        |
+|    explained_variance   | 0.942       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0419     |
+|    n_updates            | 920         |
+|    policy_gradient_loss | -0.0305     |
+|    std                  | 0.728       |
+|    value_loss           | 0.00669     |
+-----------------------------------------
+[Step   288768] SR=0.380 | FracGoal=0.488 | Ret=747.61 | Vis=0.67 | Prog=0.075 | CollEvt=14.51 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 32.1       |
+|    collision_event_count  | 14.5       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 552        |
+|    episode_return         | 748        |
+|    fraction_at_goal       | 0.488      |
+|    reward_collision       | -0.00568   |
+|    reward_progress        | 0.0748     |
+|    reward_zero_visibility | -0.0202    |
+|    stray_count            | 0.12       |
+|    success_rate           | 0.38       |
+|    visibility_ratio       | 0.673      |
+| rollout/                  |            |
+|    ep_len_mean            | 552        |
+|    ep_rew_mean            | 748        |
+| time/                     |            |
+|    fps                    | 164        |
+|    iterations             | 94         |
+|    time_elapsed           | 1757       |
+|    total_timesteps        | 288768     |
+| train/                    |            |
+|    approx_kl              | 0.07260731 |
+|    clip_fraction          | 0.319      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.2       |
+|    explained_variance     | 0.682      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0619    |
+|    n_updates              | 930        |
+|    policy_gradient_loss   | -0.0362    |
+|    std                    | 0.728      |
+|    value_loss             | 0.0542     |
+------------------------------------------
+Adaptive curriculum advanced to stage 0.66 at timestep 291,348
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 552        |
+|    ep_rew_mean          | 747        |
+| time/                   |            |
+|    fps                  | 164        |
+|    iterations           | 95         |
+|    time_elapsed         | 1775       |
+|    total_timesteps      | 291840     |
+| train/                  |            |
+|    approx_kl            | 0.06373018 |
+|    clip_fraction        | 0.343      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.2       |
+|    explained_variance   | 0.815      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.067     |
+|    n_updates            | 940        |
+|    policy_gradient_loss | -0.033     |
+|    std                  | 0.723      |
+|    value_loss           | 0.0332     |
+----------------------------------------
+[Step   294912] SR=0.360 | FracGoal=0.473 | Ret=757.49 | Vis=0.66 | Prog=0.074 | CollEvt=15.06 | Stage=0.56
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.66       |
+| research/                 |            |
+|    collision_count        | 33.8       |
+|    collision_event_count  | 15.1       |
+|    curriculum_stage       | 0.561      |
+|    episode_length         | 563        |
+|    episode_return         | 757        |
+|    fraction_at_goal       | 0.473      |
+|    reward_collision       | -0.00577   |
+|    reward_progress        | 0.0738     |
+|    reward_zero_visibility | -0.0223    |
+|    stray_count            | 0.11       |
+|    success_rate           | 0.36       |
+|    visibility_ratio       | 0.659      |
+| rollout/                  |            |
+|    ep_len_mean            | 563        |
+|    ep_rew_mean            | 757        |
+| time/                     |            |
+|    fps                    | 165        |
+|    iterations             | 96         |
+|    time_elapsed           | 1785       |
+|    total_timesteps        | 294912     |
+| train/                    |            |
+|    approx_kl              | 0.08463679 |
+|    clip_fraction          | 0.382      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.19      |
+|    explained_variance     | 0.868      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0619    |
+|    n_updates              | 950        |
+|    policy_gradient_loss   | -0.0222    |
+|    std                    | 0.722      |
+|    value_loss             | 0.0265     |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 573        |
+|    ep_rew_mean          | 769        |
+| time/                   |            |
+|    fps                  | 164        |
+|    iterations           | 97         |
+|    time_elapsed         | 1809       |
+|    total_timesteps      | 297984     |
+| train/                  |            |
+|    approx_kl            | 0.06206704 |
+|    clip_fraction        | 0.362      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.18      |
+|    explained_variance   | 0.887      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.054     |
+|    n_updates            | 960        |
+|    policy_gradient_loss | -0.0266    |
+|    std                  | 0.72       |
+|    value_loss           | 0.0152     |
+----------------------------------------
+[validation @ 300,096] SR=0.333 | FracGoal=0.406 | MeanDist=4.05 | best=0.592
+[Step   301056] SR=0.310 | FracGoal=0.411 | Ret=787.33 | Vis=0.64 | Prog=0.062 | CollEvt=13.89 | Stage=0.66
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.66       |
+| research/                 |            |
+|    collision_count        | 31.2       |
+|    collision_event_count  | 13.9       |
+|    curriculum_stage       | 0.66       |
+|    episode_length         | 591        |
+|    episode_return         | 787        |
+|    fraction_at_goal       | 0.411      |
+|    reward_collision       | -0.00523   |
+|    reward_progress        | 0.0621     |
+|    reward_zero_visibility | -0.0243    |
+|    stray_count            | 0.07       |
+|    success_rate           | 0.31       |
+|    visibility_ratio       | 0.64       |
+| rollout/                  |            |
+|    ep_len_mean            | 591        |
+|    ep_rew_mean            | 787        |
+| time/                     |            |
+|    fps                    | 163        |
+|    iterations             | 98         |
+|    time_elapsed           | 1840       |
+|    total_timesteps        | 301056     |
+| train/                    |            |
+|    approx_kl              | 0.07136121 |
+|    clip_fraction          | 0.362      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.17      |
+|    explained_variance     | 0.907      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.00717   |
+|    n_updates              | 970        |
+|    policy_gradient_loss   | -0.0191    |
+|    std                    | 0.712      |
+|    value_loss             | 0.00989    |
+| validation/               |            |
+|    episode_length         | 548        |
+|    fraction_at_goal       | 0.406      |
+|    mean_dist_to_goal      | 4.05       |
+|    success_rate           | 0.333      |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 593        |
+|    ep_rew_mean          | 777        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 99         |
+|    time_elapsed         | 1860       |
+|    total_timesteps      | 304128     |
+| train/                  |            |
+|    approx_kl            | 0.10789546 |
+|    clip_fraction        | 0.36       |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.16      |
+|    explained_variance   | 0.859      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0663    |
+|    n_updates            | 980        |
+|    policy_gradient_loss | -0.0155    |
+|    std                  | 0.711      |
+|    value_loss           | 0.0223     |
+----------------------------------------
+[Step   307200] SR=0.290 | FracGoal=0.400 | Ret=785.63 | Vis=0.62 | Prog=0.061 | CollEvt=14.19 | Stage=0.66
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.66        |
+| research/                 |             |
+|    collision_count        | 34.5        |
+|    collision_event_count  | 14.2        |
+|    curriculum_stage       | 0.66        |
+|    episode_length         | 596         |
+|    episode_return         | 786         |
+|    fraction_at_goal       | 0.4         |
+|    reward_collision       | -0.00537    |
+|    reward_progress        | 0.0614      |
+|    reward_zero_visibility | -0.0295     |
+|    stray_count            | 0.1         |
+|    success_rate           | 0.29        |
+|    visibility_ratio       | 0.623       |
+| rollout/                  |             |
+|    ep_len_mean            | 596         |
+|    ep_rew_mean            | 786         |
+| time/                     |             |
+|    fps                    | 163         |
+|    iterations             | 100         |
+|    time_elapsed           | 1879        |
+|    total_timesteps        | 307200      |
+| train/                    |             |
+|    approx_kl              | 0.053320605 |
+|    clip_fraction          | 0.405       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.15       |
+|    explained_variance     | 0.894       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0345     |
+|    n_updates              | 990         |
+|    policy_gradient_loss   | -0.00389    |
+|    std                    | 0.709       |
+|    value_loss             | 0.0227      |
+-------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.66       |
+| rollout/                |            |
+|    ep_len_mean          | 596        |
+|    ep_rew_mean          | 788        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 101        |
+|    time_elapsed         | 1896       |
+|    total_timesteps      | 310272     |
+| train/                  |            |
+|    approx_kl            | 0.08051087 |
+|    clip_fraction        | 0.405      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.14      |
+|    explained_variance   | 0.851      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.00108   |
+|    n_updates            | 1000       |
+|    policy_gradient_loss | -0.0273    |
+|    std                  | 0.702      |
+|    value_loss           | 0.00842    |
+----------------------------------------
+[Step   313344] SR=0.280 | FracGoal=0.392 | Ret=794.97 | Vis=0.63 | Prog=0.061 | CollEvt=12.91 | Stage=0.66
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.66       |
+| research/                 |            |
+|    collision_count        | 30.6       |
+|    collision_event_count  | 12.9       |
+|    curriculum_stage       | 0.66       |
+|    episode_length         | 601        |
+|    episode_return         | 795        |
+|    fraction_at_goal       | 0.392      |
+|    reward_collision       | -0.00489   |
+|    reward_progress        | 0.0607     |
+|    reward_zero_visibility | -0.0291    |
+|    stray_count            | 0.08       |
+|    success_rate           | 0.28       |
+|    visibility_ratio       | 0.632      |
+| rollout/                  |            |
+|    ep_len_mean            | 601        |
+|    ep_rew_mean            | 795        |
+| time/                     |            |
+|    fps                    | 163        |
+|    iterations             | 102        |
+|    time_elapsed           | 1916       |
+|    total_timesteps        | 313344     |
+| train/                    |            |
+|    approx_kl              | 0.06490794 |
+|    clip_fraction          | 0.376      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.12      |
+|    explained_variance     | 0.827      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0843    |
+|    n_updates              | 1010       |
+|    policy_gradient_loss   | -0.0346    |
+|    std                    | 0.697      |
+|    value_loss             | 0.00891    |
+------------------------------------------
+Adaptive curriculum fell back to stage 0.33 at timestep 316,356
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 592        |
+|    ep_rew_mean          | 785        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 103        |
+|    time_elapsed         | 1929       |
+|    total_timesteps      | 316416     |
+| train/                  |            |
+|    approx_kl            | 0.08414152 |
+|    clip_fraction        | 0.374      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.11      |
+|    explained_variance   | 0.805      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0245    |
+|    n_updates            | 1020       |
+|    policy_gradient_loss | -0.0274    |
+|    std                  | 0.697      |
+|    value_loss           | 0.0102     |
+----------------------------------------
+[Step   319488] SR=0.290 | FracGoal=0.393 | Ret=792.58 | Vis=0.63 | Prog=0.066 | CollEvt=12.14 | Stage=0.43
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 27.9        |
+|    collision_event_count  | 12.1        |
+|    curriculum_stage       | 0.429       |
+|    episode_length         | 592         |
+|    episode_return         | 793         |
+|    fraction_at_goal       | 0.393       |
+|    reward_collision       | -0.00465    |
+|    reward_progress        | 0.0655      |
+|    reward_zero_visibility | -0.0278     |
+|    stray_count            | 0.12        |
+|    success_rate           | 0.29        |
+|    visibility_ratio       | 0.634       |
+| rollout/                  |             |
+|    ep_len_mean            | 592         |
+|    ep_rew_mean            | 793         |
+| time/                     |             |
+|    fps                    | 164         |
+|    iterations             | 104         |
+|    time_elapsed           | 1946        |
+|    total_timesteps        | 319488      |
+| train/                    |             |
+|    approx_kl              | 0.082967654 |
+|    clip_fraction          | 0.344       |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -2.11       |
+|    explained_variance     | 0.668       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0462     |
+|    n_updates              | 1030        |
+|    policy_gradient_loss   | -0.0301     |
+|    std                    | 0.691       |
+|    value_loss             | 0.0247      |
+-------------------------------------------
+---------------------------------------
+| curriculum/             |           |
+|    stage                | 0.33      |
+| rollout/                |           |
+|    ep_len_mean          | 585       |
+|    ep_rew_mean          | 786       |
+| time/                   |           |
+|    fps                  | 164       |
+|    iterations           | 105       |
+|    time_elapsed         | 1963      |
+|    total_timesteps      | 322560    |
+| train/                  |           |
+|    approx_kl            | 0.0701115 |
+|    clip_fraction        | 0.354     |
+|    clip_range           | 0.2       |
+|    entropy_loss         | -2.09     |
+|    explained_variance   | 0.838     |
+|    learning_rate        | 0.0003    |
+|    loss                 | -0.0647   |
+|    n_updates            | 1040      |
+|    policy_gradient_loss | -0.0299   |
+|    std                  | 0.687     |
+|    value_loss           | 0.00878   |
+---------------------------------------
+[validation @ 325,104] SR=0.167 | FracGoal=0.407 | MeanDist=3.62 | best=0.592
+[Step   325632] SR=0.320 | FracGoal=0.421 | Ret=782.28 | Vis=0.63 | Prog=0.067 | CollEvt=12.59 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 28.7       |
+|    collision_event_count  | 12.6       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 583        |
+|    episode_return         | 782        |
+|    fraction_at_goal       | 0.421      |
+|    reward_collision       | -0.00492   |
+|    reward_progress        | 0.0666     |
+|    reward_zero_visibility | -0.028     |
+|    stray_count            | 0.12       |
+|    success_rate           | 0.32       |
+|    visibility_ratio       | 0.627      |
+| rollout/                  |            |
+|    ep_len_mean            | 583        |
+|    ep_rew_mean            | 782        |
+| time/                     |            |
+|    fps                    | 163        |
+|    iterations             | 106        |
+|    time_elapsed           | 1996       |
+|    total_timesteps        | 325632     |
+| train/                    |            |
+|    approx_kl              | 0.08158822 |
+|    clip_fraction          | 0.344      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.09      |
+|    explained_variance     | 0.523      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0517    |
+|    n_updates              | 1050       |
+|    policy_gradient_loss   | -0.0276    |
+|    std                    | 0.687      |
+|    value_loss             | 0.0474     |
+| validation/               |            |
+|    episode_length         | 623        |
+|    fraction_at_goal       | 0.407      |
+|    mean_dist_to_goal      | 3.62       |
+|    success_rate           | 0.167      |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 583        |
+|    ep_rew_mean          | 784        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 107        |
+|    time_elapsed         | 2005       |
+|    total_timesteps      | 328704     |
+| train/                  |            |
+|    approx_kl            | 0.06953555 |
+|    clip_fraction        | 0.378      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.08      |
+|    explained_variance   | 0.469      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.044     |
+|    n_updates            | 1060       |
+|    policy_gradient_loss | -0.0173    |
+|    std                  | 0.685      |
+|    value_loss           | 0.0225     |
+----------------------------------------
+[Step   331776] SR=0.320 | FracGoal=0.424 | Ret=779.75 | Vis=0.62 | Prog=0.067 | CollEvt=13.39 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 33.4       |
+|    collision_event_count  | 13.4       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 584        |
+|    episode_return         | 780        |
+|    fraction_at_goal       | 0.424      |
+|    reward_collision       | -0.00525   |
+|    reward_progress        | 0.0665     |
+|    reward_zero_visibility | -0.0268    |
+|    stray_count            | 0.14       |
+|    success_rate           | 0.32       |
+|    visibility_ratio       | 0.618      |
+| rollout/                  |            |
+|    ep_len_mean            | 584        |
+|    ep_rew_mean            | 780        |
+| time/                     |            |
+|    fps                    | 164        |
+|    iterations             | 108        |
+|    time_elapsed           | 2022       |
+|    total_timesteps        | 331776     |
+| train/                    |            |
+|    approx_kl              | 0.05882571 |
+|    clip_fraction          | 0.351      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.08      |
+|    explained_variance     | 0.594      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0532    |
+|    n_updates              | 1070       |
+|    policy_gradient_loss   | -0.029     |
+|    std                    | 0.686      |
+|    value_loss             | 0.036      |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 586        |
+|    ep_rew_mean          | 782        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 109        |
+|    time_elapsed         | 2045       |
+|    total_timesteps      | 334848     |
+| train/                  |            |
+|    approx_kl            | 0.06155602 |
+|    clip_fraction        | 0.323      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.08      |
+|    explained_variance   | 0.845      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0731    |
+|    n_updates            | 1080       |
+|    policy_gradient_loss | -0.0298    |
+|    std                  | 0.68       |
+|    value_loss           | 0.0164     |
+----------------------------------------
+[Step   337920] SR=0.300 | FracGoal=0.402 | Ret=788.12 | Vis=0.62 | Prog=0.063 | CollEvt=12.74 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 31.8       |
+|    collision_event_count  | 12.7       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 594        |
+|    episode_return         | 788        |
+|    fraction_at_goal       | 0.402      |
+|    reward_collision       | -0.00505   |
+|    reward_progress        | 0.0627     |
+|    reward_zero_visibility | -0.0251    |
+|    stray_count            | 0.18       |
+|    success_rate           | 0.3        |
+|    visibility_ratio       | 0.621      |
+| rollout/                  |            |
+|    ep_len_mean            | 594        |
+|    ep_rew_mean            | 788        |
+| time/                     |            |
+|    fps                    | 163        |
+|    iterations             | 110        |
+|    time_elapsed           | 2062       |
+|    total_timesteps        | 337920     |
+| train/                    |            |
+|    approx_kl              | 0.05663518 |
+|    clip_fraction          | 0.341      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.06      |
+|    explained_variance     | 0.81       |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.076     |
+|    n_updates              | 1090       |
+|    policy_gradient_loss   | -0.029     |
+|    std                    | 0.677      |
+|    value_loss             | 0.02       |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 594        |
+|    ep_rew_mean          | 787        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 111        |
+|    time_elapsed         | 2081       |
+|    total_timesteps      | 340992     |
+| train/                  |            |
+|    approx_kl            | 0.07972362 |
+|    clip_fraction        | 0.356      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.05      |
+|    explained_variance   | 0.871      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0823    |
+|    n_updates            | 1100       |
+|    policy_gradient_loss | -0.0281    |
+|    std                  | 0.672      |
+|    value_loss           | 0.0229     |
+----------------------------------------
+[Step   344064] SR=0.280 | FracGoal=0.393 | Ret=803.48 | Vis=0.61 | Prog=0.058 | CollEvt=14.10 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 35.6       |
+|    collision_event_count  | 14.1       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 608        |
+|    episode_return         | 803        |
+|    fraction_at_goal       | 0.393      |
+|    reward_collision       | -0.00555   |
+|    reward_progress        | 0.058      |
+|    reward_zero_visibility | -0.0262    |
+|    stray_count            | 0.2        |
+|    success_rate           | 0.28       |
+|    visibility_ratio       | 0.606      |
+| rollout/                  |            |
+|    ep_len_mean            | 608        |
+|    ep_rew_mean            | 803        |
+| time/                     |            |
+|    fps                    | 164        |
+|    iterations             | 112        |
+|    time_elapsed           | 2093       |
+|    total_timesteps        | 344064     |
+| train/                    |            |
+|    approx_kl              | 0.08155739 |
+|    clip_fraction          | 0.353      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.04      |
+|    explained_variance     | 0.892      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0328    |
+|    n_updates              | 1110       |
+|    policy_gradient_loss   | -0.0328    |
+|    std                    | 0.667      |
+|    value_loss             | 0.0091     |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 608        |
+|    ep_rew_mean          | 803        |
+| time/                   |            |
+|    fps                  | 164        |
+|    iterations           | 113        |
+|    time_elapsed         | 2111       |
+|    total_timesteps      | 347136     |
+| train/                  |            |
+|    approx_kl            | 0.09814054 |
+|    clip_fraction        | 0.378      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.02      |
+|    explained_variance   | 0.838      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0496    |
+|    n_updates            | 1120       |
+|    policy_gradient_loss | -0.0268    |
+|    std                  | 0.662      |
+|    value_loss           | 0.0164     |
+----------------------------------------
+[validation @ 350,112] SR=0.250 | FracGoal=0.298 | MeanDist=4.21 | best=0.592
+[Step   350208] SR=0.280 | FracGoal=0.381 | Ret=800.94 | Vis=0.61 | Prog=0.056 | CollEvt=14.10 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 35.8       |
+|    collision_event_count  | 14.1       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 607        |
+|    episode_return         | 801        |
+|    fraction_at_goal       | 0.381      |
+|    reward_collision       | -0.00555   |
+|    reward_progress        | 0.0561     |
+|    reward_zero_visibility | -0.0251    |
+|    stray_count            | 0.2        |
+|    success_rate           | 0.28       |
+|    visibility_ratio       | 0.611      |
+| rollout/                  |            |
+|    ep_len_mean            | 607        |
+|    ep_rew_mean            | 801        |
+| time/                     |            |
+|    fps                    | 163        |
+|    iterations             | 114        |
+|    time_elapsed           | 2146       |
+|    total_timesteps        | 350208     |
+| train/                    |            |
+|    approx_kl              | 0.09323958 |
+|    clip_fraction          | 0.382      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -2.01      |
+|    explained_variance     | 0.879      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0366    |
+|    n_updates              | 1130       |
+|    policy_gradient_loss   | -0.0167    |
+|    std                    | 0.661      |
+|    value_loss             | 0.0132     |
+| validation/               |            |
+|    episode_length         | 610        |
+|    fraction_at_goal       | 0.298      |
+|    mean_dist_to_goal      | 4.21       |
+|    success_rate           | 0.25       |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 615        |
+|    ep_rew_mean          | 812        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 115        |
+|    time_elapsed         | 2161       |
+|    total_timesteps      | 353280     |
+| train/                  |            |
+|    approx_kl            | 0.07725709 |
+|    clip_fraction        | 0.342      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -2.01      |
+|    explained_variance   | 0.816      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0452    |
+|    n_updates            | 1140       |
+|    policy_gradient_loss | -0.0345    |
+|    std                  | 0.659      |
+|    value_loss           | 0.00966    |
+----------------------------------------
+[Step   356352] SR=0.270 | FracGoal=0.373 | Ret=811.28 | Vis=0.62 | Prog=0.050 | CollEvt=14.19 | Stage=0.33
+----------------------------------------
+| curriculum/               |          |
+|    stage                  | 0.33     |
+| research/                 |          |
+|    collision_count        | 35       |
+|    collision_event_count  | 14.2     |
+|    curriculum_stage       | 0.33     |
+|    episode_length         | 613      |
+|    episode_return         | 811      |
+|    fraction_at_goal       | 0.373    |
+|    reward_collision       | -0.00569 |
+|    reward_progress        | 0.0501   |
+|    reward_zero_visibility | -0.0227  |
+|    stray_count            | 0.22     |
+|    success_rate           | 0.27     |
+|    visibility_ratio       | 0.616    |
+| rollout/                  |          |
+|    ep_len_mean            | 613      |
+|    ep_rew_mean            | 811      |
+| time/                     |          |
+|    fps                    | 163      |
+|    iterations             | 116      |
+|    time_elapsed           | 2178     |
+|    total_timesteps        | 356352   |
+| train/                    |          |
+|    approx_kl              | 0.070408 |
+|    clip_fraction          | 0.352    |
+|    clip_range             | 0.2      |
+|    entropy_loss           | -2       |
+|    explained_variance     | 0.906    |
+|    learning_rate          | 0.0003   |
+|    loss                   | -0.0379  |
+|    n_updates              | 1150     |
+|    policy_gradient_loss   | -0.0263  |
+|    std                    | 0.657    |
+|    value_loss             | 0.0135   |
+----------------------------------------
+-----------------------------------------
+| curriculum/             |             |
+|    stage                | 0.33        |
+| rollout/                |             |
+|    ep_len_mean          | 613         |
+|    ep_rew_mean          | 813         |
+| time/                   |             |
+|    fps                  | 163         |
+|    iterations           | 117         |
+|    time_elapsed         | 2193        |
+|    total_timesteps      | 359424      |
+| train/                  |             |
+|    approx_kl            | 0.057653483 |
+|    clip_fraction        | 0.339       |
+|    clip_range           | 0.2         |
+|    entropy_loss         | -2          |
+|    explained_variance   | 0.706       |
+|    learning_rate        | 0.0003      |
+|    loss                 | -0.0523     |
+|    n_updates            | 1160        |
+|    policy_gradient_loss | -0.0234     |
+|    std                  | 0.655       |
+|    value_loss           | 0.0242      |
+-----------------------------------------
+[Step   362496] SR=0.300 | FracGoal=0.401 | Ret=800.83 | Vis=0.63 | Prog=0.054 | CollEvt=12.56 | Stage=0.33
+-------------------------------------------
+| curriculum/               |             |
+|    stage                  | 0.33        |
+| research/                 |             |
+|    collision_count        | 31.2        |
+|    collision_event_count  | 12.6        |
+|    curriculum_stage       | 0.33        |
+|    episode_length         | 598         |
+|    episode_return         | 801         |
+|    fraction_at_goal       | 0.401       |
+|    reward_collision       | -0.00519    |
+|    reward_progress        | 0.0545      |
+|    reward_zero_visibility | -0.0178     |
+|    stray_count            | 0.19        |
+|    success_rate           | 0.3         |
+|    visibility_ratio       | 0.628       |
+| rollout/                  |             |
+|    ep_len_mean            | 598         |
+|    ep_rew_mean            | 801         |
+| time/                     |             |
+|    fps                    | 163         |
+|    iterations             | 118         |
+|    time_elapsed           | 2211        |
+|    total_timesteps        | 362496      |
+| train/                    |             |
+|    approx_kl              | 0.099322304 |
+|    clip_fraction          | 0.39        |
+|    clip_range             | 0.2         |
+|    entropy_loss           | -1.99       |
+|    explained_variance     | 0.879       |
+|    learning_rate          | 0.0003      |
+|    loss                   | -0.0274     |
+|    n_updates              | 1170        |
+|    policy_gradient_loss   | -0.0167     |
+|    std                    | 0.655       |
+|    value_loss             | 0.011       |
+-------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 605        |
+|    ep_rew_mean          | 816        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 119        |
+|    time_elapsed         | 2234       |
+|    total_timesteps      | 365568     |
+| train/                  |            |
+|    approx_kl            | 0.10400743 |
+|    clip_fraction        | 0.373      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -1.99      |
+|    explained_variance   | 0.614      |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.049     |
+|    n_updates            | 1180       |
+|    policy_gradient_loss | -0.023     |
+|    std                  | 0.652      |
+|    value_loss           | 0.0431     |
+----------------------------------------
+[Step   368640] SR=0.290 | FracGoal=0.404 | Ret=814.54 | Vis=0.64 | Prog=0.054 | CollEvt=12.59 | Stage=0.33
+------------------------------------------
+| curriculum/               |            |
+|    stage                  | 0.33       |
+| research/                 |            |
+|    collision_count        | 29.6       |
+|    collision_event_count  | 12.6       |
+|    curriculum_stage       | 0.33       |
+|    episode_length         | 602        |
+|    episode_return         | 815        |
+|    fraction_at_goal       | 0.404      |
+|    reward_collision       | -0.00514   |
+|    reward_progress        | 0.054      |
+|    reward_zero_visibility | -0.0139    |
+|    stray_count            | 0.17       |
+|    success_rate           | 0.29       |
+|    visibility_ratio       | 0.644      |
+| rollout/                  |            |
+|    ep_len_mean            | 602        |
+|    ep_rew_mean            | 815        |
+| time/                     |            |
+|    fps                    | 164        |
+|    iterations             | 120        |
+|    time_elapsed           | 2246       |
+|    total_timesteps        | 368640     |
+| train/                    |            |
+|    approx_kl              | 0.08777642 |
+|    clip_fraction          | 0.364      |
+|    clip_range             | 0.2        |
+|    entropy_loss           | -1.97      |
+|    explained_variance     | 0.883      |
+|    learning_rate          | 0.0003     |
+|    loss                   | -0.0192    |
+|    n_updates              | 1190       |
+|    policy_gradient_loss   | -0.0277    |
+|    std                    | 0.645      |
+|    value_loss             | 0.0109     |
+------------------------------------------
+----------------------------------------
+| curriculum/             |            |
+|    stage                | 0.33       |
+| rollout/                |            |
+|    ep_len_mean          | 589        |
+|    ep_rew_mean          | 800        |
+| time/                   |            |
+|    fps                  | 163        |
+|    iterations           | 121        |
+|    time_elapsed         | 2266       |
+|    total_timesteps      | 371712     |
+| train/                  |            |
+|    approx_kl            | 0.09694959 |
+|    clip_fraction        | 0.388      |
+|    clip_range           | 0.2        |
+|    entropy_loss         | -1.96      |
+|    explained_variance   | 0.74       |
+|    learning_rate        | 0.0003     |
+|    loss                 | -0.0439    |
+|    n_updates            | 1200       |
+|    policy_gradient_loss | -0.0191    |
+|    std                  | 0.645      |
+|    value_loss           | 0.0175     |
+----------------------------------------
+Traceback (most recent call last):
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/scripts/train_v3_recurrent.py", line 44, in <module>
+    main()
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/scripts/train_v3_recurrent.py", line 32, in main
+    train_v3(
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/src/shepherding/research/training.py", line 108, in train_v3
+    model.learn(total_timesteps=total_timesteps, callback=callbacks)
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/sb3_contrib/ppo_recurrent/ppo_recurrent.py", line 450, in learn
+    return super().learn(
+           ^^^^^^^^^^^^^^
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/stable_baselines3/common/on_policy_algorithm.py", line 337, in learn
+    self.train()
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/sb3_contrib/ppo_recurrent/ppo_recurrent.py", line 414, in train
+    loss.backward()
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/torch/_tensor.py", line 630, in backward
+    torch.autograd.backward(
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/torch/autograd/__init__.py", line 364, in backward
+    _engine_run_backward(
+  File "/home/ciatel/coding/college/DS-geometric-shepherding-rl/.venv/lib/python3.12/site-packages/torch/autograd/graph.py", line 865, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Exception ignored in atexit callback: <function _exit_function at 0x7a2dd1b81800>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/util.py", line 356, in _exit_function
+    p._popen.terminate()
+  File "/usr/lib/python3.12/multiprocessing/popen_fork.py", line 57, in terminate
+    self._send_signal(signal.SIGTERM)
+  File "/usr/lib/python3.12/multiprocessing/popen_fork.py", line 49, in _send_signal
+    os.kill(self.pid, sig)
+KeyboardInterrupt: 
